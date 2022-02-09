@@ -1,0 +1,138 @@
+
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-1 col-sm-1 col-xs-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{model.patientModel?.patientName}} ({{model.patientModel?.age}})</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Patient Profile</a>
+            </li>
+            <li class="breadcrumb-item active"> {{model.patientModel?.patientName}} ({{model.patientModel?.age}})</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+   <div class="card">
+    <div class="text-right">
+      <button class="btn btn-primary btn-sm m-2" (click)="printPrescrption()">
+        Print
+      </button>
+    </div>
+   </div>
+    <div class="card" id="section-to-print" *ngIf="model?.patientModel?.patientName">
+      <div class="container-fluid" >   
+        <div class="col-md-8 col-sm-8 col-xs-8" style="border: 1px solid #000;padding: 10px;">
+          <div>
+            <strong> Name: </strong> {{model?.patientModel?.patientName}}
+          </div>
+          <div>
+            <strong>Gender (Age): </strong>   {{model.patientModel?.gender}} {{model.patientModel?.age}}
+          </div>
+          <div>
+            <strong> Consultant:</strong>  {{model.appointment?.consultingDoctorName}}
+          </div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4" style="border: 1px solid #000;padding: 10px;border-left: none;">
+          <div>
+            <strong>Date: </strong>  {{model?.appointment?.appointmentDateTime | date}}
+          </div>
+          <div>
+            <strong>UHID: </strong> {{model?.patientModel?.ulId}}
+          </div>
+          <div style="color: transparent">.</div>
+        </div>             
+      <div class="col-md-12 col-sm-12" style="padding: 25px;"  style="border: 1px solid #000;border-top: none;padding-top: 10px;">                
+        <div class="row clearfix">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Complaints</strong>
+              </div>  
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : {{model.compliants}}
+              </div> 
+            </div>
+            <div class="row clearfix">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Investigation Results</strong>  
+              </div>  
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : <span *ngFor="let each of model.patientTestModel">
+                  {{each.testMasterName}} {{each.remarks}} &nbsp;
+                </span>
+              </div>  
+            </div>
+            <div class="row clearfix">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Impression</strong> 
+              </div>  
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : {{model.impression}}
+              </div>
+            </div>
+            <div class="row clearfix">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Advice</strong> 
+              </div>  
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : {{model.advice}}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 col-sm-1 col-xs-12" style="margin-top: 10px;">
+            <table class="table table-bordered">
+              <thead>
+                <tr class="row">
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Rx
+                  </th>
+                  <th class="col-md-8 col-sm-8 col-xs-8">
+                    Medicine Name
+                  </th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Frequency
+                  </th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Duration
+                  </th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Notes
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row" *ngFor="let each of model.prescriptionModel; let index = index">
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{index + 1}}
+                  </td>
+                  <td class="col-md-8 col-sm-8 col-xs-8">
+                    {{each.medicinName}} - {{each.strength}} ({{each.genericName ? each.genericName : each.medicinName}})
+                  </td>
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{each.morning ? 1 : 0}}-{{each.noon? 1:0}}-{{each.night? 1: 0}}
+                  </td>
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{each.noOfDays}} Day(s)
+                  </td>
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{each.beforeFood ? "Before Food": "After Food"}} {{each.remarks}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>  
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+  </section>

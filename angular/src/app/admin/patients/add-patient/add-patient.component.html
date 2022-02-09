@@ -1,0 +1,173 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{id ? 'Update' : 'Add'}} Patient</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/admin/patients/all-patients">Patients</a>
+            </li>
+            <li class="breadcrumb-item active">{{id ? 'Update' : 'Add'}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2><strong> Patient Information</strong></h2>
+          </div>
+          <div class="body">
+            <form class="m-4" #f="ngForm">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3" *ngIf="id">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>HR No </mat-label>
+                    <input matInput name="hrno" #hrno="ngModel" [(ngModel)]="model.hrno" required [readonly]="true">
+                    <mat-error *ngIf="hrno.invalid && (hrno.dirty || hrno.touched)">
+                      <span *ngIf="hrno.errors?.['required']"> HR No is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>UHID </mat-label>
+                    <input maxlength="15" matInput name="ulId" #ulId="ngModel" [(ngModel)]="model.ulId" required>
+                    <mat-error *ngIf="ulId.invalid && (ulId.dirty || ulId.touched)">
+                      <span *ngIf="ulId.errors?.['required']"> UHID is required</span>
+                      <span *ngIf="ulId.errors?.['maxlength']"> UHID must be maximum of 15 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Salutation</mat-label>
+                    <mat-select matInput name="initial" #initial="ngModel" [(ngModel)]="model.initial" required>
+                      <mat-option value="Mr. ">
+                        Mr.
+                      </mat-option>
+                      <mat-option value="Ms. ">
+                        Ms.
+                      </mat-option>
+                      <mat-option value="Mrs. ">
+                        Mrs.
+                      </mat-option>
+                      <mat-option value="Dr. ">
+                        Dr.
+                      </mat-option>
+                    </mat-select>
+                    <i class="fa-input-icon fas fa-handshake" matSuffix></i>
+                    <mat-error *ngIf="initial.invalid && (initial.dirty || initial.touched)">
+                      <span *ngIf="initial.errors?.['required']"> Salutation is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input maxlength="30" minlength="2" matInput name="name" #name="ngModel"
+                      [(ngModel)]="model.patientName" required>
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                      <span *ngIf="name.errors?.['required']"> Name is required</span>
+                      <span *ngIf="name.errors?.['maxlength']"> Name must be maximum of 25 characters</span>
+                      <span *ngIf="name.errors?.['minlength']"> Name must be minimum of 2 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Age</mat-label>
+                    <input max="160" matInput type="number" name="age" #age="ngModel" [(ngModel)]="model.age" required>
+                    <i class="fa-input-icon fas fa-user-clock" matSuffix></i>
+                    <mat-error *ngIf="age.invalid && (age.dirty || age.touched)">
+                      <span *ngIf="age.errors?.['required']"> Age is required</span>
+                      <span *ngIf="age.errors?.['max']"> Age must be maximum of 160</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Gender</mat-label>
+                    <mat-select name="gender" #gender="ngModel" [(ngModel)]="model.gender" required>
+                      <mat-option [value]="'Male'">
+                        Male
+                      </mat-option>
+                      <mat-option [value]="'Female'">
+                        Female
+                      </mat-option>
+                    </mat-select>
+                    <i class="fa-input-icon fas fa-transgender-alt" matSuffix></i>
+                    <mat-error *ngIf="gender.invalid && (gender.dirty || gender.touched)">
+                      <span *ngIf="gender.errors?.['required']"> Gender is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Mobile No</mat-label>
+                    <input pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" matInput name="mobile"
+                      #mobile="ngModel" [(ngModel)]="model.mobileNumber" required>
+                    <i class="fa-input-icon fas fa-mobile-alt" matSuffix></i>
+                    <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
+                      <span *ngIf="mobile.errors?.['required']"> Mobile No is required</span>
+                      <span *ngIf="mobile.errors?.['pattern']"> Invalid Mobile No</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Facility</mat-label>
+                    <mat-select [compareWith]="objectComparisonFunction" name="referedBy" #referedBy="ngModel"
+                      [(ngModel)]="doctorOption" required>
+                      <mat-option *ngFor="let each of doctorOptions" [value]="each">
+                        {{each.name}}
+                      </mat-option>
+                    </mat-select>
+                    <i class="fa-input-icon fas fa-hospital-alt" matSuffix></i>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <textarea maxlength="300" matInput name="address" #address="ngModel" [(ngModel)]="model.address"
+                      required>
+                    </textarea>
+                    <mat-error *ngIf="address.invalid && (address.dirty || address.touched)">
+                      <span *ngIf="address.errors?.['maxlength']"> Address must be maximum of 300 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid "
+                    mat-raised-button color="primary">Submit</button>
+                  <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
+                    color="primary">Update</button>
+                  <button routerLink="/admin/patients/all-patients" type="button" mat-button>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

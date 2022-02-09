@@ -1,0 +1,171 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{action != 'edit' ? 'Book ' : 'Update '}} Appointment </h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/admin/appointment/viewAppointment">Appointments</a>
+            </li>
+            <li class="breadcrumb-item active">{{id ? 'Update' : 'Book'}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>{{action != 'edit' ? 'Book ' : 'Update '}} Appointment </h2>
+          </div>
+          <div class="body pt-0">
+            <form class="m-4" #f="ngForm">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Consulting Doctor</mat-label>
+                    <input matInput [matAutocomplete]="auto2" name="consultingDoctor" #consultingDoctor="ngModel"
+                      [(ngModel)]="model.consultingDoctorName" (keyup)="doctorRequired = false"
+                      (ngModelChange)="doDoctorFilter(model.consultingDoctorName)" required>
+                    <mat-icon matSuffix>search</mat-icon>
+                    <mat-error *ngIf="consultingDoctor.invalid && (consultingDoctor.dirty || consultingDoctor.touched)">
+                      <span *ngIf="consultingDoctor.errors?.['required']"> Consulting Doctor is required</span>
+                    </mat-error>
+                    <mat-hint style="color: crimson;" *ngIf="doctorRequired">
+                      Consulting Doctor is required
+                    </mat-hint>
+                  </mat-form-field>
+                  <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete"
+                    (optionSelected)="onDoctorSelectionChanged($event)">
+                    <mat-option *ngFor="let eachOption of doctorOptions" [value]="eachOption.name">
+                      {{eachOption.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Patient</mat-label>
+                    <input matInput [matAutocomplete]="auto" name="patientId" #patientId="ngModel"
+                      [disabled]="action == 'edit'" [(ngModel)]="model.patientName" (keyup)="patientRequired = false"
+                      (ngModelChange)="doFilter(model.patientName)" required>
+                    <mat-icon matSuffix>search</mat-icon>
+                    <mat-error *ngIf="patientId.invalid && (patientId.dirty || patientId.touched)">
+                      <span *ngIf="patientId.errors?.['required']"> Patient is required</span>
+                    </mat-error>
+                    <mat-hint style="color: crimson;" *ngIf="patientRequired">
+                      Patient is required
+                    </mat-hint>
+                  </mat-form-field>
+                  <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                    (optionSelected)="onSelectionChanged($event)">
+                    <mat-option *ngFor="let eachOption of patientOptions" [value]="eachOption.patientName">
+                      {{eachOption.patientName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Facility</mat-label>
+                    <input matInput [readonly]="true" name="referedByName" #referedByName="ngModel"
+                      [(ngModel)]="patient.referedByName">
+                    <i class="fa-input-icon fas fa-hospital-alt" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>UHID</mat-label>
+                    <input matInput [readonly]="true" name="ulId" #ulId="ngModel" [(ngModel)]="patient.ulId">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>H.R. NO</mat-label>
+                    <input matInput [readonly]="true" name="hrno" #hrno="ngModel" [(ngModel)]="patient.hrno">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Age</mat-label>
+                    <input matInput [readonly]="true" name="age" #age="ngModel" [(ngModel)]="patient.age">
+                    <i class="fa-input-icon fas fa-user-clock" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Gender</mat-label>
+                    <input matInput [readonly]="true" name="gender" #gender="ngModel" [(ngModel)]="patient.gender">
+                    <i class="fa-input-icon fas fa-transgender-alt" matSuffix></i>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-3 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Date & Time</mat-label>
+                    <input matInput [owlDateTimeTrigger]="date2" (dateTimeChange)="dateChange($event)"
+                      [owlDateTime]="date2" #appointmentDateTime="ngModel" name="appointmentDate"
+                      [(ngModel)]="model.appointmentDateTime" [min]="today" required>
+                    <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
+                    <owl-date-time #date2></owl-date-time>
+                    <mat-error
+                      *ngIf="appointmentDateTime.invalid && (appointmentDateTime.dirty || appointmentDateTime.touched)">
+                      <span *ngIf="appointmentDateTime.errors?.['required']"> Time Of Appintment is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Visit Type </mat-label>
+                    <mat-select name="visitType" #visitType="ngModel" [(ngModel)]="model.visitType" required>
+                      <mat-option [value]="'Follow Up'">
+                        Follow up
+                      </mat-option>
+                      <mat-option [value]="'Procedure'">
+                        Procedure
+                      </mat-option>
+                      <mat-option [value]="'New'">
+                        New
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="visitType.invalid && (visitType.dirty || visitType.touched)">
+                      <span *ngIf="visitType.errors?.['required']"> Visit Type is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Complaint</mat-label>
+                    <textarea maxlength="500" matInput name="compliant" #compliant="ngModel"
+                      [(ngModel)]="model.description"></textarea>
+                    <mat-error *ngIf="compliant.invalid && (compliant.dirty || compliant.touched)">
+                      <span *ngIf="compliant.errors?.['maxlength']"> Complaint must be maximum of 500 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button *ngIf="action != 'edit'" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid"
+                    mat-raised-button color="primary">Submit</button>
+                  <button *ngIf="action == 'edit'" (click)="update()" class="btn-space"
+                    [disabled]="!f.form.valid || patientsLoading || doctorsLoading" mat-raised-button
+                    color="primary">Update</button>
+                  <button routerLink="/admin/appointment/viewAppointment" type="button" mat-button>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

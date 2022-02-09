@@ -1,0 +1,36 @@
+<div *ngIf="!(medList?.length > 0); else prescData">
+
+</div>
+<ng-template  #prescData>	
+<div class="col-12" *ngFor="let each of medList; let index = index;">
+	<div class="card p-3 prescribe" *ngIf="!each.isDeleted"  (click)="edit(index)">
+		<div class="row align-items-center cursor-pointer">
+			<div class="col-1">
+				<span class="material-icons">
+					medication
+				</span>
+			</div>
+			<div class="col-3">
+				<h5>{{each.medicinName}}</h5>
+				<span>({{each.genericName ? each.genericName : each.medicinName}}) {{each.strength}}</span>
+			</div>
+			<div class="col-2">
+				<p>{{each.morning ? 1 : 0}}-{{each.noon? 1:0}}-{{each.night? 1: 0}}</p>
+				<span>{{each.beforeFood ? "Before Food": "After Food"}}</span>
+			</div>
+			<div class="col-1">
+				<p>{{each.noOfDays}} Day(s)</p>
+			</div>
+			<div class="col-4">
+				<p>
+				{{each.remarks}}
+				</p>
+			</div>
+			<div class="col-1 text-danger" *ngIf="!readyOnly">
+				<i class="fa fa-trash" ngbTooltip="Delete Medicine" [openDelay]="500" (click)="removeMed(index)"></i>
+			</div>
+		</div>
+	</div>
+</div>
+</ng-template>
+

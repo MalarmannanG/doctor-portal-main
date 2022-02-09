@@ -1,0 +1,139 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{id ? 'Update' : 'Add'}} Facility</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/admin/doctors/allDoctors">Facilities   </a>
+            </li>
+            <li class="breadcrumb-item active"> {{id ? 'Update' : 'Add'}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2> {{id ? 'Update' : 'Add'}} Facility</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" #f="ngForm">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Facility Name</mat-label>
+                    <input maxlength="30" minlength="2" matInput name="name" #name="ngModel" [(ngModel)]="model.name"
+                      required>
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                      <span *ngIf="name.errors?.['minlength']"> Facility Name must be maximum of 30 characters</span>
+                      <span *ngIf="name.errors?.['maxlength']"> Facility Name must be minimum of 2 characters</span>
+                      <span *ngIf="name.errors?.['required']"> Facility Name is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Doctor Name</mat-label>
+                    <input maxlength="30" matInput name="clinicName" #clinicName="ngModel"
+                      [(ngModel)]="model.clinicName">
+                    <i class="fa-input-icon fas fa-address-card" matSuffix></i>
+                    <mat-error *ngIf="clinicName.invalid && (clinicName.dirty || clinicName.touched)">
+                      <span *ngIf="clinicName.errors?.['maxlength']"> Contact Name must be maximum of 30
+                        characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Phone No</mat-label>
+                    <input pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" matInput name="mobile"
+                      #phone="ngModel" [(ngModel)]="model.phoneNo1">
+                    <i class="fa-input-icon fas fa-mobile-alt" matSuffix></i>
+                    <mat-error *ngIf="phone.invalid && (phone.dirty || phone.touched)">
+                      <span *ngIf="phone.errors?.['required']"> Invalid Phone No</span>
+                      <span *ngIf="phone.errors?.['pattern']"> Invalid Phone No</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Office Phone No</mat-label>
+                    <input pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" matInput name="mobile2"
+                      #mobile="ngModel" [(ngModel)]="model.phoneNo2">
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
+                      <span *ngIf="mobile.errors?.['required']"> Invalid Office Phone No</span>
+                      <span *ngIf="mobile.errors?.['pattern']"> Invalid Office Phone No</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Address</mat-label>
+                    <textarea maxlength="300" matInput name="address" #address="ngModel"
+                      [(ngModel)]="model.address"></textarea>
+                    <mat-error *ngIf="address.invalid && (address.dirty || address.touched)">
+                      <span *ngIf="address.errors?.['maxlength']"> Address must be maximum of 300 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Pin code</mat-label>
+                    <i class="fa-input-icon fas fa-map-marker-alt" matSuffix></i>
+                    <input matInput name="qualification" #qualification="ngModel" [(ngModel)]="model.qualification">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput name="email" #email="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                      [(ngModel)]="model.email">
+                    <mat-icon matSuffix>email</mat-icon>
+                    <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+                      <span *ngIf="email.errors?.['required']"> Email is required</span>
+                      <span *ngIf="email.errors?.['pattern']"> Inavalid email </span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Notes</mat-label>
+                    <textarea matInput name="notes" #notes="ngModel" [(ngModel)]="model.notes"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>             -->
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid"
+                    mat-raised-button color="primary">Submit</button>
+                  <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
+                    color="primary">Update</button>
+                  <button routerLink="/admin/doctors/allDoctors" type="button" mat-button>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

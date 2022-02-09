@@ -1,0 +1,20 @@
+.prescribe {
+  margin-bottom: 0.75rem;
+  p {
+    margin-bottom: 0;
+  }
+  .material-icons {
+    font-size: 60px;
+  }
+  i {
+    font-size: 20px;
+    cursor: pointer;
+    &.bi-pencil,
+    &.bi-plus-circle {
+      color: #00bcd4;
+    }
+    &.bi-trash {
+      color: #dc3545;
+    }
+  }
+}

@@ -1,0 +1,172 @@
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Vitals Report</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Vitals Report</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>{{!model.id ? 'Book ' : 'Update '}} Vitals</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" #f="ngForm">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Patient Name</mat-label>
+                    <input matInput [readonly]="true" name="patientname" #patientname="ngModel"
+                      [(ngModel)]="appointment.patientName">
+                    <mat-icon matSuffix>face</mat-icon>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Doctor</mat-label>
+                    <input matInput [readonly]="true" name="doctor" #doctor="ngModel"
+                      [(ngModel)]="appointment.consultingDoctorName">
+                    <i class="fa-input-icon fas fa-stethoscope" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Facility</mat-label>
+                    <input matInput [readonly]="true" name="referedByName" #referedByName="ngModel"
+                      [(ngModel)]="appointment.patient.referedByName">
+                    <i class="fa-input-icon fas fa-hospital-alt" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>UHID</mat-label>
+                    <input matInput [readonly]="true" name="ulId" #ulId="ngModel"
+                      [(ngModel)]="appointment.patient.ulId">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>H.R. NO</mat-label>
+                    <input matInput [readonly]="true" name="hrno" #hrno="ngModel"
+                      [(ngModel)]="appointment.patient.hrno">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Age</mat-label>
+                    <input matInput [readonly]="true" name="age" #age="ngModel" [(ngModel)]="appointment.patient.age">
+                    <i class="fa-input-icon fas fa-user-clock" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Gender</mat-label>
+                    <input matInput [readonly]="true" name="gender" #gender="ngModel"
+                      [(ngModel)]="appointment.patient.gender">
+                    <i class="fa-input-icon fas fa-transgender-alt" matSuffix></i>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Height</mat-label>
+                    <input matInput maxlength="{{(model.height?.toString().includes('.') ? 5 : 4)}}" type="text"
+                      (keypress)="numberOnly($event)" name="height" #height="ngModel" [(ngModel)]="model.height">
+                    <i class="fa-input-icon fas fa-weight" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Weight</mat-label>
+                    <input maxlength="{{(model.weight?.toString().includes('.') ? 5 : 4)}}" type="text"
+                      (keypress)="numberOnly($event)" matInput type="text" name="weight" #weight="ngModel"
+                      [(ngModel)]="model.weight">
+                    <i class="fa-input-icon fas fa-ruler-vertical" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>BP</mat-label>
+                    <input matInput type="text" maxlength="7" mask="000/00" name="bloodPresure" #bloodPresure="ngModel"
+                      [(ngModel)]="model.bloodPresure">
+                    <i class="fa-input-icon fas fa-angry" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label> Pulse</mat-label>
+                    <input maxlength="{{(model.pulse?.toString().includes('.') ? 5 : 4)}}" type="text"
+                      (keypress)="numberOnly($event)" matInput type="text" name="pulse" #pulse="ngModel"
+                      [(ngModel)]="model.pulse">
+                    <i class="fa-input-icon fas fa-heartbeat" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Temprature</mat-label>
+                    <input maxlength="{{(model.temprature?.toString().includes('.') ? 5 : 4)}}" type="text"
+                      (keypress)="numberOnly($event)" matInput type="text" name="temprature" #temprature="ngModel"
+                      [(ngModel)]="model.temprature">
+                    <i class="fa-input-icon fas fa-thermometer-half" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>SPO2</mat-label>
+                    <input maxlength="{{(model.spO2?.toString().includes('.') ? 5 : 4)}}" type="text"
+                      (keypress)="numberOnly($event)" matInput type="text" name="spO2" #spO2="ngModel"
+                      [(ngModel)]="model.spO2">
+                    <i class="fa-input-icon fas fa-tint" matSuffix></i>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Choose File</mat-label>
+                    <ngx-mat-file-input [(ngModel)]="patientFiles" name="patientFiles" placeholder="Reports" multiple
+                      (ngModelChange)="fileChange()">
+                    </ngx-mat-file-input>
+                    <mat-icon matSuffix>folder</mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row" *ngIf="model.patientFiles?.length > 0">
+                <div class="card p-2">
+                  <h5 class="p-3">
+                    Files
+                  </h5>
+                  <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let eachFile of model.patientFiles">
+                      <a [download]="eachFile.fileName" [href]="prepareUrl(eachFile.filePath)">{{eachFile.fileName}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button *ngIf="!model.id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid"
+                    mat-raised-button color="primary">Submit</button>
+                  <button *ngIf="model.id > 0" (click)="update()" class="btn-space" [disabled]="!f.form.valid"
+                    mat-raised-button color="primary">Update</button>
+                  <button type="button" routerLink="/admin/dashboard/main" mat-button>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

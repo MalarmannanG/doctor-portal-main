@@ -1,0 +1,51 @@
+/* You can add global styles to this file, and also import other style files */
+body .dash-data {
+	background-color: #fff !important;
+	padding: 0 !important;
+	border-radius: 5px;
+}
+
+body .dash-data .mat-form-field-wrapper {
+	padding: 0 !important;
+}
+
+body .dash-data .mat-form-field-type-mat-date-range-input .mat-form-field-infix {
+	max-width: 90% !important;
+}
+
+body .profile-header {
+	min-height: 100px !important;
+}
+
+.cursor-pointer {
+	cursor: pointer !important;
+}
+
+.danger {
+	color: crimson;
+}
+
+.success {
+	color: green;
+}
+
+.bolder {
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.hidden {
+	display: none;
+}
+
+.cdk-overlay-container {
+	z-index: 9000;
+}
+
+.fa-input-icon {
+	display: block;
+	position: relative;
+	top: -0.25em;
+	font-size: 120%;
+	line-height: 1.125;
+}

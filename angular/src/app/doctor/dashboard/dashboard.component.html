@@ -1,0 +1,227 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Dashboard</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Doctor Dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widgets -->
+    <div class="row dash-data">
+      <div class="col-12 col-md-3">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Consulting Doctor</mat-label>
+          <span matPrefix>
+            <i class="material-icons">search</i>
+          </span>
+          <input matInput [matAutocomplete]="auto2" name="consultingDoctor" #consultingDoctor="ngModel"
+            [(ngModel)]="selectedDoctor" (ngModelChange)="doDoctorFilter(selectedDoctor)">
+          <mat-error *ngIf="consultingDoctor.invalid && (consultingDoctor.dirty || consultingDoctor.touched)">
+            <span *ngIf="consultingDoctor.errors?.['required']"> Consulting Doctor is required</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete" (optionSelected)="filterChange()">
+          <mat-option *ngFor="let eachOption of doctorOptions" [value]="eachOption.name">
+            {{eachOption.name}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="col-12 col-md-5">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Patient</mat-label>
+          <span matPrefix>
+            <i class="material-icons">search</i>
+          </span>
+          <input matInput [matAutocomplete]="auto" name="patientId" #patientId="ngModel" [(ngModel)]="selectedPatient"
+            (ngModelChange)="doFilter(selectedPatient)">
+          <mat-error *ngIf="patientId.invalid && (patientId.dirty || patientId.touched)">
+            <span *ngIf="patientId.errors?.['required']"> Patient is required</span>
+          </mat-error>
+        </mat-form-field>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="filterChange()">
+          <mat-option *ngFor="let eachOption of patientOptions" [value]="eachOption.patientName">
+            {{eachOption.patientName}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="col-12 col-md-3">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start date" (ngModelChange)="filterChange()" [(ngModel)]="fromDate"
+              name="fromDate">
+            <input matEndDate placeholder="End date" (ngModelChange)="filterChange()" [(ngModel)]="toDate"
+              name="todate">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+      <div class="col-md-1">
+        <button class="btn btn-primary btn-sm btn-rounded mt-3" ngbTooltip="Clear" (click)="clear()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-lg-3 col-md-3 col-sm-12">
+        <div class="card card-statistic-2" (click)="selection('')">
+          <div class="clearfix">
+            <div class="card-icon-only shadow-primary float-start">
+              <img src="assets/images/patient.png" alt="">
+            </div>
+            <div class="card-right">
+              <div>
+                <h5 class="float-end">Total Patients</h5>
+              </div>
+              <div class="col-green">
+                <h3 class="font-weight-bold float-end mb-0">{{totalPatientsCount}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="card-content msl-4 mb-3">
+            <!-- <p class="m-b-0 d-flex"><i class="material-icons col-green psr-2">trending_up</i> 18% Higher Then Last Month
+            </p> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12">
+        <div class="card card-statistic-2 cursor-pointer" (click)="selection('Appointments')"
+          [style]="selectedColor('Appointments')">
+          <div class="clearfix">
+            <div class="card-icon-only shadow-primary float-start">
+              <img src="assets/images/appointment.png" alt="">
+            </div>
+            <div class="card-right">
+              <div>
+                <h5 class="float-end">
+                  <span *ngIf="todaysAppointments">
+                    Today's
+                  </span>
+                  Patients
+                </h5>
+              </div>
+              <div class="col-green">
+                <h3 class="font-weight-bold float-end mb-0">{{appointmentsCount + procedureCount}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="card-content msl-4 mb-3">
+            <!-- <p class="m-b-0 d-flex"><i class="material-icons col-orange psr-2">trending_down</i> 07% Less Then Last
+              Month
+            </p> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12">
+        <div class="card card-statistic-2 cursor-pointer" (click)="selection('Visits')"
+          [style]="selectedColor('Visits')">
+          <div class="clearfix">
+            <div class="card-icon-only shadow-primary float-start">
+              <img src="assets/images/surgery.png" alt="">
+            </div>
+            <div class="card-right">
+              <div>
+                <h5 class="float-end">
+                  <span *ngIf="todaysAppointments">
+                    Today's
+                  </span>
+                  Appointments
+                </h5>
+              </div>
+              <div class="col-green">
+                <h3 class="font-weight-bold float-end mb-0">{{appointmentsCount}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="card-content msl-4 mb-3">
+            <!-- <p class="m-b-0 d-flex"><i class="material-icons col-green psr-2">trending_up</i> 12% Higher Then Last Month
+            </p> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-12">
+        <div class="card card-statistic-2 cursor-pointer" (click)="selection('Procedures')"
+          [style]="selectedColor('Procedures')">
+          <div class="clearfix">
+            <div class="card-icon-only shadow-primary float-start">
+              <img src="assets/images/online.png" alt="">
+            </div>
+            <div class="card-right">
+              <div>
+                <h5 class="float-end">
+                  <span *ngIf="todaysAppointments">
+                    Today's
+                  </span>
+                  Procedures
+                </h5>
+              </div>
+              <div class="col-green">
+                <h3 class="font-weight-bold float-end mb-0">{{procedureCount}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="card-content msl-4 mb-3">
+            <!-- <p class="m-b-0 d-flex"><i class="material-icons col-orange psr-2">trending_down</i> 22% Less Then Last
+              Month
+            </p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- #END# Widgets -->
+    <div class="row mt-3">
+
+      <div *ngFor="let each of appointments; let index = index;" class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+        <div class="card patient-card cursor-pointer" (click)="gotoProfile(each.id)">
+          <div class="contact-grid">
+            <img [src]="each.patient?.gender == 'Male' ? maleUrl : femaleUrl" class="user-img" alt="">
+            <h6 class="name-group col-green">
+              <i class="material-icons">account_circle</i>
+              <span class="icon-name">{{each.patient?.patientName}} ({{each.patient?.age}})</span>
+            </h6>
+            <h6 class="name-group">
+              <i class="material-icons">phone</i>
+              <span class="icon-name">{{each.patient?.mobileNumber}}</span>
+            </h6>
+            <h6 class="name-group">
+              <i class="material-icons">local_hospital</i>
+              <span class="icon-name">{{each.patient?.referedByName}}</span>
+            </h6>
+            <div class="row card-end">
+              <div class="col-md-6">
+                <h6 class="name-group">
+                  <i class="material-icons">event</i>
+                  <div class="set-flex">
+                    <div class="media-title">{{each.appointmentDateTime | date: 'hh:mm a'}}</div>
+                    <div class="text-job text-muted mb-0">{{each.appointmentDateTime | date: 'MMM d, y'}}</div>
+                  </div>
+                </h6>
+              </div>
+              <div class="col-md-6">
+                <h6 class="name-group">
+                  <i class="material-icons">assignment</i>
+                  <span class="icon-name">{{each.description}}</span>
+                </h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
