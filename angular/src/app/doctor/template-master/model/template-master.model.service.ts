@@ -24,8 +24,11 @@ export class TemplatePrescriptionModel {
     id: number;
     templateMasterId: number;
     genericName: string;
-    medicinName: string;
+    medicineName: string;
+    categoryName : string;
     strength: string;
+    units: string;
+    remarks: string;
     beforeFood: boolean;
     morning: boolean;
     noon: boolean;
@@ -37,4 +40,5 @@ export class TemplatePrescriptionModel {
     modifiedBy: number;
     createdDate: any;
     modifiedDate: any;
+     
 }

@@ -67,10 +67,10 @@
                 </div>
               </div>
               <mat-table #table [dataSource]="model" matSort class="mat-cell">                              
-                <ng-container matColumnDef="name">
+                <!-- <ng-container matColumnDef="name">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
-                </ng-container>
+                </ng-container> -->
                 <ng-container matColumnDef="userType">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>User Type</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.userType}}</mat-cell>
@@ -79,10 +79,10 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Gender</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.gender}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="username">
+                <!-- <ng-container matColumnDef="username">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>User Name</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.userName}}</mat-cell>
-                </ng-container>
+                </ng-container> -->
                 <ng-container matColumnDef="phoneNo">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.phoneNo}}</mat-cell>

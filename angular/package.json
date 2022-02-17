@@ -48,6 +48,7 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.20.0",
     "echarts": "^4.9.0",
+    "file-saver": "^2.0.5",
     "moment": "^2.29.1",
     "ng-apexcharts": "^1.6.0",
     "ng-click-outside": "^9.0.0",

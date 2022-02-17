@@ -27,6 +27,7 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   prescriptionOptions: PrescriptionMasterModel[] = [];
   prescriptionList: PrescriptionMasterModel[] =[];
   genericName: string;
+  selectedMedicine = '';
   constructor(private router: Router, 
     private patientProfileService: PatientProfileService,
     private templateMasterService: TemplateMasterService,
@@ -41,10 +42,11 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   }
 
   addPrescription() {
+    debugger;
     if(!this.editing) {
       this.model.templatePrescriptionModel?.push(this.activePrescription);
     } else {
-      this.editablePrescription.medicinName = this.activePrescription.medicinName;
+      this.editablePrescription.medicineName = this.activePrescription.medicineName;
       this.editablePrescription.strength = this.activePrescription.strength;
       this.editablePrescription.genericName = this.activePrescription.genericName;
       this.editablePrescription.morning = this.activePrescription.morning;
@@ -74,6 +76,7 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   }
 
   update() {
+    debugger;
     this.templateMasterService.put(this.model)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
@@ -83,6 +86,8 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   } 
   
   onSubmit() {
+    debugger;
+    
     this.templateMasterService.post(this.model)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
@@ -93,6 +98,7 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
 
   get() {
     this.templateMasterService.get(this.id)
+    
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
       this.model = resp;
@@ -100,23 +106,41 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   }
 
   onMedSelectionChanged(event) {
-    if(event.option.value) {
-      let selected = this.prescriptionList.filter(a => a.medicinName == event.option.value)[0];
-      this.activePrescription.medicinName = selected.medicinName;
+    if (event.option.value) {
+      let selected = this.prescriptionList.filter(a => a.id == event.option.value)[0];
+      this.activePrescription.medicineName = selected.medicineName;
       this.activePrescription.strength = selected.strength;
       this.activePrescription.genericName = selected.genericName;
+      this.activePrescription.categoryName = selected.categoryName;
+      this.activePrescription.units = selected.units;
+      console.log(selected.strength + '' + selected.remarks);
+      this.activePrescription.remarks = selected.remarks;
+      this.selectedMedicine = selected.medicineName + '-' + selected.categoryName + '-' + selected.strength + '' + selected.units;
+
     }
   }
 
   doMedFilter(filter) {
-    filter = filter;
-    this.prescriptionOptions = [];  
-    this.prescriptionList.forEach(element => {
-      if(element.medicinName.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
-        this.prescriptionOptions.push(element)
-      }
-    });     
-  } 
+    if (Number.parseInt(filter)) {
+      this.prescriptionOptions = [];
+      this.prescriptionList.forEach(element => {
+        if (element.id == filter) {
+          this.prescriptionOptions.push(element);
+          this.selectedMedicine = element.medicineName + '-' + element.categoryName + '-' + element.strength + '' + element.units;
+        }
+      });
+    }
+    else {
+      var _filter = filter?.toLocaleLowerCase();
+      this.prescriptionOptions = [];
+      this.prescriptionList.forEach(element => {
+        if (element.medicineName?.toLocaleLowerCase().includes(_filter)) {
+          this.prescriptionOptions.push(element)
+        }
+      });
+    }
+  }
+
   
   populatePrescriptionMaster() {    
     this.patientProfileService.getMedicines()

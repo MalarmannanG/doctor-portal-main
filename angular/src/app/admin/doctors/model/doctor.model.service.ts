@@ -11,4 +11,5 @@ export class DoctorModel {
     address: string;
     email: string;
     notes: string;
+    pinCode: number;
 }

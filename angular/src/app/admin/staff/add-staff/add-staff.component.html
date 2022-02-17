@@ -30,7 +30,7 @@
             <form class="m-4" #f="ngForm">
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                  <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Name</mat-label>
                     <input maxlength="30" minlength="2" matInput name="name" #name="ngModel" [(ngModel)]="model.name"
                       required>
@@ -40,21 +40,19 @@
                       <span *ngIf="name.errors?.['maxlength']"> Name must be maximum of 30 characters</span>
                       <span *ngIf="name.errors?.['minlength']"> Name must be minimum of 2 characters</span>
                     </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  </mat-form-field> -->
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>User name</mat-label>
-                    <input maxlength="15" minlength="2" matInput name="userName" #userName="ngModel"
-                      [(ngModel)]="model.userName" required>
-                    <i class="fa-input-icon fas fa-user-circle" matSuffix></i>
-                    <mat-error *ngIf="userName.invalid && (userName.dirty || name.touched)">
-                      <span *ngIf="userName.errors?.['required']">User Name is required</span>
-                      <span *ngIf="userName.errors?.['maxlength']"> Name must be maximum of 15 characters</span>
-                      <span *ngIf="userName.errors?.['minlength']"> Name must be minimum of 2 characters</span>
+                    <mat-label>Staff Email</mat-label>
+                    <input matInput pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" #email="ngModel"
+                      [(ngModel)]="model.email" [required]="true">
+                    <mat-icon matSuffix>email</mat-icon>
+                    <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+                      <span *ngIf="email.errors?.['required']"> Email is required</span>
+                      <span *ngIf="email.errors?.['pattern']"> Inavalid email </span>
                     </mat-error>
                   </mat-form-field>
                 </div>
+                
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>User Type</mat-label>
@@ -72,8 +70,31 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>User name</mat-label>
+                    <input maxlength="50" minlength="8" matInput name="userName" #userName="ngModel"
+                      [(ngModel)]="model.userName" required>
+                    <i class="fa-input-icon fas fa-user-circle" matSuffix></i>
+                    <mat-error *ngIf="userName.invalid && (userName.dirty || name.touched)">
+                      <span *ngIf="userName.errors?.['required']">User Name is required</span>
+                      <span *ngIf="userName.errors?.['maxlength']"> Name must be maximum of 50 characters</span>
+                      <span *ngIf="userName.errors?.['minlength']"> Name must be minimum of 8 characters</span>
+                    </mat-error>
+                  </mat-form-field> -->
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Mobile No</mat-label>
+                    <input pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" matInput name="mobile"
+                      #mobile="ngModel" [(ngModel)]="model.phoneNo">
+                    <i class="fa-input-icon fas fa-mobile-alt" matSuffix></i>
+                    <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
+                      <span *ngIf="mobile.errors?.['required']"> Mobile No is Required</span>
+                      <span *ngIf="mobile.errors?.['pattern']"> Invalid Mobile No</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
               </div>
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Mobile No</mat-label>
@@ -86,7 +107,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" #email="ngModel"
@@ -98,7 +119,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-              </div>
+              </div> -->
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">

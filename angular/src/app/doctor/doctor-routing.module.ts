@@ -4,7 +4,8 @@ import { Routes, RouterModule } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AppointmentsComponent } from "./appointments/appointments.component";
 import { DoctorsComponent } from "./doctors/doctors.component";
-import { PatientsComponent } from "./patients/patients.component";
+//import { PatientsComponent } from "./patients/patients.component";
+import { PatientsComponent } from "../doctor/patients/patients.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { AllTestMasterComponent } from "./test-master/all-test-master/all-test-master.component";
 import { AddTestMasterComponent } from "./test-master/add-test-master/add-test-master.component";
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path: "dashboard",
     component: DashboardComponent,
+  },
+  {
+    path: "patients",
+    component: PatientsComponent,
   },
   {
     path: "all-test",

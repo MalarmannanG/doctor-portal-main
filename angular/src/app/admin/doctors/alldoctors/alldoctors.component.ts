@@ -17,6 +17,7 @@ import { DoctorModel } from "../model/doctor.model.service";
 import { DoctorService } from "../service/doctor.service";
 import { Router } from "@angular/router";
 import { BaseQueryModel } from "src/app/model/base.query-model";
+import Swal from "sweetalert2";
 @Component({
   selector: "app-alldoctors",
   templateUrl: "./alldoctors.component.html",
@@ -24,8 +25,7 @@ import { BaseQueryModel } from "src/app/model/base.query-model";
 })
 export class AlldoctorsComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   displayedColumns = [
     "name",
     "clinicName",
@@ -40,7 +40,7 @@ export class AlldoctorsComponent
   index: number;
   id: number;
   doctors: Doctors | null;
-  model:DoctorModel[] = [];
+  model: DoctorModel[] = [];
   unsubscribe$ = new Subject();
   isTblLoading = false;
   searchDoctor: string;
@@ -61,8 +61,8 @@ export class AlldoctorsComponent
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
   ngOnInit() {
-   // this.loadData();
-   this.getAll()
+    // this.loadData();
+    this.getAll()
   }
   ngOnDestroy(): void {
     this.unsubscribe$.complete();
@@ -74,7 +74,7 @@ export class AlldoctorsComponent
 
   getAll() {
     let query = "";
-    if(this.searchDoctor) {
+    if (this.searchDoctor) {
       query = `?name=${this.searchDoctor}`
     }
 
@@ -82,12 +82,12 @@ export class AlldoctorsComponent
     query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
     this.isTblLoading = true;
     this.doctorService.getAll(query)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.isTblLoading = false;
-      this.model = resp.result;
-      this.totalCount = resp.total;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.isTblLoading = false;
+        this.model = resp.result;
+        this.totalCount = resp.total;
+      });
   }
   paginate(event) {
     let pageIndex = event.pageIndex;
@@ -104,18 +104,29 @@ export class AlldoctorsComponent
     this.router.navigateByUrl(`/admin/doctors/edit-doctor/${id}`)
   }
   deleteItem(id) {
-    
-    this.doctorService.delete(id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.refreshTable();
-        this.showNotification(
-          "snackbar-danger",
-          "Delete Record Successfully...!!!",
-          "bottom",
-          "center"
-        );
-    })
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        this.doctorService.delete(id)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp) => {
+            this.refreshTable();
+            this.showNotification(
+              "snackbar-danger",
+              "Delete Record Successfully...!!!",
+              "bottom",
+              "center"
+            );
+          });
+      }
+    });
   }
   private refreshTable() {
     this.getAll();
@@ -132,8 +143,8 @@ export class AlldoctorsComponent
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.renderedData.forEach((row) =>
-          this.selection.select(row)
-        );
+        this.selection.select(row)
+      );
   }
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
@@ -236,7 +247,7 @@ export class ExampleDataSource extends DataSource<Doctors> {
       })
     );
   }
-  disconnect() {}
+  disconnect() { }
   /** Returns a sorted copy of the database data. */
   sortData(data: Doctors[]): Doctors[] {
     if (!this._sort.active || this._sort.direction === "") {

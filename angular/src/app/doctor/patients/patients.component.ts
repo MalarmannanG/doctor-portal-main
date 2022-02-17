@@ -1,181 +1,290 @@
-import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import { FormControl } from "@angular/forms";
-import { map, Observable, startWith } from "rxjs";
-import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { MatChipInputEvent } from "@angular/material/chips";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { PrescriptionList } from "../model/prescription.model";
-
-
-export class DiagModel {
-  diagnosis: string;
-  description: string;
-}
-
-export class SurgeryModel {
-  surgery: string;
-  description: string;
-}
-
-export class DrugAalergyModel {
-  surgery: string;
-  description: string;
-}
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { PatientService } from "./patient.service";
+import { HttpClient } from "@angular/common/http";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { Patient } from "./patient.model";
+import { DataSource } from "@angular/cdk/collections";
+import { MatSnackBar } from "@angular/material/snack-bar";
+// import { FormDialogComponent } from "./dialog/form-dialog/form-dialog.component";
+// import { DeleteComponent } from "./dialog/delete/delete.component";
+import { BehaviorSubject, fromEvent, merge, Observable, Subject, takeUntil } from "rxjs";
+import { map } from "rxjs/operators";
+import { SelectionModel } from "@angular/cdk/collections";
+import { UnsubscribeOnDestroyAdapter } from "src/app/shared/UnsubscribeOnDestroyAdapter";
+import { PatientModel } from "./model/patient.model";
+import { PatientMasterService } from "./service/patient.service";
+import { Router } from "@angular/router";
+import { BaseQueryModel } from "src/app/model/base.query-model";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-patients",
   templateUrl: "./patients.component.html",
-  styleUrls: ["./patients.component.scss"],
+  styleUrls: ["./patients.component.sass"],
 })
+export class PatientsComponent
+  extends UnsubscribeOnDestroyAdapter
+  implements OnInit, OnDestroy {
+  displayedColumns = [
+    "patientName",
+    "age",
+    "gender",
+    "address",
+    "mobile",
+    "referedByName",
+    //"actions"
+  ];
+  exampleDatabase: PatientService | null;
+  dataSource: ExampleDataSource | null;
+  selection = new SelectionModel<Patient>(true, []);
+  index: number;
+  id: number;
+  patient: Patient | null;
+  unsubscribe$ = new Subject();
+  isTblLoading = false;
+  model: PatientModel[] = [];
+  searchPatient: string;
+  queryModel = new BaseQueryModel();
+  totalCount = 0;
 
-export class PatientsComponent implements OnInit {
-
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  templateCtrl = new FormControl();
-  filteredTemplate: Observable<string[]>;
-  templates: string[] = ['Kidney Stone'];
-  allTemplate: string[] = ['Abdominal Pain', 'UTI', 'Urinary Incontinence', 'BPH'];
-  step = 0;
-
-  @ViewChild('templateInput') templateInput: ElementRef<HTMLInputElement>;
-  @ViewChild('lastElement') lastElement: ElementRef<HTMLInputElement>;
-
-  diagList: DiagModel[] = [];
-  surgeryList: SurgeryModel[] = [];
-  drugList: DrugAalergyModel[] = [];
-  inestigationList: DrugAalergyModel[] = [];
-  prescriptionList: PrescriptionList[] = [];
-  closeResult = '';
-  isTemplateSelected: boolean = false;
-  tomorrow = new Date();
-  newMed: boolean = false;
-  defaultValue = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-
-  constructor(config: NgbModalConfig, private modalService: NgbModal) {
-    config.backdrop = 'static';
-    config.size = 'lg';
-    config.scrollable = true
-    this.tomorrow.setDate(this.tomorrow.getDate() + 1);
-    this.setFilterValue();
+  constructor(
+    public httpClient: HttpClient,
+    public dialog: MatDialog,
+    public patientService: PatientService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private patientsService: PatientMasterService
+  ) {
+    super();
+  }
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild("filter", { static: true }) filter: ElementRef;
+  ngOnDestroy(): void {
+    this.unsubscribe$.complete();
+  }
+  ngOnInit() {
+    //this.loadData();
+    this.getAll();
+  }
+  refresh() {
+    //this.loadData();
+    this.getAll();
   }
 
-  setFilterValue() {
-    this.filteredTemplate = this.templateCtrl.valueChanges.pipe(
-      startWith(null),
-      map((template: string | null) => (template ? this._filter(template) : this.allTemplate.slice())),
+
+  getAll() {
+    this.isTblLoading = true;
+    let query = "";
+    if (this.searchPatient) {
+      query = `?name=${this.searchPatient}`
+    }
+
+    query = query ? `${query}&` : "?";
+    query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
+    this.patientsService.getAll(query)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.isTblLoading = false;
+        this.model = resp.result;
+        this.totalCount = resp.total;
+      });
+  }
+
+  paginate(event) {
+    let pageIndex = event.pageIndex;
+    let pageSize = event.pageSize;
+    this.queryModel.skip = pageIndex * pageSize;
+    this.queryModel.take = pageSize;
+    this.getAll();
+  }
+
+  addNew() {
+    this.router.navigateByUrl('/doctor/patient-profile');
+  }
+  editCall(id) {
+    this.router.navigateByUrl('/doctor/patient-profile/' + id)
+  }
+  deleteItem(id) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        this.patientsService.delete(id)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp) => {
+            this.refreshTable();
+            this.showNotification(
+              "snackbar-danger",
+              "Delete Record Successfully...!!!",
+              "bottom",
+              "center"
+            );
+          });
+      }
+    });
+  }
+  private refreshTable() {
+    this.getAll();
+  }
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.renderedData.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.renderedData.forEach((row) =>
+        this.selection.select(row)
+      );
+  }
+  removeSelectedRows() {
+    const totalSelect = this.selection.selected.length;
+    this.selection.selected.forEach((item) => {
+      const index: number = this.dataSource.renderedData.findIndex(
+        (d) => d === item
+      );
+      // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
+      this.exampleDatabase.dataChange.value.splice(index, 1);
+      this.refreshTable();
+      this.selection = new SelectionModel<Patient>(true, []);
+    });
+    this.showNotification(
+      "snackbar-danger",
+      totalSelect + " Record Delete Successfully...!!!",
+      "bottom",
+      "center"
     );
   }
-
-  addDiag() {
-    this.diagList.push(new DiagModel());
-    setTimeout(() => this.focusInput(this.lastElement), 300);
+  public loadData() {
+    this.exampleDatabase = new PatientService(this.httpClient);
+    this.dataSource = new ExampleDataSource(
+      this.exampleDatabase,
+      this.paginator,
+      this.sort
+    );
+    this.subs.sink = fromEvent(this.filter.nativeElement, "keyup").subscribe(
+      () => {
+        if (!this.dataSource) {
+          return;
+        }
+        this.dataSource.filter = this.filter.nativeElement.value;
+      }
+    );
   }
-
-  focusInput(element: ElementRef) {
-    element.nativeElement.focus();
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+      duration: 2000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
   }
-
-  removeDiag() {
-    this.diagList.pop();
-    setTimeout(() => this.focusInput(this.lastElement), 300);
+}
+export class ExampleDataSource extends DataSource<Patient> {
+  filterChange = new BehaviorSubject("");
+  get filter(): string {
+    return this.filterChange.value;
   }
-
-  addSurgery() {
-    this.surgeryList.push(new SurgeryModel());
+  set filter(filter: string) {
+    this.filterChange.next(filter);
   }
-
-  removeSurgery() {
-    this.surgeryList.pop()
+  filteredData: Patient[] = [];
+  renderedData: Patient[] = [];
+  constructor(
+    public exampleDatabase: PatientService,
+    public paginator: MatPaginator,
+    public _sort: MatSort
+  ) {
+    super();
+    // Reset to the first page when the user changes the filter.
+    this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
-
-  addDrug() {
-    this.drugList.push(new DrugAalergyModel());
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<Patient[]> {
+    // Listen for any changes in the base data, sorting, filtering, or pagination
+    const displayDataChanges = [
+      this.exampleDatabase.dataChange,
+      this._sort.sortChange,
+      this.filterChange,
+      this.paginator.page,
+    ];
+    this.exampleDatabase.getAllPatients();
+    return merge(...displayDataChanges).pipe(
+      map(() => {
+        // Filter data
+        this.filteredData = this.exampleDatabase.data
+          .slice()
+          .filter((patient: Patient) => {
+            const searchStr = (
+              patient.name +
+              patient.gender +
+              patient.address +
+              patient.date +
+              patient.bGroup +
+              patient.treatment +
+              patient.mobile
+            ).toLowerCase();
+            return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+          });
+        // Sort filtered data
+        const sortedData = this.sortData(this.filteredData.slice());
+        // Grab the page's slice of the filtered sorted data.
+        const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+        this.renderedData = sortedData.splice(
+          startIndex,
+          this.paginator.pageSize
+        );
+        return this.renderedData;
+      })
+    );
   }
-
-  removeDrug() {
-    this.drugList.pop()
-  }
-
-  addInestigation() {
-    this.inestigationList.push(new DrugAalergyModel());
-  }
-
-  removeInestigation() {
-    this.inestigationList.pop()
-  }
-
-  addPrescription() {
-    this.prescriptionList.push(new PrescriptionList());
-    this.newMed = false;
-  }
-
-  addMed() {
-    this.newMed = true;
-  }
-
-  removePrescription() {
-    this.prescriptionList.pop()
-  }
-
-  openModel(content) {
-    this.modalService.open(content);
-  }
-
-  onSaveDiagnosis() {
-    this.step = 1;
-    window.scroll(0, 0);
-  }
-
-
-  addTemplate(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    if (value) {
-      this.templates.push(value);
+  disconnect() { }
+  /** Returns a sorted copy of the database data. */
+  sortData(data: Patient[]): Patient[] {
+    if (!this._sort.active || this._sort.direction === "") {
+      return data;
     }
-    event.chipInput!.clear();
-
-    this.templateCtrl.setValue(null);
-  }
-
-  removeTemplate(template: string): void {
-    const index = this.templates.indexOf(template);
-    this.allTemplate.push(template);
-    this.setFilterValue();
-    if (index >= 0) {
-      this.templates.splice(index, 1);
-    }
-  }
-
-  selectedTemplate(event: MatAutocompleteSelectedEvent): void {
-    this.templates.push(event.option.viewValue);
-    this.allTemplate = this.allTemplate.filter(template => template !== event.option.viewValue)
-    this.templateInput.nativeElement.value = '';
-    this.templateCtrl.setValue(null);
-  }
-
-  changeTemplate() {
-    this.isTemplateSelected = !this.isTemplateSelected;
-  }
-
-  SaveTemplate() {
-
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allTemplate.filter(template => template.toLowerCase().includes(filterValue));
-  }
-
-
-
-  ngOnInit(): void {
-    this.diagList.push(new DiagModel());
-    this.surgeryList.push(new SurgeryModel());
-    this.drugList.push(new DrugAalergyModel());
-    this.inestigationList.push(new DrugAalergyModel());
-    this.prescriptionList.push(new PrescriptionList());
+    return data.sort((a, b) => {
+      let propertyA: number | string = "";
+      let propertyB: number | string = "";
+      switch (this._sort.active) {
+        case "id":
+          [propertyA, propertyB] = [a.id, b.id];
+          break;
+        case "name":
+          [propertyA, propertyB] = [a.name, b.name];
+          break;
+        case "gender":
+          [propertyA, propertyB] = [a.gender, b.gender];
+          break;
+        case "date":
+          [propertyA, propertyB] = [a.date, b.date];
+          break;
+        case "address":
+          [propertyA, propertyB] = [a.address, b.address];
+          break;
+        case "mobile":
+          [propertyA, propertyB] = [a.mobile, b.mobile];
+          break;
+      }
+      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+      return (
+        (valueA < valueB ? -1 : 1) * (this._sort.direction === "asc" ? 1 : -1)
+      );
+    });
   }
 }

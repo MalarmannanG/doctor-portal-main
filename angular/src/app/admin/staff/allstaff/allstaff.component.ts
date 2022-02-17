@@ -17,21 +17,21 @@ import { Router } from "@angular/router";
 import { UserMasterService } from "../service/user.service";
 import { AppUserModel } from "../model/user.model";
 import { BaseQueryModel } from "src/app/model/base.query-model";
+import Swal from "sweetalert2";
 @Component({
   selector: "app-allstaff",
   templateUrl: "./allstaff.component.html",
-  styleUrls: ["./allstaff.component.sass"],
+  styleUrls: ["./allstaff.component.scss"],
 })
 export class AllstaffComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit
-{
+  implements OnInit {
   displayedColumns = [
-    "name",
-    "username",
+    // "name",
+    // "username",
+    "email",
     "userType",
     "phoneNo",
-    "email",
     "gender",
     "address",
     "actions",
@@ -74,10 +74,10 @@ export class AllstaffComponent
     this.getAll();
   }
 
-  
+
   getAll() {
     let query = "";
-    if(this.searchUser) {
+    if (this.searchUser) {
       query = `?name=${this.searchUser}`
     }
 
@@ -86,12 +86,12 @@ export class AllstaffComponent
 
     this.isTblLoading = true;
     this.userMasterService.getAll(query)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.isTblLoading = false;
-      this.model = resp.result;
-      this.totalCount = resp.total;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.isTblLoading = false;
+        this.model = resp.result;
+        this.totalCount = resp.total;
+      });
   }
 
   paginate(event) {
@@ -109,18 +109,29 @@ export class AllstaffComponent
     this.router.navigateByUrl(`/admin/staff/edit-staff/${id}`)
   }
   deleteItem(id) {
-    
-    this.userMasterService.delete(id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.refreshTable();
-        this.showNotification(
-          "snackbar-danger",
-          "Delete Record Successfully...!!!",
-          "bottom",
-          "center"
-        );
-    })
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        this.userMasterService.delete(id)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp) => {
+            this.refreshTable();
+            this.showNotification(
+              "snackbar-danger",
+              "Delete Record Successfully...!!!",
+              "bottom",
+              "center"
+            );
+          });
+      }
+    });
   }
   private refreshTable() {
     this.getAll();
@@ -137,8 +148,8 @@ export class AllstaffComponent
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.renderedData.forEach((row) =>
-          this.selection.select(row)
-        );
+        this.selection.select(row)
+      );
   }
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
@@ -240,9 +251,10 @@ export class ExampleDataSource extends DataSource<Staff> {
       })
     );
   }
-  disconnect() {}
+  disconnect() { }
   /** Returns a sorted copy of the database data. */
   sortData(data: Staff[]): Staff[] {
+    console.log('Data');
     if (!this._sort.active || this._sort.direction === "") {
       return data;
     }

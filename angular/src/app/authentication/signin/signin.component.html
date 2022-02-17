@@ -30,11 +30,11 @@
               </div>              
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Username</mat-label>
+                  <mat-label>Staff Email</mat-label>
                   <input matInput formControlName="username" (keyup)="errorMsg = ''" />
                   <mat-icon matSuffix>face</mat-icon>                
                   <mat-error *ngIf="authForm.get('username').hasError('required')">
-                    Username is required
+                    Email is required
                   </mat-error>
                 </mat-form-field>
               </div>

@@ -14,6 +14,7 @@ import { BaseQueryModel } from "src/app/model/base.query-model";
 import { DiagnosisMasterService } from "../service/diagnosis-master.service";
 
 import { DiagnosisMasterModel } from "../model/diagnosis-master.model.service";
+import Swal from "sweetalert2";
 @Component({
   selector: "app-all-diagnosis-master",
   templateUrl: "./all-diagnosis-master.component.html",
@@ -21,8 +22,7 @@ import { DiagnosisMasterModel } from "../model/diagnosis-master.model.service";
 })
 export class AllDiagnosisMasterComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   displayedColumns = [
     "name",
     "description",
@@ -30,7 +30,7 @@ export class AllDiagnosisMasterComponent
   ];
   index: number;
   id: number;
-  model:DiagnosisMasterModel[] = [];
+  model: DiagnosisMasterModel[] = [];
   unsubscribe$ = new Subject();
   isTblLoading = false;
   searchDiagnosis: string;
@@ -40,7 +40,7 @@ export class AllDiagnosisMasterComponent
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    private diagnosisMasterService: DiagnosisMasterService,    
+    private diagnosisMasterService: DiagnosisMasterService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -50,8 +50,8 @@ export class AllDiagnosisMasterComponent
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
   ngOnInit() {
-   // this.loadData();
-   this.getAll()
+    // this.loadData();
+    this.getAll()
   }
   ngOnDestroy(): void {
     this.unsubscribe$.complete();
@@ -63,7 +63,7 @@ export class AllDiagnosisMasterComponent
 
   getAll() {
     let query = "";
-    if(this.searchDiagnosis) {
+    if (this.searchDiagnosis) {
       query = `?name=${this.searchDiagnosis}`
     }
 
@@ -71,12 +71,12 @@ export class AllDiagnosisMasterComponent
     query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
     this.isTblLoading = true;
     this.diagnosisMasterService.getAll(query)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.isTblLoading = false;
-      this.model = resp.result;
-      this.totalCount = resp.total;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.isTblLoading = false;
+        this.model = resp.result;
+        this.totalCount = resp.total;
+      });
   }
   paginate(event) {
     let pageIndex = event.pageIndex;
@@ -93,36 +93,47 @@ export class AllDiagnosisMasterComponent
     this.router.navigateByUrl(`/doctor/edit-diagnosis/${id}`)
   }
   deleteItem(id) {
-    
-    this.diagnosisMasterService.delete(id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.refreshTable();
-        this.showNotification(
-          "snackbar-danger",
-          "Delete Record Successfully...!!!",
-          "bottom",
-          "center"
-        );
-    })
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        this.diagnosisMasterService.delete(id)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp) => {
+            this.refreshTable();
+            this.showNotification(
+              "snackbar-danger",
+              "Delete Record Successfully...!!!",
+              "bottom",
+              "center"
+            );
+          });
+      }
+    });
   }
   private refreshTable() {
     this.getAll();
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-  
+
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    
+
   }
   removeSelectedRows() {
-  
+
   }
   public loadData() {
-   
+
   }
   showNotification(colorName, text, placementFrom, placementAlign) {
     this.snackBar.open(text, "", {

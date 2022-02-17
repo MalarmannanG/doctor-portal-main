@@ -149,7 +149,7 @@
                   </h5>
                   <ul class="list-group">
                     <li class="list-group-item" *ngFor="let eachFile of model.patientFiles">
-                      <a [download]="eachFile.fileName" [href]="prepareUrl(eachFile.filePath)">{{eachFile.fileName}}</a>
+                      <a style="color:#0d6efd; cursor:pointer;" (click)="downloadFile(eachFile)">{{eachFile.fileName}}</a>
                     </li>
                   </ul>
                 </div>

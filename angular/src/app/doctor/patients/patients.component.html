@@ -5,7 +5,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ul class="breadcrumb breadcrumb-style ">
             <li class="breadcrumb-item">
-              <h4 class="page-title">Patient Profile</h4>
+              <h4 class="page-title">View Patient</h4>
             </li>
             <li class="breadcrumb-item bcrumb-1">
               <a routerLink="/admin/dashboard/main">
@@ -14,605 +14,127 @@
             <li class="breadcrumb-item bcrumb-2">
               <a href="#" onClick="return false;">Patient</a>
             </li>
-            <li class="breadcrumb-item active">Profile</li>
+            <li class="breadcrumb-item active">View</li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="row clearfix">
-      <div class="col-lg-10 col-md-9 col-12">
-        <mat-accordion>
-          <mat-expansion-panel [expanded]="step === 0" (opened)="step=0">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Diagnosis
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="row align-items-center">
-              <ng-template #templateSelection>
-                <div class="col-10 mb-2">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Select Template</mat-label>
-                    <mat-chip-list #chipList aria-label="Template selection">
-                      <mat-chip *ngFor="let template of templates" selectable="true" removable="true"
-                        (removed)="removeTemplate(template)">
-                        {{template}}
-                        <button matChipRemove>
-                          <mat-icon>cancel</mat-icon>
-                        </button>
-                      </mat-chip>
-                      <input placeholder="Template Name" #templateInput [formControl]="templateCtrl"
-                        [matAutocomplete]="auto" [matChipInputFor]="chipList"
-                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                        (matChipInputTokenEnd)="addTemplate($event)">
-                    </mat-chip-list>
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedTemplate($event)">
-                      <mat-option *ngFor="let template of filteredTemplate | async" [value]="template">
-                        {{template}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </div>
-                <div class="col-2 mb-2">
-                  <button (click)="SaveTemplate()" class="btn btn-success me-2">Done</button>
-                  <button (click)="changeTemplate()" class="btn btn-danger">Cancel</button>
-                </div>
-              </ng-template>
-              <div class="col-12 mb-2" *ngIf="!isTemplateSelected; else templateSelection">
-                <ng-template #displayTemp>
-                  <mat-chip-list aria-label="Template Display">
-                    <mat-chip *ngFor="let template of templates" selectable="true" removable="true"
-                      (removed)="removeTemplate(template)">
-                      {{template}}
-                      <button matChipRemove>
-                        <mat-icon>cancel</mat-icon>
-                      </button>
-                    </mat-chip>
-                    <mat-chip>
-                      <button class="btn btn-link" (click)="changeTemplate()">
-                        Add More
-                      </button>
-                    </mat-chip>
-                  </mat-chip-list>
-                </ng-template>
-                <button *ngIf="templates.length <= 0; else displayTemp" (click)="changeTemplate()"
-                  ngbTooltip="Add template" class="pull-right btn btn-sm btn-primary">
-                  <i class="bi bi-plus-circle"></i> Template
-                </button>
-              </div>
-            </div>
-            <div class="row cust-margin">
-              <div class="col-12" *ngFor="let each of diagList; let index = index; last as isLast">
-                <div class="row align-items-center">
-                  <div class="col-md-5 col-12">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Diagnosis</mat-label>
-                      <input *ngIf="isLast; else noFocus" #lastElement matInput formControlName="{{'diagnosis' + i}}">
-                      <ng-template #noFocus>
-                        <input matInput formControlName="{{'diagnosis' + i}}">
-                      </ng-template>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-6 col-12">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Description</mat-label>
-                      <input matInput formControlName="description">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-1 col-12 col-btn" *ngIf="index === diagList.length - 1">
-                    <i class="bi bi-trash" ngbTooltip="Delete Diagnosis" [openDelay]="500" (click)="removeDiag()"></i>
-                    <i class="bi bi-plus-circle" ngbTooltip="Add Diagnosis" [openDelay]="500" (click)="addDiag()"></i>
-                  </div>
-                  <div class="col-md-1 col-12 col-btn" *ngIf="index !== diagList.length - 1">
-                    <i class="bi bi-pencil"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-12">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Complaints</mat-label>
-                  <textarea matInput formControlName="address"></textarea>
-                </mat-form-field>
-              </div>
-              <div class="col-md-6 col-12">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Examination </mat-label>
-                  <textarea matInput formControlName="address" defaultValue="{{defaultValue}}"></textarea>
-                </mat-form-field>
-              </div>
-              <div class="col-md-6 col-12">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Impression</mat-label>
-                  <textarea matInput formControlName="address" defaultValue="{{defaultValue}}"></textarea>
-                </mat-form-field>
-              </div>
-              <div class="col-md-6 col-12">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Advice</mat-label>
-                  <textarea matInput formControlName="address"></textarea>
-                </mat-form-field>
-              </div>
-              <div class="col-md-6 col-12">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Plan</mat-label>
-                  <textarea matInput formControlName="address"></textarea>
-                </mat-form-field>
-              </div>
-              <div class="col-md-6 col-12">
-                <mat-form-field class="example-full-width" appearance="outline">
-                  <mat-label>Follow-up</mat-label>
-                  <textarea matInput formControlName="address"></textarea>
-                </mat-form-field>
-              </div>
-              <div class="col-12">
-                <!-- <app-multiuploader></app-multiuploader> -->
-              </div>
-              <div class="col-12 mt-3 text-center">
-                <button class="btn btn-primary" (click)="onSaveDiagnosis()">Save and Prescribe</button>
-              </div>           
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel [expanded]="step === 1"  (opened)="step=1">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Prescription
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="row">
-              <app-prescription [medList]="prescriptionList"></app-prescription>
-              <div class="col-12">
-                <div class="row" *ngIf="newMed">
-                  <div class="col-md-3 col-12">
-                    <mat-form-field class="example-full-width with-hint" appearance="outline">
-                      <mat-label>Medicine Name</mat-label>
-                      <input matInput formControlName="medName">
-                      <mat-hint>Generic Name</mat-hint>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-2 col-12">
-                    <mat-form-field class="example-full-width mb-3" appearance="outline">
-                      <mat-label>Strength</mat-label>
-                      <mat-select formControlName="strength">
-                        <mat-option value="500mg">500mg</mat-option>
-                        <mat-option value="250mg">250mg</mat-option>
-                        <mat-option value="100mg">100mg</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-3 col-12">
-                    <mat-radio-group aria-label="schedule">
-                      <mat-radio-button value="before food">Before Food</mat-radio-button>
-                      <mat-radio-button value="after food">After Food</mat-radio-button>
-                    </mat-radio-group>
-                    <section class="example-section">
-                      <mat-checkbox class="example-margin">Morning</mat-checkbox>
-                      <mat-checkbox class="example-margin">Noon</mat-checkbox>
-                      <mat-checkbox class="example-margin">Night</mat-checkbox>
-                    </section>
-                  </div>
-                  <div class="col-md-2 col-12">
-                    <mat-form-field class="example-full-width mb-3" appearance="outline">
-                      <mat-label>Remarks </mat-label>
-                      <input matInput formControlName="first">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-2 col-12">
-                    <mat-form-field class="example-full-width mb-3" appearance="outline">
-                      <mat-label>No of Days </mat-label>
-                      <input matInput formControlName="first" type="number" min="1">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-12 text-center">
-                    <button (click)="addPrescription()" class="btn btn-sm btn-success">Done</button>
-                  </div>
-                </div>
-                <div class="col-12 text-center" *ngIf="!newMed">
-                  <button (click)="addMed()" class="btn btn-sm btn-primary">Add</button>
-                </div>
-              </div>
-            </div>
-          </mat-expansion-panel>
-        </mat-accordion>
-
-        <!-- <mat-tab-group mat-align-tabs="start">
-                <mat-tab label="Surgery / Operation">
-                  <div class="p-10">
-                    <div class="row">
-                      <div class="col-12">
-                        <button (click)="addSurgery()" class="pull-right btn btn-sm btn-primary">Add +</button>
-                      </div>
-
-                      <div class="col-12" *ngFor="let each of surgeryList; let index = index;">
-                        <div class="row">
-                          <div class="col-md-4 col-12">
-                            <mat-form-field class="example-full-width mb-3" appearance="outline">
-                              <mat-label>Name </mat-label>
-                              <input matInput formControlName="first">
-                            </mat-form-field>
-                          </div>
-                          <div class="col-md-4 col-12">
-                            <mat-form-field class="example-full-width mb-3" appearance="outline">
-                              <mat-label>Description </mat-label>
-                              <input matInput formControlName="first">
-                            </mat-form-field>
-                          </div>
-                          <div class="col-md-4 col-12" *ngIf="index == surgeryList.length - 1">
-                            <button (click)="removeSurgery()" class="btn btn-sm btn-danger mt-1">Delete</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </mat-tab>
-                <mat-tab label="Drug Alergy">
-                  <div class="p-10">
-                    <div class="row">
-                      <div class="col-12">
-                        <button (click)="addDrug()" class="pull-right btn btn-sm btn-primary">Add +</button>
-                      </div>
-
-                      <div class="col-12" *ngFor="let each of drugList; let index = index;">
-                        <div class="row">
-                          <div class="col-md-4 col-12">
-                            <mat-form-field class="example-full-width mb-3" appearance="outline">
-                              <mat-label>Drug Name </mat-label>
-                              <input matInput formControlName="first">
-                            </mat-form-field>
-                          </div>
-                          <div class="col-md-4 col-12">
-                            <mat-form-field class="example-full-width mb-3" appearance="outline">
-                              <mat-label>Reason </mat-label>
-                              <input matInput formControlName="first">
-                            </mat-form-field>
-                          </div>
-                          <div class="col-md-4 col-12" *ngIf="index == drugList.length - 1">
-                            <button (click)="removeDrug()" class="btn btn-sm btn-danger mt-1">Delete</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </mat-tab>
-              </mat-tab-group> -->
-      </div>
-      <div class="col-lg-2 col-md-3 col-12">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
-          <!-- <div class="header">
-            <h2>
-              <strong>Visits</strong>
-            </h2>
-          </div> -->
           <div class="body">
-            <div class="row">
-              <div class="col-md-12">
-                <!-- <ul class="left-timeline">
-                    <li>
-                      <time class="left-time" datetime=""><span class="hidden"></span>
-                        <span class="large"></span></time>
-                      <div class="left-icon"><img style="width: 25px;" src="assets/images/user/user1.jpg" alt="">
-                      </div>
-                      <div class="left-label empty"> <span>2017-11-04</span> </div>
-                    </li>
-                    <li>
-                      <time class="left-time" datetime=""><span class="hidden"></span>
-                        <span class="large"></span></time>
-                      <div class="left-icon"><img style="width: 25px;" src="assets/images/user/user2.jpg" alt="">
-                      </div>
-                      <div class="left-label empty"> <span>2017-10-05</span> </div>
-                    </li>
-                    <li>
-                      <time class="left-time" datetime=""><span class="hidden"></span>
-                        <span class="large"></span></time>
-                      <div class="left-icon"><img style="width: 25px;" src="assets/images/user/user3.jpg" alt="">
-                      </div>
-                      <div class="left-label empty"> <span>2017-09-02</span> </div>
-                    </li>
-                    <li>
-                      <time class="left-time" datetime=""><span class="hidden"></span>
-                        <span class="large"></span></time>
-                      <div class="left-icon"><img style="width: 25px;" src="assets/images/user/user4.jpg" alt="">
-                      </div>
-                      <div class="left-label empty"> <span>2017-06-24</span> </div>
-                    </li>
-                  </ul> -->
-
-                <ul>
-                  <li>
-                    <button class="btn btn-lg btn-link" (click)="openModel(investigation)">
-                      Investigation Results
+            <div class="table-responsive">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ms-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Patients</strong></h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                        <input placeholder="Search" type="text" [(ngModel)]="searchPatient" (keyup)="getAll()" #filter class="browser-default search-field"
+                          aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10" [hidden]=!selection.hasValue()>
+                          <button mat-mini-fab color="warn" (click)="removeSelectedRows()">
+                            <mat-icon class="col-white">delete</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <li>
+                        <div class="icon-button-demo">
+                          <button mat-mini-fab color="primary" (click)="addNew()">
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="icon-button-demo">
+                          <button mat-mini-fab color="primary" (click)="refresh()">
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table #table [dataSource]="model" matSort class="mat-cell">                                           
+                <ng-container matColumnDef="patientName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.initial}} {{row.patientName}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="age">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Age
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" > {{row.age}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="gender">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Gender
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.gender}}
+                  </mat-cell>
+                </ng-container>                
+                <ng-container matColumnDef="address">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Address
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.address}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="mobile">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.mobileNumber}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="referedByName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header >Facility
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.referedByName}}
+                  </mat-cell>
+                </ng-container>
+                <!-- actions -->
+                <!-- <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef class="pr-0">Actions</mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button color="accent" class="btn-tbl-edit" (click)="$event.stopPropagation()"
+                      (click)="editCall(row.id)">
+                      <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
                     </button>
-                  </li>
-                  <li>
-                    <button class="btn btn-lg btn-link" (click)="openModel(visits)">Past History</button>
-                  </li>
-                  <li>
-                    <button class="btn btn-lg btn-link" (click)="openModel(visits)">Past Visits</button>
-                  </li>
-                </ul>
+                    <button mat-icon-button color="accent" class="btn-tbl-delete" (click)="$event.stopPropagation()"
+                      (click)="deleteItem(row.id)">
+                      <mat-icon aria-label="Delete" class="col-white">delete</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container> -->
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
+                <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row.id)"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <!-- Loading spinner -->
+              <div *ngIf="isTblLoading" class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mt-10">
-          <div class="header pb-0">
-            <h2>
-              <strong>Vitals</strong>
-            </h2>
-          </div>
-          <div class="body">
-            <div class="row">
-              <div class="col-md-12 mb-0">
-                <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>Temperature</mat-label>
-                  <input matInput type="number" value="102" readonly>
-                  <span matSuffix>&#8451;</span>
-                </mat-form-field>
+              <div *ngIf="!isTblLoading" class="no-results"
+                [style.display]="model.length == 0 ? '' : 'none'">
+                No results
               </div>
-              <div class="col-md-12 mb-0">
-                <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>SpO2</mat-label>
-                  <input matInput type="number" value="97" readonly>
-                  <span matSuffix>%</span>
-                </mat-form-field>
-              </div>
-              <div class="col-md-12 mb-0">
-                <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>Pulse</mat-label>
-                  <input matInput type="number" value="104" readonly>
-                  <span matSuffix>/min</span>
-                </mat-form-field>
-              </div>
-              <div class="col-md-12 mb-0">
-                <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>BP</mat-label>
-                  <input matInput type="text" value="84 / 123" readonly>
-                  <span matSuffix>mmHg</span>
-                </mat-form-field>
-              </div>
-              <div class="col-md-12 mb-0">
-                <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>Weight</mat-label>
-                  <input matInput type="number" value="65" readonly>
-                  <span matSuffix>kg</span>
-                </mat-form-field>
-              </div>
-              <div class="col-md-12 mb-0">
-                <mat-form-field class="example-full-width mb-3" appearance="outline">
-                  <mat-label>Height</mat-label>
-                  <input matInput type="number" value="165" readonly>
-                  <span matSuffix>cm</span>
-                </mat-form-field>
-              </div>
+              <mat-paginator #paginator [length]="totalCount" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]" (page)="paginate($event)">
+              </mat-paginator>
             </div>
           </div>
         </div>
       </div>
-
-      <ng-template #investigation let-modal>
-        <div class="modal-header">
-          <h3 class="modal-title" id="modal-basic-title">Investigation
-            Results</h3>
-          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-12">
-              <button (click)="addInestigation()" class="pull-right btn btn-sm btn-primary">Add
-                +</button>
-            </div>
-            <div class="col-12" *ngFor="let each of inestigationList; let index = index;">
-              <div class="row align-items-center">
-                <div class="col-md-4 col-12">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Test Name </mat-label>
-                    <input matInput formControlName="first">
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4 col-12">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Remarks </mat-label>
-                    <input matInput formControlName="first">
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4 col-12" *ngIf="index == inestigationList.length - 1">
-                  <button (click)="removeInestigation()" class="btn btn-sm btn-danger">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
-        </div>
-      </ng-template>
-
-      <ng-template #visits let-modal>
-        <div class="modal-header">
-          <h3 class="modal-title" id="modal-basic-title">Past Visit</h3>
-          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row head-row">
-            <div class="col-md-3 col-12">
-              <h5 class="mb-0">Doctor</h5>
-            </div>
-            <div class="col-md-4 col-12">
-              <h5 class="mb-0">Date</h5>
-            </div>
-            <div class="col-md-4 col-12">
-              <h5 class="mb-0">Treatment</h5>
-            </div>
-          </div>
-          <ngb-accordion [closeOthers]="true" class="acc-btn-last">
-            <ngb-panel id="visit-1">
-              <ng-template ngbPanelHeader let-opened="opened">
-                <div class="row align-items-center">
-                  <div class="col-md-4 col-12">
-                    <h6 class="mb-0">Dr. A.K. Jayaraj</h6>
-                  </div>
-                  <div class="col-md-3 col-12">
-                    <h6 class="mb-0">11/05/2017</h6>
-                  </div>
-                  <div class="col-md-4 col-12">
-                    <h6 class="mb-0">Check up</h6>
-                  </div>
-                  <div class="col-md-1 col-12">
-                    <button ngbPanelToggle class="btn btn-link p-0">
-                      <i class="bi bi-dash-circle" *ngIf="opened; else plus"></i>
-                      <ng-template #plus>
-                        <i class="bi bi-plus-circle"></i>
-                      </ng-template>
-                    </button>
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template ngbPanelContent>
-                <app-prescription [medList]="prescriptionList"></app-prescription>
-              </ng-template>
-            </ngb-panel>
-            <ngb-panel id="visit-2">
-              <ng-template ngbPanelHeader let-opened="opened">
-                <div class="row align-items-center">
-                  <div class="col-md-4 col-12">
-                    <h6 class="mb-0">Dr. A.K. Jayaraj</h6>
-                  </div>
-                  <div class="col-md-3 col-12">
-                    <h6 class="mb-0">15/05/2017</h6>
-                  </div>
-                  <div class="col-md-4 col-12">
-                    <h6 class="mb-0">Operation</h6>
-                  </div>
-                  <div class="col-md-1 col-12">
-                    <button ngbPanelToggle class="btn btn-link p-0">
-                      <i class="bi bi-dash-circle" *ngIf="opened; else plus"></i>
-                      <ng-template #plus>
-                        <i class="bi bi-plus-circle"></i>
-                      </ng-template>
-                    </button>
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template ngbPanelContent>
-                <app-prescription [medList]="prescriptionList"></app-prescription>
-              </ng-template>
-            </ngb-panel>
-          </ngb-accordion>
-          <!-- <div class="table-responsive">
-            <table class="table table-striped custom-table table-hover">
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Doctor</th>
-                  <th>Treatment</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>11/05/2017</td>
-                  <td>Dr. Harshitha C</td>
-                  <td>Check up</td>
-                  <td>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>13/05/2017</td>
-                  <td>Dr. A.K. Jayaraj</td>
-                  <td>X-Ray</td>
-                  <td>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>13/05/2017</td>
-                  <td>Dr. A.K. Jayaraj</td>
-                  <td>Blood Test</td>
-                  <td>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>14/05/2017</td>
-                  <td>Dr. A.K. Jayaraj</td>
-                  <td>Admit</td>
-                  <td>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>15/05/2017</td>
-                  <td>Dr. A.K. Jayaraj</td>
-                  <td>Operation</td>
-                  <td>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>18/05/2017</td>
-                  <td>Dr. A.K. Jayaraj</td>
-                  <td>Discharge</td>
-                  <td>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button class="btn tblActnBtn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
-        </div>
-        <!-- <div class="modal-footer">
-          <button type="button" class="btn btn-outline-dark" (click)="modal.close()">Save</button>
-        </div> -->
-      </ng-template>
-      <!-- <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card project_widget">
-          <div class="header">
-            <h5>Past Visit History</h5>
-          </div>
-          <div class="body">
-            
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </section>

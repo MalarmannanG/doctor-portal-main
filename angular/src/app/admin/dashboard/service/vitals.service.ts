@@ -32,5 +32,7 @@ export class VitalsReportService {
     delete(id): Observable<any> {
         return this.http.delete<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.VITALS}/Delete/${id}`);
     }
-
+    getFile(model): Observable<any> {
+        return this.http.post<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.VITALS}/GetFile`,model,{ responseType: 'blob' as 'json' });
+    }
 }

@@ -90,11 +90,12 @@
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Age</mat-label>
-                    <input max="160" matInput type="number" name="age" #age="ngModel" [(ngModel)]="model.age" required>
+                    <input max="160" min="0" matInput type="number" name="age" #age="ngModel" [(ngModel)]="model.age" required>
                     <i class="fa-input-icon fas fa-user-clock" matSuffix></i>
                     <mat-error *ngIf="age.invalid && (age.dirty || age.touched)">
                       <span *ngIf="age.errors?.['required']"> Age is required</span>
                       <span *ngIf="age.errors?.['max']"> Age must be maximum of 160</span>
+                      <span *ngIf="age.errors?.['min']"> Age must be minimum of 0</span>
                     </mat-error>
                   </mat-form-field>
                 </div>

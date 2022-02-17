@@ -24,6 +24,7 @@ import { DoctorService } from "../../doctors/service/doctor.service";
 import { DoctorModel } from "../../doctors/model/doctor.model.service";
 import { PatientModel } from "../../patients/model/patient.model";
 import * as moment from "moment";
+import { I } from "@angular/cdk/keycodes";
 export type areaChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -158,7 +159,7 @@ export class MainComponent implements OnInit, OnDestroy {
       this.getAppointments()
   }
 
-  getAppointments() {   
+  getAppointments(isInit? : boolean) {   
     let query = "";
 
     if (this.selectedPatient) {
@@ -196,8 +197,11 @@ export class MainComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
       this.appointments = resp.result;
+      if(isInit)
+      {
       this.procedureCount = resp?.result?.filter(a => a.visitType == 'Procedure')?.length ?? 0;
       this.appointmentsCount = resp?.result?.filter(a => a.visitType != 'Procedure')?.length ?? 0;
+      }
     });
   }
 
@@ -236,7 +240,14 @@ export class MainComponent implements OnInit, OnDestroy {
     this.isProcedure = isProcedure;    
     this.getAppointments();
   }
-
+  dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement,isProcedure = null) {
+    //console.log(dateRangeStart.value);
+    //console.log(dateRangeEnd.value);
+    this.fromDate = dateRangeStart.value;
+    this.toDate = dateRangeEnd.value;
+    this.isProcedure = isProcedure;    
+    this.getAppointments();
+  }
   getPatinets() {    
     this.patientsService.getAll()
     .pipe(takeUntil(this.unsubscribe$))
@@ -252,7 +263,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     this.fromDate = moment().startOf('day');
     this.toDate = moment().endOf('day');
-    this.getAppointments();
+    this.getAppointments(true);
     this.getPatinets();
     this.getDoctors();
   }

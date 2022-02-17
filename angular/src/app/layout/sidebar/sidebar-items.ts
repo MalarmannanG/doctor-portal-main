@@ -356,7 +356,20 @@ export const ROUTES: RouteInfo[] = [
         badgeClass: "",
         role: [""],
         submenu: [],
-      }
+      },
+      {
+        path: "/doctor/patients",
+        title: "Patients",
+        moduleName: "dashboard",
+        iconType: "",
+        icon: "",
+        class: "ml-menu",
+        groupTitle: false,
+        badge: "",
+        badgeClass: "",
+        role: [""],
+        submenu: [],
+      },
     ]
   },
   {

@@ -33,7 +33,8 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AppointmentsComponent } from "./appointments/appointments.component";
 import { FormComponent } from "./appointments/form/form.component";
 import { DoctorsComponent } from "./doctors/doctors.component";
-import { PatientsComponent } from "./patients/patients.component";
+//import { PatientsComponent } from "./patients/patients.component";
+import { PatientsComponent } from "../doctor/patients/patients.component";
 import { SettingsComponent } from "./settings/settings.component";
 import { AppointmentsService } from "./appointments/appointments.service";
 //import { MultiUploaderComponent } from '../multiuploader/multiuploader.component';
@@ -47,7 +48,7 @@ import { AddTemplateMasterComponent } from "./template-master/add-template-maste
 import { AllTemplateMasterComponent } from "./template-master/all-template-master/all-template-master.component";
 import { NewPatientProfileComponent } from "./patient-profile/add-patient-profile/patient-profile.component";
 import { NgxMaskModule } from "ngx-mask";
-
+import { PatientService } from "./patients/patient.service";
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -102,6 +103,6 @@ import { NgxMaskModule } from "ngx-mask";
     MatExpansionModule,
     NgxMaskModule
   ],
-  providers: [AppointmentsService],
+  providers: [AppointmentsService,PatientService],
 })
 export class DoctorModule {}

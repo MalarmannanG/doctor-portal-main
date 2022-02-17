@@ -12,6 +12,7 @@ export class AppoinemtModel {
     consultingDoctorID: number;
     consultingDoctorName: string;
     visitType: string;
+    isActive : boolean;
     dayOrNight: string;
     timeOfAppintment: string;
     appointmentDateTime: any;

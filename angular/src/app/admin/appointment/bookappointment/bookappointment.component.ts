@@ -11,6 +11,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { PatientModel } from "../../patients/model/patient.model";
 import { DoctorModel } from "../../doctors/model/doctor.model.service";
 import * as moment from "moment";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "app-bookappointment",
@@ -72,6 +73,7 @@ export class BookappointmentComponent {
     if(this.patientOption?.id && this.doctorOption?.id) {
       this.model.consultingDoctorID = this.doctorOption.id;
       this.model.patientId = this.patientOption.id;
+      
       this.appoinementService.post(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
@@ -86,8 +88,11 @@ export class BookappointmentComponent {
   }
 
   update() {
-    debugger
-    this.model.appointmentDateTime = moment(this.model.appointmentDateTime).format('YYYY-MM-DD HH:mm:ss');  
+  
+    //this.model.appointmentDateTime = moment(this.model.appointmentDateTime).format('YYYY-MM-DD HH:mm:ss');  
+    
+    //this.model.appointmentDateTime = moment(this.model.appointmentDateTime).toLocaleString();
+    //this.model.appointmentDateTime = 
     if(!this.doctorOption?.id) {
       this.doctorRequired = true;
     }

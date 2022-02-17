@@ -133,25 +133,27 @@
                     <span matPrefix>
                       <i class="material-icons">search</i>
                     </span>
-                    <input matInput [matAutocomplete]="autoMed" name="medicinName" #medicinName="ngModel"
-                      [disabled]="action == 'edit'" [(ngModel)]="activePrescription.medicinName"
-                      (ngModelChange)="doMedFilter(activePrescription.medicinName)">
-                    <mat-hint> <span class="bolder font-large">{{activePrescription.genericName ? activePrescription.genericName : "Generic Name"}}</span> </mat-hint>
-                    <mat-error *ngIf="medicinName.invalid && (medicinName.dirty || medicinName.touched)">
-                      <span *ngIf="medicinName.errors?.['required']"> Medicine Name is required</span>
+                    <input matInput [matAutocomplete]="autoMed" name="medicineName" #medicineName="ngModel"
+                      [disabled]="action == 'edit'" [(ngModel)]="selectedMedicine"
+                      (ngModelChange)="doMedFilter(selectedMedicine)">
+                    <mat-hint> <span class="bolder font-large">
+                      {{activePrescription.medicineName}}-{{activePrescription.categoryName}}-{{activePrescription.strength}}{{activePrescription.units}}</span> </mat-hint>
+                    <mat-error *ngIf="medicineName.invalid && (medicineName.dirty || medicineName.touched)">
+                      <span *ngIf="medicineName.errors?.['required']"> Medicine Name is required</span>
                     </mat-error>
                   </mat-form-field>
                   <mat-autocomplete autoActiveFirstOption #autoMed="matAutocomplete"
                     (optionSelected)="onMedSelectionChanged($event)">
-                    <mat-option *ngFor="let eachOption of prescriptionOptions" [value]="eachOption.medicinName">
-                      {{eachOption.medicinName}}
+                    <mat-option *ngFor="let eachOption of prescriptionOptions" [value]="eachOption.id">
+                      {{eachOption.medicineName}}-{{eachOption.categoryName}}-{{eachOption.strength}}{{eachOption.units}}
                     </mat-option>
                   </mat-autocomplete>
                 </div>
                 <div class="col-md-2 col-12">
                   <mat-form-field class="example-full-width mb-3" appearance="outline" required>
                     <mat-label>Strength</mat-label>
-                    <mat-select #strength="ngModel" [(ngModel)]="activePrescription.strength" required
+                    <input maxlength="50" readonly matInput [(ngModel)]="activePrescription.strength" name="strength">
+                    <!-- <mat-select #strength="ngModel" [(ngModel)]="activePrescription.strength" required
                       name="strength">
                       <mat-option value="0.5mg">0.5mg</mat-option>
                       <mat-option value="0.25mg">0.25mg</mat-option>
@@ -167,7 +169,7 @@
                     </mat-select>
                     <mat-error *ngIf="strength.invalid && (strength.dirty || strength.touched)">
                       <span *ngIf="strength.errors?.['required']"> Strength is required</span>
-                    </mat-error>
+                    </mat-error> -->
                   </mat-form-field>
                 </div>
                 <div class="col-md-3 col-12">
@@ -176,18 +178,18 @@
                     <mat-radio-button [value]="false">After Food</mat-radio-button>
                   </mat-radio-group>
                   <section class="example-section">
-                    <mat-checkbox [(ngModel)]="activePrescription.morning" name="morning" class="example-margin">
+                    <mat-checkbox [(ngModel)]="activePrescription.morning" name="morning">
                       Morning</mat-checkbox>
-                    <mat-checkbox [(ngModel)]="activePrescription.noon" name="noon" class="example-margin">Noon
+                    <mat-checkbox [(ngModel)]="activePrescription.noon" name="noon">Noon
                     </mat-checkbox>
-                    <mat-checkbox [(ngModel)]="activePrescription.night" name="night" class="example-margin">Night
+                    <mat-checkbox [(ngModel)]="activePrescription.night" name="night">Night
                     </mat-checkbox>
                   </section>
                 </div>
                 <div class="col-md-2 col-12">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Remarks </mat-label>
-                    <input maxlength="500" matInput [(ngModel)]="activePrescription.description" name="description">
+                    <input maxlength="500" matInput [(ngModel)]="activePrescription.remarks" name="remarks">
                   </mat-form-field>
                 </div>
                 <div class="col-md-2 col-12">
@@ -203,7 +205,7 @@
                 </div>
                 <div class="col-12 text-center">
                   <button
-                    [disabled]="!activePrescription.medicinName || !activePrescription.strength || !activePrescription.noOfDays"
+                    [disabled]="!activePrescription.medicineName || !activePrescription.strength || !activePrescription.noOfDays"
                     (click)="addPrescription()" class="btn btn-sm btn-success mr-2">Done</button>
                   &nbsp; <button (click)="cancelPrescription()" class="btn btn-sm btn-danger mr-2">Cancel</button>
                 </div>

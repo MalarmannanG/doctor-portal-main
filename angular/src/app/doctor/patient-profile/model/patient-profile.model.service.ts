@@ -38,20 +38,23 @@ export class PrescriptionModel {
 
     id: number;
     templateMasterId: number;
-    medicinName: string;
+    medicineName: string;
     genericName: string;
+    categoryName : string;
     strength: string;
+    units: string;
+    remarks: string;
     beforeFood: boolean;
     morning: boolean;
     noon: boolean;
     night: boolean;
-    description: string;
     noOfDays: string;
     isDeleted: boolean;
     createdBy: number;
     modifiedBy: number;
     createdDate: any;
     modifiedDate: any;
+    
 }
 
 export class PatientDiagnosisModel {
@@ -96,9 +99,11 @@ export class PrescriptionMasterModel {
 
     id: number;
     genericName: string;
-    medicinName: string;
+    medicineName: string;
+    categoryName: string;
     strength: string;
     units: string;
+    remarks: string;
     isDeleted: boolean;
     createdBy: number;
     modifiedBy: number;

@@ -17,6 +17,7 @@ import { PatientModel } from "../model/patient.model";
 import { PatientMasterService } from "../service/patient.service";
 import { Router } from "@angular/router";
 import { BaseQueryModel } from "src/app/model/base.query-model";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-allpatients",
@@ -25,10 +26,9 @@ import { BaseQueryModel } from "src/app/model/base.query-model";
 })
 export class AllpatientsComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   displayedColumns = [
-    "patientName",   
+    "patientName",
     "age",
     "gender",
     "address",
@@ -74,23 +74,23 @@ export class AllpatientsComponent
     this.getAll();
   }
 
-  
+
   getAll() {
     this.isTblLoading = true;
     let query = "";
-    if(this.searchPatient) {
+    if (this.searchPatient) {
       query = `?name=${this.searchPatient}`
-    } 
+    }
 
     query = query ? `${query}&` : "?";
     query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
     this.patientsService.getAll(query)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.isTblLoading = false;
-      this.model = resp.result;
-      this.totalCount = resp.total;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.isTblLoading = false;
+        this.model = resp.result;
+        this.totalCount = resp.total;
+      });
   }
 
   paginate(event) {
@@ -105,21 +105,32 @@ export class AllpatientsComponent
     this.router.navigateByUrl('/admin/patients/add-patient');
   }
   editCall(id) {
-    this.router.navigateByUrl('/admin/patients/edit-patient/'+id)
+    this.router.navigateByUrl('/admin/patients/edit-patient/' + id)
   }
   deleteItem(id) {
-    
-    this.patientsService.delete(id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.refreshTable();
-        this.showNotification(
-          "snackbar-danger",
-          "Delete Record Successfully...!!!",
-          "bottom",
-          "center"
-        );
-    })
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        this.patientsService.delete(id)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp) => {
+            this.refreshTable();
+            this.showNotification(
+              "snackbar-danger",
+              "Delete Record Successfully...!!!",
+              "bottom",
+              "center"
+            );
+          });
+      }
+    });
   }
   private refreshTable() {
     this.getAll();
@@ -136,8 +147,8 @@ export class AllpatientsComponent
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.renderedData.forEach((row) =>
-          this.selection.select(row)
-        );
+        this.selection.select(row)
+      );
   }
   removeSelectedRows() {
     const totalSelect = this.selection.selected.length;
@@ -240,7 +251,7 @@ export class ExampleDataSource extends DataSource<Patient> {
       })
     );
   }
-  disconnect() {}
+  disconnect() { }
   /** Returns a sorted copy of the database data. */
   sortData(data: Patient[]): Patient[] {
     if (!this._sort.active || this._sort.direction === "") {

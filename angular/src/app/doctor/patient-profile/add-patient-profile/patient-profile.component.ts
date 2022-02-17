@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Subject, takeUntil } from "rxjs";
 import { environment } from "src/environments/environment";
+import Swal from "sweetalert2";
 import { DiagnosisMasterModel, DiagnosisMasterModelList } from "../../diagnosis-master/model/diagnosis-master.model.service";
 import { DiagnosisMasterService } from "../../diagnosis-master/service/diagnosis-master.service";
 import { TemplateMasterModel } from "../../template-master/model/template-master.model.service";
@@ -52,7 +53,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   prescriptionList: PrescriptionMasterModel[] = [];
   selectedTemplateName: string;
   templateLoading = true;
-
+  selectedMedicine = '';
   constructor(private router: Router,
     private patientProfileService: PatientProfileService,
     private templateMasterService: TemplateMasterService,
@@ -95,11 +96,18 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
   onMedSelectionChanged(event) {
+
     if (event.option.value) {
-      let selected = this.prescriptionList.filter(a => a.medicinName == event.option.value)[0];
-      this.activePrescription.medicinName = selected.medicinName;
+      let selected = this.prescriptionList.filter(a => a.id == event.option.value)[0];
+      this.activePrescription.medicineName = selected.medicineName;
       this.activePrescription.strength = selected.strength;
       this.activePrescription.genericName = selected.genericName;
+      this.activePrescription.categoryName = selected.categoryName;
+      this.activePrescription.units = selected.units;
+      console.log(selected.strength + '' + selected.remarks);
+      this.activePrescription.remarks = selected.remarks;
+      this.selectedMedicine = selected.medicineName + '-' + selected.categoryName + '-' + selected.strength + '' + selected.units;
+
     }
   }
 
@@ -116,6 +124,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
     if (this.selectedTemplateName) {
       let selectedTemplateObj = this.templateList.filter(a => a.name == this.selectedTemplateName)[0];
       this.selectedTemplateObjsTemp.push(selectedTemplateObj);
+      this.templateSelected();
     }
   }
 
@@ -150,14 +159,14 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
     if (!this.editing) {
       this.model.prescriptionModel?.push(this.activePrescription);
     } else {
-      this.editablePrescription.medicinName = this.activePrescription.medicinName;
+      this.editablePrescription.medicineName = this.activePrescription.medicineName;
       this.editablePrescription.strength = this.activePrescription.strength;
       this.editablePrescription.genericName = this.activePrescription.genericName;
       this.editablePrescription.morning = this.activePrescription.morning;
       this.editablePrescription.noon = this.activePrescription.noon;
       this.editablePrescription.night = this.activePrescription.night;
       this.editablePrescription.beforeFood = this.activePrescription.beforeFood;
-      this.editablePrescription.description = this.activePrescription.description;
+      this.editablePrescription.remarks = this.activePrescription.remarks;
       this.editablePrescription.noOfDays = this.activePrescription.noOfDays;
     }
     this.activePrescription = new PrescriptionModel();
@@ -219,12 +228,27 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
   update() {
-    this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel.filter(a => a.id || a.diagnosisMasterName)
-    this.patientProfileService.put(this.model)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((resp) => {
-        this.router.navigateByUrl('/doctor/dashboard')
-      });
+    Swal.fire({
+      title: "Are you sure to close this appoinment?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, close it!",
+    }).then((result) => {
+      if (result.value)
+        this.model.appointment.isActive = false;
+      else
+        this.model.appointment.isActive = true;
+
+      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel.filter(a => a.id || a.diagnosisMasterName)
+      this.patientProfileService.put(this.model)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((resp) => {
+          this.router.navigateByUrl('/doctor/dashboard')
+        });
+    });
   }
 
   getPastHistories() {
@@ -318,25 +342,25 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
   showDiagnosisAdd() {
-    let patientDiagsCount = this.model.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;    
+    let patientDiagsCount = this.model.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;
     return patientDiagsCount == 0;
   }
 
 
-showAddDiagnosis() {
-let patientDiagsCount = this.model?.patientDiagnosisModel?.filter(a=> !a.isDeleted)?.length ?? 0;
-return patientDiagsCount == 0; 
-}
+  showAddDiagnosis() {
+    let patientDiagsCount = this.model?.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;
+    return patientDiagsCount == 0;
+  }
 
-showDiagnosisDelete(index) {
-let patientDiagsCount = this.model?.patientDiagnosisModel?.filter(a=> !a.isDeleted)?.length ?? 0;
-return index == (patientDiagsCount - 1);
-}
+  showDiagnosisDelete(index) {
+    let patientDiagsCount = this.model?.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;
+    return index == (patientDiagsCount - 1);
+  }
 
-showInvestigationDelete(index) {
-let investcationsCount = this.model?.patientTestModel?.filter(a=> !a.isDeleted)?.length ?? 0;
-return index == (investcationsCount - 1);
-}
+  showInvestigationDelete(index) {
+    let investcationsCount = this.model?.patientTestModel?.filter(a => !a.isDeleted)?.length ?? 0;
+    return index == (investcationsCount - 1);
+  }
 
   saveTemplate() {
     this.selectedTemplateObjs = JSON.parse(JSON.stringify(this.selectedTemplateObjsTemp));
@@ -346,13 +370,24 @@ return index == (investcationsCount - 1);
   }
 
   doMedFilter(filter) {
-    filter = filter;
-    this.prescriptionOptions = [];
-    this.prescriptionList.forEach(element => {
-      if (element.medicinName.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
-        this.prescriptionOptions.push(element)
-      }
-    });
+    if (Number.parseInt(filter)) {
+      this.prescriptionOptions = [];
+      this.prescriptionList.forEach(element => {
+        if (element.id == filter) {
+          this.prescriptionOptions.push(element);
+          this.selectedMedicine = element.medicineName + '-' + element.categoryName + '-' + element.strength + '' + element.units;
+        }
+      });
+    }
+    else {
+      var _filter = filter?.toLocaleLowerCase();
+      this.prescriptionOptions = [];
+      this.prescriptionList.forEach(element => {
+        if (element.medicineName?.toLocaleLowerCase().includes(_filter)) {
+          this.prescriptionOptions.push(element)
+        }
+      });
+    }
   }
 
   doDiagFilter(filter, index) {
@@ -404,7 +439,7 @@ return index == (investcationsCount - 1);
     mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" media="all" crossorigin="anonymous">');
     mywindow.document.write('<style>@page { size: A4; margin: 0; }</style>');
     mywindow.document.write('</head><body>');
-    mywindow.document.write('<script> function printing() {  document.getElementById("print-btn").remove(); window.print(); window.close(); } </script>');
+    mywindow.document.write('<script> function printing() {  document.getElementById("print-btn").remove(); document.getElementsByTagName("img").remove(); window.print(); window.close(); } </script>');
     mywindow.document.write(document.getElementById("section-to-print").innerHTML);
     mywindow.document.write('</body></html>');
 

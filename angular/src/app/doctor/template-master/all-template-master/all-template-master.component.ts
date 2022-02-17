@@ -14,6 +14,7 @@ import { BaseQueryModel } from "src/app/model/base.query-model";
 import { TemplateMasterService } from "../service/template-master.service";
 
 import { TemplateMasterModel } from "../model/template-master.model.service";
+import Swal from "sweetalert2";
 @Component({
   selector: "app-all-template-master",
   templateUrl: "./all-template-master.component.html",
@@ -21,8 +22,7 @@ import { TemplateMasterModel } from "../model/template-master.model.service";
 })
 export class AllTemplateMasterComponent
   extends UnsubscribeOnDestroyAdapter
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   displayedColumns = [
     "name",
     "compliants",
@@ -35,7 +35,7 @@ export class AllTemplateMasterComponent
   ];
   index: number;
   id: number;
-  model:TemplateMasterModel[] = [];
+  model: TemplateMasterModel[] = [];
   unsubscribe$ = new Subject();
   isTblLoading = false;
   searchTemplate: string;
@@ -45,7 +45,7 @@ export class AllTemplateMasterComponent
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    private templateMasterService: TemplateMasterService,    
+    private templateMasterService: TemplateMasterService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -55,8 +55,8 @@ export class AllTemplateMasterComponent
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild("filter", { static: true }) filter: ElementRef;
   ngOnInit() {
-   // this.loadData();
-   this.getAll()
+    // this.loadData();
+    this.getAll()
   }
   ngOnDestroy(): void {
     this.unsubscribe$.complete();
@@ -68,7 +68,7 @@ export class AllTemplateMasterComponent
 
   getAll() {
     let query = "";
-    if(this.searchTemplate) {
+    if (this.searchTemplate) {
       query = `?name=${this.searchTemplate}`
     }
 
@@ -76,12 +76,12 @@ export class AllTemplateMasterComponent
     query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
     this.isTblLoading = true;
     this.templateMasterService.getAll(query)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.isTblLoading = false;
-      this.model = resp.result;
-      this.totalCount = resp.total;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.isTblLoading = false;
+        this.model = resp.result;
+        this.totalCount = resp.total;
+      });
   }
   paginate(event) {
     let pageIndex = event.pageIndex;
@@ -98,36 +98,47 @@ export class AllTemplateMasterComponent
     this.router.navigateByUrl(`/doctor/edit-template/${id}`)
   }
   deleteItem(id) {
-    
-    this.templateMasterService.delete(id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.refreshTable();
-        this.showNotification(
-          "snackbar-danger",
-          "Delete Record Successfully...!!!",
-          "bottom",
-          "center"
-        );
-    })
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.value) {
+        this.templateMasterService.delete(id)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe((resp) => {
+            this.refreshTable();
+            this.showNotification(
+              "snackbar-danger",
+              "Delete Record Successfully...!!!",
+              "bottom",
+              "center"
+            );
+          });
+      }
+    });
   }
   private refreshTable() {
     this.getAll();
   }
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-  
+
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    
+
   }
   removeSelectedRows() {
-  
+
   }
   public loadData() {
-   
+
   }
   showNotification(colorName, text, placementFrom, placementAlign) {
     this.snackBar.open(text, "", {

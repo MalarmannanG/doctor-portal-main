@@ -158,7 +158,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       this.getAppointments()
   }
 
-  getAppointments() {   
+  getAppointments(isInit? : boolean) {   
     let query = "";
 
     if (this.selectedPatient) {
@@ -196,8 +196,11 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
       this.appointments = resp.result;
+      if(isInit)
+      {
       this.procedureCount = resp?.result?.filter(a => a.visitType == 'Procedure')?.length ?? 0;
       this.appointmentsCount = resp?.result?.filter(a => a.visitType != 'Procedure')?.length ?? 0;
+      }
     });
   }
 
@@ -252,7 +255,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     this.fromDate = moment().startOf('day');
     this.toDate = moment().endOf('day');
-    this.getAppointments();
+    this.getAppointments(true);
     this.getPatinets();
     this.getDoctors();
   }
