@@ -59,10 +59,13 @@
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Enter a date range</mat-label>
           <mat-date-range-input [rangePicker]="picker">
-            <input matStartDate placeholder="Start date" (ngModelChange)="filterChange()" [(ngModel)]="fromDate"
+            <!-- <input matStartDate placeholder="Start date" (ngModelChange)="filterChange()" [(ngModel)]="fromDate"
               name="fromDate">
             <input matEndDate placeholder="End date" (ngModelChange)="filterChange()" [(ngModel)]="toDate"
-              name="todate">
+              name="todate"> -->
+              <input matStartDate placeholder="Start date" #dateRangeStart
+              name="fromDate">
+            <input matEndDate placeholder="End date" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)"> 
           </mat-date-range-input>
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>

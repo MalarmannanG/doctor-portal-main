@@ -49,3 +49,10 @@ body .profile-header {
 	font-size: 120%;
 	line-height: 1.125;
 }
+
+.mat-column-actions {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 8% !important;
+    width: 8% !important;
+    }

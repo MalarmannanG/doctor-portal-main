@@ -15,11 +15,16 @@ export class PatientProfileModel {
     description: string;
     compliants: string;
     examination: string;
+    pastHistory : string;
+    investigationResults: string;
     impression: string;
     advice: string;
     plan: string;
-    followUp: string;
+    isfollowUpNeed : boolean;
+    followUp: any;
     isDeleted: boolean;
+    sos: boolean;
+    stat: boolean;
     createdBy: number;
     modifiedBy: number;
     createdDate: any;
@@ -29,6 +34,7 @@ export class PatientProfileModel {
     appointment: AppoinemtModel;
     patientDiagnosisModel: PatientDiagnosisModel[];
     patientTestModel: PatientTestModel[];
+ 
 }
 
 export class PrescriptionModel {
@@ -50,6 +56,8 @@ export class PrescriptionModel {
     night: boolean;
     noOfDays: string;
     isDeleted: boolean;
+    sos: boolean;
+    stat: boolean;
     createdBy: number;
     modifiedBy: number;
     createdDate: any;

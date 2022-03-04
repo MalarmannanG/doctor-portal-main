@@ -35,8 +35,8 @@ export class SigninComponent
   }
   ngOnInit() {
     this.authForm = this.formBuilder.group({
-      username: ["admin@pisystems.com", Validators.required],
-      password: ["123456", Validators.required],
+      username: ["", Validators.required],
+      password: ["", Validators.required],
     });
   }
   get f() {
@@ -82,12 +82,12 @@ export class SigninComponent
             localStorage.setItem("token", res.token)
             let role = res.role;
             localStorage.setItem("role", role);
-            let email = "admin@pisystems.com";
-            let password = "123456";
-            if (role == "Doctor") {
-              email = "doctor@pisystems.com";
-              password = "123456";
-            }
+            //let email = "admin@pisystems.com";
+            //let password = "123456";
+            //if (role == "Doctor") {
+              //email = "doctor@pisystems.com";
+              //password = "123456";
+            //}
             setTimeout(() => {
               const role = this.accountService.currentUserValue.role;
               if (role === Role.All || role === Role.Admin) {

@@ -29,7 +29,7 @@
           <div class="body">
             <form class="m-4" #f="ngForm">
               <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Name</mat-label>
                     <input maxlength="30" minlength="2" matInput name="name" #name="ngModel" [(ngModel)]="model.name"
@@ -42,17 +42,29 @@
                     </mat-error>
                   </mat-form-field> -->
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Staff Email</mat-label>
-                    <input matInput pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" #email="ngModel"
+                    <mat-label>User Name</mat-label>
+                    <input matInput  name="email" #email="ngModel"
                       [(ngModel)]="model.email" [required]="true">
                     <mat-icon matSuffix>email</mat-icon>
                     <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
                       <span *ngIf="email.errors?.['required']"> Email is required</span>
-                      <span *ngIf="email.errors?.['pattern']"> Inavalid email </span>
+                      
                     </mat-error>
                   </mat-form-field>
                 </div>
-                
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input maxlength="30" minlength="2" matInput name="name" #name="ngModel" [(ngModel)]="model.name"
+                      required>
+                    <mat-icon matSuffix>face</mat-icon>
+                    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+                      <span *ngIf="name.errors?.['required']"> Name is required</span>
+                      <span *ngIf="name.errors?.['maxlength']"> Name must be maximum of 30 characters</span>
+                      <span *ngIf="name.errors?.['minlength']"> Name must be minimum of 2 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>User Type</mat-label>

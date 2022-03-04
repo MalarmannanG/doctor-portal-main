@@ -202,7 +202,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "",
-    title: "Faclities",
+    title: "Facilities",
     moduleName: "doctors",
     iconType: "material-icons-two-tone",
     icon: "supervised_user_circle",
@@ -214,7 +214,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: "/admin/doctors/allDoctors",
-        title: "All Faclities",
+        title: "All Facilities",
         moduleName: "doctors",
         iconType: "",
         icon: "",
@@ -227,7 +227,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: "/admin/doctors/add-doctor",
-        title: "Add Faclity",
+        title: "Add Facility",
         moduleName: "doctors",
         iconType: "",
         icon: "",
@@ -269,7 +269,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: "",
     title: "MENUITEMS.STAFF.TEXT",
-    moduleName: "staff",
+    moduleName: "users",
     iconType: "material-icons-two-tone",
     icon: "people_alt",
     class: "menu-toggle",
@@ -281,7 +281,7 @@ export const ROUTES: RouteInfo[] = [
       {
         path: "/admin/staff/all-staff",
         title: "MENUITEMS.STAFF.LIST.ALL-STAFF",
-        moduleName: "staff",
+        moduleName: "users",
         iconType: "",
         icon: "",
         class: "ml-menu",
@@ -294,7 +294,7 @@ export const ROUTES: RouteInfo[] = [
       {
         path: "/admin/staff/add-staff",
         title: "MENUITEMS.STAFF.LIST.ADD-STAFF",
-        moduleName: "staff",
+        moduleName: "user",
         iconType: "",
         icon: "",
         class: "ml-menu",

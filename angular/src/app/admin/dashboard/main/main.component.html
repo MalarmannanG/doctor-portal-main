@@ -11,7 +11,7 @@
               <a routerLink="/doctor/dashboard">
                 <i class="fas fa-home"></i> Home</a>
             </li>
-            <li class="breadcrumb-item active">Doctor Dashboard</li>
+            <li class="breadcrumb-item active">Dashboard</li>
           </ul>
         </div>
       </div>
@@ -58,7 +58,7 @@
       <div class="col-12 col-md-3">
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [rangePicker]="picker" da>
+          <mat-date-range-input [rangePicker]="picker">
             <input matStartDate placeholder="Start date" #dateRangeStart
               name="fromDate">
             <input matEndDate placeholder="End date" #dateRangeEnd (dateChange)="dateRangeChange(dateRangeStart, dateRangeEnd)"> 

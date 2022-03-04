@@ -21,11 +21,15 @@ export class PatientProfileService {
     getAll(query = ""): Observable<any> {
         return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/GetAll${query}`);
     }
-
+    GetAllInActive(query = ""): Observable<any> {
+        return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/GetAllInActive${query}`);
+    }
     get(id): Observable<any> {
         return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/Get/${id}`);
     }
-
+    getByPatient(id): Observable<any> {
+        return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/GetByPatient/${id}`);
+    }
     put(model): Observable<any> {
         return this.http.put<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/Update`, model);
     }
@@ -41,6 +45,8 @@ export class PatientProfileService {
     getAllUsers(query = ""): Observable<any> {
         return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.USERS}/GetAll${query}`);
     }
-
+    getAllComplaints(): Observable<any> {
+        return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/GetAllComplaints`);
+    }
 
 }

@@ -4,5 +4,11 @@
   white-space: unset !important;
   flex: 0 0 22% !important;
   width: 22% !important;
-  
-}
+  }
+
+  .mat-column-actions {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 8% !important;
+    width: 8% !important;
+    }

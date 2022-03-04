@@ -27,7 +27,7 @@ export class AllstaffComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit {
   displayedColumns = [
-    // "name",
+     "name",
     // "username",
     "email",
     "userType",

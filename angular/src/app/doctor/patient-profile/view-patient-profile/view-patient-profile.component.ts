@@ -3,6 +3,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/co
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import * as moment from "moment";
 import { Subject, takeUntil } from "rxjs";
 import { environment } from "src/environments/environment";
 import Swal from "sweetalert2";
@@ -15,13 +16,14 @@ import { TestMasterService } from "../../test-master/service/test-master.service
 import { PatientDiagnosisModel, PatientProfileModel, PatientTestModel, PrescriptionMasterModel, PrescriptionModel } from "../model/patient-profile.model.service";
 import { PatientProfileService } from "../service/patient-profile.service";
 
+
 @Component({
-  selector: "app-patient-profile",
-  templateUrl: "./patient-profile.component.html",
-  styleUrls: ["./patient-profile.component.scss"],
+  selector: "app-view-patient-profile",
+  templateUrl: "./view-patient-profile.component.html",
+  styleUrls: ["./view-patient-profile.component.scss"],
 })
 
-export class NewPatientProfileComponent implements OnInit, OnDestroy {
+export class ViewPatientProfileComponent implements OnInit, OnDestroy {
   docForm: FormGroup;
   hide3 = true;
   step: number = 0;
@@ -48,20 +50,16 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   diagOptions: DiagnosisMasterModelList[] = [];
   inestigationOptions: TestMasterModel[] = [];
   testMaster: TestMasterModel[] = [];
-  complaintsList: string[] = [];
   selectedInvestigation: any;
   pastHistoryList: PatientProfileModel[] = [];
   selectedprescrptionObj: PrescriptionMasterModel = new PrescriptionMasterModel();
   prescriptionOptions: PrescriptionMasterModel[] = [];
   prescriptionList: PrescriptionMasterModel[] = [];
-  complaintsOptions: string[] = [];
   selectedTemplateName: string;
   selectedDiagName: string;
-  selectedTestName: string;
+  selectedTestName : string;
   templateLoading = true;
   selectedMedicine = '';
-  selectedComplaint = '';
-  today = new Date();
   constructor(private router: Router,
     private patientProfileService: PatientProfileService,
     private templateMasterService: TemplateMasterService,
@@ -73,11 +71,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
 
-  getAllComplaints() {
-    this.patientProfileService.getAllComplaints().subscribe(res => {
-      this.complaintsList = this.complaintsOptions = res;
-    });
-  }
+
   focusInput(element: ElementRef) {
     element.nativeElement.focus();
   }
@@ -132,11 +126,9 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
       this.activePrescription.genericName = selected.genericName;
       this.activePrescription.categoryName = selected.categoryName;
       this.activePrescription.units = selected.units;
-      var strength = selected.strength != null ? '- ' + selected.strength : '';
-      var categoryName = selected.categoryName != null ? '- ' + selected.categoryName : '';
-      var units = selected.units != null ? '- ' + selected.units : '';
+      console.log(selected.strength + '' + selected.remarks);
       this.activePrescription.remarks = selected.remarks;
-      this.selectedMedicine = selected.medicineName + categoryName + strength + units;
+      this.selectedMedicine = selected.medicineName + '-' + selected.categoryName + '-' + selected.strength + '' + selected.units;
 
     }
   }
@@ -164,7 +156,8 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
       _patientDiag.diagnosisMasterName = selectedTemplateObj.name;
       _patientDiag.description = selectedTemplateObj.description;
       _patientDiag.diagnosisMasterId = selectedTemplateObj.id;
-      if (this.model.patientDiagnosisModel == null) {
+      if(this.model.patientDiagnosisModel == null)
+      {
         this.model.patientDiagnosisModel = [];
       }
       this.model.patientDiagnosisModel.push(_patientDiag);
@@ -173,7 +166,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
   addTest(event) {
     if (this.selectedTestName) {
-
+      
       let selectedTemplateObj = this.inestigationOptions.filter(a => a.name == this.selectedTestName)[0];
       var _patientDiag = new PatientTestModel();
       _patientDiag.testMasterName = selectedTemplateObj.name;
@@ -212,9 +205,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
 
   addPrescription() {
     if (!this.editing) {
-
       this.model.prescriptionModel?.push(this.activePrescription);
-      this.selectedMedicine = '';
     } else {
       this.editablePrescription.medicineName = this.activePrescription.medicineName;
       this.editablePrescription.strength = this.activePrescription.strength;
@@ -239,7 +230,9 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
     this.editing = true;
     this.newMed = true;
   }
-
+  changeOpened(item){
+      item.appointment.isOpened = !item.appointment.isOpened;
+  }
   populatePrescriptionMaster() {
     this.patientProfileService.getMedicines()
       .pipe(takeUntil(this.unsubscribe$))
@@ -248,9 +241,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
         this.prescriptionOptions = this.prescriptionList;
       });
   }
-  changeOpened(item) {
-    item.appointment.isOpened = !item.appointment.isOpened;
-  }
+
   populateTemplateList() {
     this.templateMasterService.getAll()
       .pipe(takeUntil(this.unsubscribe$))
@@ -313,13 +304,14 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
   getPastHistories() {
-    let query = `?patientId=${this.model.patientId}&appointmentDate=${this.model.appointment.appointmentDateTime}`
-    this.patientProfileService.getAll(query)
+    let appointmentDate = moment(this.model.appointment.appointmentDateTime).format('YYYY-MM-DD');
+    let query = `?patientId=${this.model.patientId}&appointmentDate=${appointmentDate}`
+    this.patientProfileService.GetAllInActive(query)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.pastHistoryList = resp?.filter(a => a.appointmentId != this.model.appointmentId);
-        this.pastHistoryList.forEach(function (item) {
-          item.appointment.isOpened = false;
+        this.pastHistoryList.forEach(function(item){
+            item.appointment.isOpened = false;
         })
       });
   }
@@ -333,7 +325,7 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
   get() {
-    this.patientProfileService.get(this.id)
+    this.patientProfileService.getByPatient(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
@@ -341,10 +333,9 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
         //   this.model.patientDiagnosisModel = [];
         //   this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
         // }
-        this.selectedComplaint = this.model.compliants;
-        this.isDiagSelected = this.model.patientDiagnosisModel?.length > 0;
-        this.isDiagSelected = this.model.patientDiagnosisModel?.length > 0;
-        this.isTestSelected = this.model.patientTestModel?.length > 0;
+        this.isTemplateSelected = false;
+        this.isDiagSelected = false;
+        this.isTestSelected = true;
         this.populateTestMaster();
         this.populateTemplateList();
         this.populateDiagnosis();
@@ -469,21 +460,14 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
     this.isTemplateSelected = !this.isTemplateSelected;
     this.templateSelected();
   }
-  doComplaintFilter(filter) {
-    this.model.compliants = filter;
-    this.complaintsOptions = [];
-    this.complaintsOptions = this.complaintsList.filter(a => a.toLowerCase().includes(filter.toLowerCase()));
-  }
+
   doMedFilter(filter) {
     if (Number.parseInt(filter)) {
       this.prescriptionOptions = [];
       this.prescriptionList.forEach(element => {
         if (element.id == filter) {
           this.prescriptionOptions.push(element);
-          var strength = element.strength == null ? '- ' + element.strength : '';
-          var categoryName = element.categoryName == null ? '- ' + element.categoryName : '';
-          var units = element.units == null ? '- ' + element.units : '';
-          this.selectedMedicine = element.medicineName + categoryName + strength + units;
+          this.selectedMedicine = element.medicineName + '-' + element.categoryName + '-' + element.strength + '' + element.units;
         }
       });
     }
@@ -534,7 +518,6 @@ export class NewPatientProfileComponent implements OnInit, OnDestroy {
       this.populateTemplateList();
 
     }
-    this.getAllComplaints();
   }
 
   printPrescrption() {

@@ -157,7 +157,14 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.selectedDoctor = "";
       this.getAppointments()
   }
-
+  dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement,isProcedure = null) {
+    //console.log(dateRangeStart.value);
+    //console.log(dateRangeEnd.value);
+    this.fromDate = dateRangeStart.value;
+    this.toDate = dateRangeEnd.value;
+    this.isProcedure = isProcedure;    
+    this.getAppointments();
+  }
   getAppointments(isInit? : boolean) {   
     let query = "";
 

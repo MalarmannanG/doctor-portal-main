@@ -1,0 +1,40 @@
+.tblActnBtn i {
+    font-size: 20px;
+  }
+  
+  .col-btn {
+    display: flex;
+    justify-content: space-around;
+    i {
+      font-size: 20px;
+      cursor: pointer;
+      &.fa-pencil-alt,
+      &.fa-plus-circle {
+        color: #00bcd4;
+      }
+      &.fa-trash-alt {
+        color: #dc3545;
+      }
+    }
+  }
+  
+  .cust-margin {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .btn-link {
+    padding: 0.5rem;
+  }
+  
+  .head-row {
+    padding: 0.5rem 1.25rem;
+  }
+  
+  ::ng-deep {
+    .side-panel {
+      .mat-expansion-panel-body {
+        padding: 0 15px 15px;
+      }
+    }
+  }
+  

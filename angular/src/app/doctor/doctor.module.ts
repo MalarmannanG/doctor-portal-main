@@ -49,6 +49,8 @@ import { AllTemplateMasterComponent } from "./template-master/all-template-maste
 import { NewPatientProfileComponent } from "./patient-profile/add-patient-profile/patient-profile.component";
 import { NgxMaskModule } from "ngx-mask";
 import { PatientService } from "./patients/patient.service";
+import { ViewPatientProfileComponent } from "./patient-profile/view-patient-profile/view-patient-profile.component";
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -65,7 +67,8 @@ import { PatientService } from "./patients/patient.service";
     AllDiagnosisMasterComponent,
     AddTemplateMasterComponent,
     AllTemplateMasterComponent,
-    NewPatientProfileComponent
+    NewPatientProfileComponent,
+    ViewPatientProfileComponent
   ],
   imports: [
     CommonModule,
@@ -101,7 +104,9 @@ import { PatientService } from "./patients/patient.service";
     MatChipsModule,
     NgbModule,
     MatExpansionModule,
-    NgxMaskModule
+    NgxMaskModule,
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule
   ],
   providers: [AppointmentsService,PatientService],
 })

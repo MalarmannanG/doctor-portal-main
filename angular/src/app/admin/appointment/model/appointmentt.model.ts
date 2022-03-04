@@ -20,4 +20,5 @@ export class AppoinemtModel {
     patient: PatientModel;
     patientFiles: PatientFilesModel[];
     vitalsReportModel: VitalsReportModel;
+    isOpened: boolean;
 }

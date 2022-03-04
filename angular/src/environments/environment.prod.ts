@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "http://pisystemsimran-001-site1.dtempurl.com",
+  apiUrl: "",
   navUrl: "http://pisystemsimran-001-site1.dtempurl.com",
 };

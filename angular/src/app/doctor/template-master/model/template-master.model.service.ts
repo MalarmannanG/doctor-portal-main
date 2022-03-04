@@ -36,6 +36,8 @@ export class TemplatePrescriptionModel {
     description: string;
     noOfDays: string;
     isDeleted: boolean;
+    sos: boolean;
+    stat: boolean;
     createdBy: number;
     modifiedBy: number;
     createdDate: any;

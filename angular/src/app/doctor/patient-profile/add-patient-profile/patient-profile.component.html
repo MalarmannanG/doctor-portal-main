@@ -14,7 +14,7 @@
             <li class="breadcrumb-item bcrumb-2">
               <a href="#" onClick="return false;">Patient Profile</a>
             </li>
-            <li class="breadcrumb-item active"> {{model.patientModel?.patientName}} ({{model.patientModel?.age}})</li>
+            <!-- <li class="breadcrumb-item active"> {{model.patientModel?.patientName}} ({{model.patientModel?.age}})</li> -->
           </ul>
         </div>
       </div>
@@ -87,14 +87,15 @@
             <div class="row cust-margin" *ngIf="templateLoading">
               Loading Templates...
             </div>
-            <div class="row cust-margin" *ngIf="!diagLoading">
+            <!-- <div class="row cust-margin" *ngIf="!diagLoading">
               <div class="col-md-12 col-12">
                 <button class="btn btn-sm btn-primary" *ngIf="showAddDiagnosis()" (click)="addDiag()">
                   Add Diagnosis
                 </button>
               </div>
+
               <div class="col-12" *ngFor="let each of model.patientDiagnosisModel; let index = index; last as isLast">
-                <div class="row align-items-center" *ngIf="!each.isDeleted && diagOptions.length > 0">  
+                <div class="row align-items-center" *ngIf="!each.isDeleted && diagOptions.length > 0">
                   <div class="col-md-5 col-12">
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Diagnosis</mat-label>
@@ -121,12 +122,76 @@
                     <i class="fas fa-plus-circle" ngbTooltip="Add Diagnosis" [openDelay]="500" (click)="addDiag()"></i>
                   </div>
                   <div class="col-md-1 col-12 col-btn" *ngIf="index !== model.patientDiagnosisModel.length - 1">
-                    <!-- <i class="fas fa-pencil-alt"></i> -->
+                    
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
+            <div class="row align-items-center">
+              <div class="col-12 mb-2">
+                <mat-card>
+                  <h5>Diagnosis</h5>
+                </mat-card>
+              </div>
+              <div class="col-12 mb-2" *ngIf="!isDiagSelected">
+                <!-- <ng-template #diagsSelection> -->
+                <div class="col-9 mb-2">
+                  <div class="row align-items-center">
+                    <div class="col-md-9 col-12">
+                      <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Diagnosis</mat-label>
+                        <mat-chip-list #chipDiagList aria-label="Diagnosis selection">
+                          <mat-chip *ngFor="let template of model.patientDiagnosisModel; let index = index"
+                            selectable="true" removable="true">
+                            {{template.diagnosisMasterName}}
+                            <button matChipRemove (click)="removeDiagChip(index, true)">
+                              <mat-icon>cancel</mat-icon>
+                            </button>
+                          </mat-chip>
+                          <input placeholder="Diagnosis Name" #diagCtrl="ngModel" name="diag"
+                            [(ngModel)]="selectedDiagName" [matAutocomplete]="autoTemp" [matChipInputFor]="chipDiagList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                        </mat-chip-list>
+                        <mat-autocomplete #autoTemp="matAutocomplete" (optionSelected)="addDiag($event)">
+                          <mat-option *ngFor="let template of diagosisList" [value]="template.name">
+                            {{template.name}}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-3 mb-2">
+                      <button (click)="saveDiags()" class="btn btn-success me-2">Done</button>
+                      <button [disabled]="model.patientDiagnosisModel?.length < 1" (click)="cancelDiags()"
+                        class="btn btn-danger">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+                <!-- </ng-template> -->
+              </div>
+              <div class="col-12 mb-2" *ngIf="isDiagSelected">
+                <!-- <ng-template #displayDiags> -->
+                <mat-chip-list aria-label="Template Display">
+                  <mat-chip *ngFor="let template of model.patientDiagnosisModel; let index = index" selectable="true"
+                    removable="true">
+                    {{template.diagnosisMasterName}}
+                    <button matChipRemove (click)="removeDiagChip(index)">
+                      <mat-icon>cancel</mat-icon>
+                    </button>
+                  </mat-chip>
+                  <mat-chip *ngIf="model.patientDiagnosisModel?.length > 0">
+                    <button class="btn btn-link" (click)="addMoreDigs()">
+                      Add More
+                    </button>
+                  </mat-chip>
+                </mat-chip-list>
+                <!-- </ng-template> -->
+                <button *ngIf="!selectedTemplateObj.name; else displayTemp" (click)="isDiagSelected = !isDiagSelected"
+                  ngbTooltip="Add Diagnosis" class="pull-right btn btn-sm btn-primary">
+                  <i class="fas fa-plus-circle primary"></i> Diagnosis
+                </button>
+              </div>
 
+            </div>
             <div class="row">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
@@ -146,9 +211,13 @@
                       <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                         <mat-form-field class="example-full-width mb-3" appearance="outline">
                           <mat-label>Complaints</mat-label>
-                          <textarea maxlength="1000" matInput name="compliants" #compliants="ngModel"
-                            [(ngModel)]="model.compliants">
-                          </textarea>
+                          <input matInput [matAutocomplete]="autoCompliants" name="compliants" #compliants="ngModel"
+                            [(ngModel)]="selectedComplaint" (ngModelChange)="doComplaintFilter(selectedComplaint)">
+                          <mat-autocomplete #autoCompliants="matAutocomplete">
+                            <mat-option *ngFor="let template of complaintsOptions" [value]="template">
+                              {{template}}
+                            </mat-option>
+                          </mat-autocomplete>
                           <mat-error *ngIf="compliants.invalid && (compliants.dirty || compliants.touched)">
                             <span *ngIf="compliants.errors?.['maxlength']"> Max Length is 1000</span>
                           </mat-error>
@@ -162,6 +231,31 @@
                           </textarea>
                           <mat-error *ngIf="examination.invalid && (examination.dirty || examination.touched)">
                             <span *ngIf="examination.errors?.['maxlength']"> Max Length is 1000</span>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Past History</mat-label>
+                          <textarea maxlength="1000" matInput name="pastHistory" #pastHistory="ngModel"
+                            [(ngModel)]="model.pastHistory">
+                          </textarea>
+                          <mat-error *ngIf="pastHistory.invalid && (pastHistory.dirty || pastHistory.touched)">
+                            <span *ngIf="pastHistory.errors?.['maxlength']"> Max Length is 1000</span>
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                          <mat-label>Investigation Results</mat-label>
+                          <textarea maxlength="1000" matInput name="investigationResults"
+                            #investigationResults="ngModel" [(ngModel)]="model.investigationResults">
+                          </textarea>
+                          <mat-error
+                            *ngIf="investigationResults.invalid && (investigationResults.dirty || investigationResults.touched)">
+                            <span *ngIf="investigationResults.errors?.['maxlength']"> Max Length is 1000</span>
                           </mat-error>
                         </mat-form-field>
                       </div>
@@ -202,7 +296,23 @@
                         </mat-form-field>
                       </div>
                       <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <section class="example-section">
+                          <mat-checkbox [(ngModel)]="model.isfollowUpNeed" name="isfollowUpNeed">Follow Up Needed
+                          </mat-checkbox>
+                        </section>
+                        <section class="example-section" *ngIf="model.isfollowUpNeed">
+                          <mat-form-field class="example-full-width mb-3" appearance="outline">
+                            <mat-label> Date & Time</mat-label>
+                            <input matInput [owlDateTimeTrigger]="date2" [owlDateTime]="date2" #followUp="ngModel"
+                              name="followUp" [(ngModel)]="model.followUp" [min]="today">
+                            <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
+                            <owl-date-time #date2></owl-date-time>
+                            <mat-error *ngIf="followUp.invalid && (followUp.dirty || followUp.touched)">
+                              <span *ngIf="followUp.errors?.['required']"> FollowUp is required</span>
+                            </mat-error>
+                          </mat-form-field>
+                        </section>
+                        <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
                           <mat-label>Follow Up</mat-label>
                           <textarea maxlength="1000" matInput name="followUp" #followUp="ngModel"
                             [(ngModel)]="model.followUp">
@@ -210,7 +320,7 @@
                           <mat-error *ngIf="followUp.invalid && (followUp.dirty || followUp.touched)">
                             <span *ngIf="followUp.errors?.['maxlength']"> Max Length is 1000</span>
                           </mat-error>
-                        </mat-form-field>
+                        </mat-form-field> -->
                       </div>
                     </div>
                   </form>
@@ -243,7 +353,9 @@
                         [disabled]="action == 'edit'" [(ngModel)]="selectedMedicine"
                         (ngModelChange)="doMedFilter(selectedMedicine)">
                       <mat-hint> <span class="bolder font-large">
-                        {{activePrescription.medicineName}}-{{activePrescription.categoryName}}-{{activePrescription.strength}}{{activePrescription.units}}</span> </mat-hint>
+
+                          {{activePrescription.medicineName}}-{{activePrescription.categoryName}}-{{activePrescription.strength}}{{activePrescription.units}}</span>
+                      </mat-hint>
                       <mat-error *ngIf="medicineName.invalid && (medicineName.dirty || medicineName.touched)">
                         <span *ngIf="medicineName.errors?.['required']"> Medicine Name is required</span>
                       </mat-error>
@@ -256,29 +368,19 @@
                     </mat-autocomplete>
                   </div>
                   <div class="col-md-2 col-12">
-                    <mat-form-field class="example-full-width mb-3" appearance="outline" required>
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
                       <mat-label>Strength</mat-label>
                       <input maxlength="50" readonly matInput [(ngModel)]="activePrescription.strength" name="strength">
-                      <!-- <mat-select #strength="ngModel" [(ngModel)]="activePrescription.strength" required
-                        name="strength">
-                        <mat-option value="0.5mg">0.5mg</mat-option>
-                        <mat-option value="0.25mg">0.25mg</mat-option>
-                        <mat-option value="4mg">4mg</mat-option>
-                        <mat-option value="15mg">15mg</mat-option>
-                        <mat-option value="30mg">30mg</mat-option>
-                        <mat-option value="75mg">75mg</mat-option>
-                        <mat-option value="500mg">500mg</mat-option>
-                        <mat-option value="400mg">400mg</mat-option>
-                        <mat-option value="250mg">250mg</mat-option>
-                        <mat-option value="100mg">100mg</mat-option>
-                        <mat-option value="0.4 / 0.5mg">0.4 / 0.5mg</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="strength.invalid && (strength.dirty || strength.touched)">
-                        <span *ngIf="strength.errors?.['required']"> Strength is required</span>
-                      </mat-error> -->
+
                     </mat-form-field>
                   </div>
                   <div class="col-md-3 col-12">
+                    <section class="example-section">
+                      <mat-checkbox [(ngModel)]="activePrescription.sos" name="sos">
+                        Sos</mat-checkbox>
+                      <mat-checkbox [(ngModel)]="activePrescription.stat" name="stat">
+                        Stat</mat-checkbox>
+                    </section>
                     <mat-radio-group aria-label="schedule" [(ngModel)]="activePrescription.beforeFood">
                       <mat-radio-button [value]="true">Before Food</mat-radio-button>
                       <mat-radio-button [value]="false">After Food</mat-radio-button>
@@ -310,8 +412,7 @@
                     </mat-form-field>
                   </div>
                   <div class="col-12 text-center">
-                    <button
-                      [disabled]="!activePrescription.medicineName || !activePrescription.strength || !activePrescription.noOfDays"
+                    <button [disabled]="!activePrescription.medicineName ||  !activePrescription.noOfDays"
                       (click)="addPrescription()" class="btn btn-sm btn-success mr-2">Done</button>
                     &nbsp; <button (click)="cancelPrescription()" class="btn btn-sm btn-danger mr-2">Cancel</button>
                   </div>
@@ -329,7 +430,7 @@
               mat-raised-button color="primary">Submit</button>
             <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid || newMed"
               mat-raised-button color="primary">Update</button>
-            <button routerLink="/admin/patients/all-patients" type="button" mat-button>Cancel</button>
+            <button routerLink="/doctor/dashboard" type="button" mat-button>Cancel</button>
           </div>
         </div>
       </div>
@@ -345,10 +446,12 @@
               <div class="col-md-12">
                 <ul>
                   <li class="text-left">
-                    <button class="btn btn-lg btn-link" style="text-align: left;" (click)="openModel(investigation)">Investigation</button>
+                    <button class="btn btn-lg btn-link" style="text-align: left;"
+                      (click)="openModel(investigation)">Investigation</button>
                   </li>
                   <li>
-                    <button class="btn btn-lg btn-link" style="text-align: left;" (click)="openModel(visits)">Past Visits</button>
+                    <button class="btn btn-lg btn-link" style="text-align: left;" (click)="openModel(visits)">Past
+                      Visits</button>
                   </li>
                 </ul>
               </div>
@@ -476,7 +579,7 @@
     </ng-template>
     <ngb-accordion *ngIf="pastHistoryList?.length > 0; else noData" [closeOthers]="true" class="acc-btn-last">
       <ngb-panel id="visit-1" *ngFor="let each of pastHistoryList">
-        <ng-template ngbPanelHeader let-opened="opened">
+        <ng-template ngbPanelHeader let-opened="each?.appointment?.isOpened">
           <div class="row">
             <div class="col-md-4 col-12">
               <h6 class="mb-0">{{each?.appointment?.consultingDoctorName}}</h6>
@@ -490,9 +593,9 @@
               <h6 class="mb-0">{{each?.appointment?.description}}</h6>
             </div>
             <div class="col-md-1 col-12">
-              <button ngbPanelToggle class="btn btn-link p-0">
-                <i class="fas fa-minus" *ngIf="opened"></i>
-                <i *ngIf="!opened" class="fas fa-plus-circle"></i>
+              <button ngbPanelToggle class="btn btn-link p-0" (click)="changeOpened(each)">
+                <i class="fas fa-minus" *ngIf="each?.appointment?.isOpened"></i>
+                <i *ngIf="!each?.appointment?.isOpened" class="fas fa-plus-circle"></i>
               </button>
             </div>
           </div>
@@ -521,7 +624,65 @@
   </div>
   <div class="modal-body">
     <div class="row">
-      <div class="col-12" *ngIf="!model.patientTestModel || model.patientTestModel?.length == 0">
+
+      <div class="col-12 mb-2" *ngIf="!isTestSelected">
+        <!-- <ng-template #diagsSelection> -->
+
+        <div class="row align-items-center">
+          <div class="col-md-9 col-12">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Investigation</mat-label>
+              <mat-chip-list #chipTestList aria-label="Diagnosis selection">
+                <mat-chip *ngFor="let template of model.patientTestModel; let index = index" selectable="true"
+                  removable="true">
+                  {{template.testMasterName}}
+                  <button matChipRemove (click)="removeTestChip(index, true)">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </mat-chip>
+                <input #testCtrl="ngModel" name="diag" [(ngModel)]="selectedTestName" [matAutocomplete]="autoTemp"
+                  [matChipInputFor]="chipTestList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+              </mat-chip-list>
+              <mat-autocomplete #autoTemp="matAutocomplete" (optionSelected)="addTest($event)">
+                <mat-option *ngFor="let template of inestigationOptions" [value]="template.name">
+                  {{template.name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div class="col-3 mb-2">
+            <button (click)="saveTest()" class="btn btn-success me-2">Done</button>
+            <button [disabled]="model.patientTestModel?.length < 1" (click)="cancelTest()"
+              class="btn btn-danger">Cancel</button>
+          </div>
+
+        </div>
+        <!-- </ng-template> -->
+      </div>
+      <div class="col-12 mb-2" *ngIf="isTestSelected">
+        <!-- <ng-template #displayDiags> -->
+        <mat-chip-list aria-label="Template Display">
+          <mat-chip *ngFor="let template of model.patientTestModel; let index = index" selectable="true"
+            removable="true">
+            {{template.testMasterName}}
+            <button matChipRemove (click)="removeTestChip(index)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+          <mat-chip *ngIf="model.patientTestModel?.length > 0">
+            <button class="btn btn-link" (click)="addMoreTest()">
+              Add More
+            </button>
+          </mat-chip>
+        </mat-chip-list>
+        <!-- </ng-template> -->
+        <!-- <button *ngIf="!selectedTemplateObj.name; else displayTemp" (click)="isDiagSelected = !isDiagSelected"
+          ngbTooltip="Add Diagnosis" class="pull-right btn btn-sm btn-primary">
+          <i class="fas fa-plus-circle primary"></i> Diagnosis
+        </button> -->
+      </div>
+
+      <!-- <div class="col-12" *ngIf="!model.patientTestModel || model.patientTestModel?.length == 0">
         <button (click)="addInestigation()" class="pull-right btn btn-sm btn-primary">
           <i class="fas fa-plus-circle"></i>Add
         </button>
@@ -555,7 +716,7 @@
             <i class="fas fa-plus-circle" (click)="addInestigation()"></i>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="modal-footer">
@@ -570,8 +731,8 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-10 col-sm-10 col-xs-10">
-          <img style="width: 250px;padding: 10px;" class="mx-auto d-block"
-            src="http://pisystemsimran-001-site1.dtempurl.com/assets/images/pih-logo.png">
+          <!-- <img style="width: 250px;padding: 10px;" class="mx-auto d-block"
+            src="http://pisystemsimran-001-site1.dtempurl.com/assets/images/pih-logo.png"> -->
         </div>
         <div class="col-md-2 col-sm-2 col-xs-2 text-right">
           <button id="print-btn" onclick="printing()" class="mt-1 btn btn-sm btn-primary">Print</button>
@@ -601,7 +762,7 @@
         style="border: 1px solid #000;border-top: none;padding-top: 10px;">
         <div class="row clearfix">
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="row">
+            <div *ngIf="model.compliants" class="row">
               <div class="col-md-3 col-sm-3 col-xs-3">
                 <strong>Complaints</strong>
               </div>
@@ -609,7 +770,7 @@
                 : {{model.compliants}}
               </div>
             </div>
-            <div class="row clearfix">
+            <div *ngIf="model.patientTestModel?.length > 0" class="row clearfix">
               <div class="col-md-3 col-sm-3 col-xs-3">
                 <strong>Investigation Results</strong>
               </div>
@@ -619,7 +780,7 @@
                 </span>
               </div>
             </div>
-            <div class="row clearfix">
+            <div *ngIf="model.impression" class="row clearfix">
               <div class="col-md-3 col-sm-3 col-xs-3">
                 <strong>Impression</strong>
               </div>
@@ -627,7 +788,7 @@
                 : {{model.impression}}
               </div>
             </div>
-            <div class="row clearfix">
+            <div *ngIf="model.advice" class="row clearfix">
               <div class="col-md-3 col-sm-3 col-xs-3">
                 <strong>Advice</strong>
               </div>
@@ -664,7 +825,7 @@
                   </td>
                   <td class="col-md-8 col-sm-8 col-xs-8">
                     {{each.medicineName}} - {{each.strength}} ({{each.genericName ? each.genericName :
-                    each.medicineName}})
+                    each.medicineName}}) {{each.categoryName ? each.categoryName : ''}}{{each.units ? each.units : ''}}
                   </td>
                   <td class="col-md-1 col-sm-1 col-xs-1">
                     {{each.morning ? 1 : 0}}-{{each.noon? 1:0}}-{{each.night? 1: 0}}
@@ -673,7 +834,8 @@
                     {{each.noOfDays}} Day(s)
                   </td>
                   <td class="col-md-1 col-sm-1 col-xs-1">
-                    {{each.beforeFood ? "Before Food": "After Food"}} {{each.remarks}}
+                    {{each.beforeFood ? "Before Food": "After Food"}} {{each.remarks?.toLowerCase().indexOf('food') > -1
+                    ? '' : each.remarks}}
                   </td>
                 </tr>
               </tbody>

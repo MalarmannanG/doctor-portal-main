@@ -75,7 +75,7 @@
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Office Phone No</mat-label>
-                    <input pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" matInput name="mobile2"
+                    <input pattern="\d{5}([- ]*)\d{6}" matInput name="mobile2"
                       #mobile="ngModel" [(ngModel)]="model.phoneNo2">
                     <mat-icon matSuffix>phone</mat-icon>
                     <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">

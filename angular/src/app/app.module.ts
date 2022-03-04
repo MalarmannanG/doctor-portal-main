@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { ErrorHandler, NgModule } from "@angular/core";
 
 import { CoreModule } from "./core/core.module";
 import { SharedModule } from "./shared/shared.module";
@@ -32,6 +32,7 @@ import {
 } from "@angular/common/http";
 
 import { LoadingBarRouterModule } from "@ngx-loading-bar/router";
+import { GlobalErrorHandler } from "./shared/globalErrorHandler";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -79,6 +80,7 @@ export function createTranslateLoader(http: HttpClient): any {
         },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        {provide: ErrorHandler, useClass: GlobalErrorHandler},
         fakeBackendProvider,
     ],
     bootstrap: [AppComponent]

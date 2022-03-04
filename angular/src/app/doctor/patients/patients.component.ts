@@ -105,7 +105,7 @@ export class PatientsComponent
     this.router.navigateByUrl('/doctor/patient-profile');
   }
   editCall(id) {
-    this.router.navigateByUrl('/doctor/patient-profile/' + id)
+    this.router.navigateByUrl('/doctor/patients/' + id)
   }
   deleteItem(id) {
     Swal.fire({
