@@ -16,6 +16,7 @@ export class AppoinemtModel {
     dayOrNight: string;
     timeOfAppintment: string;
     appointmentDateTime: any;
+    appointmentISOString : string;
     description: number;
     patient: PatientModel;
     patientFiles: PatientFilesModel[];

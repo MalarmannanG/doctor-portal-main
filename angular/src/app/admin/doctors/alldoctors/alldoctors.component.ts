@@ -30,7 +30,7 @@ export class AlldoctorsComponent
     "name",
     "clinicName",
     "phoneNo1",
-    "qualification",
+    "pinCode",
     "email",
     "actions"
   ];

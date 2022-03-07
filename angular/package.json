@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "nswag": "cd nswag/ && refresh.bat"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +50,7 @@
     "core-js": "^3.20.0",
     "echarts": "^4.9.0",
     "file-saver": "^2.0.5",
+    "luxon": "^1.27.0",
     "moment": "^2.29.1",
     "ng-apexcharts": "^1.6.0",
     "ng-click-outside": "^9.0.0",
@@ -64,6 +66,7 @@
     "ngx-material-file-input": "^3.0.0",
     "ngx-perfect-scrollbar": "^10.1.1",
     "ngx-spinner": "^13.1.1",
+    "nswag": "^13.15.10",
     "rxjs": "^7.4.0",
     "subsink": "^1.0.2",
     "sweetalert2": "^11.3.0",

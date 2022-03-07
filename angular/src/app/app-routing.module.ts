@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { Routes, RouterModule, PreloadAllModules } from "@angular/router";
 import { Page404Component } from "./authentication/page404/page404.component";
 import { AuthGuard } from "./core/guard/auth.guard";
 import { Role } from "./core/models/role";
@@ -55,7 +55,7 @@ const routes: Routes = [
   { path: "**", component: Page404Component },
 ];
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy",preloadingStrategy: PreloadAllModules })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

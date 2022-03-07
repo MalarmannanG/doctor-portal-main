@@ -92,7 +92,9 @@ export class BookappointmentComponent {
     //this.model.appointmentDateTime = moment(this.model.appointmentDateTime).format('YYYY-MM-DD HH:mm:ss');  
     
     //this.model.appointmentDateTime = moment(this.model.appointmentDateTime).toLocaleString();
-    //this.model.appointmentDateTime = 
+    this.model.appointmentISOString = moment(this.model.appointmentDateTime).toISOString();
+    console.log(this.model.appointmentDateTime);
+    console.log(this.model.appointmentISOString);
     if(!this.doctorOption?.id) {
       this.doctorRequired = true;
     }

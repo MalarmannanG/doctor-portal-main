@@ -188,7 +188,7 @@ export class MainComponent implements OnInit, OnDestroy {
       query = query ? query + `&toDate=${this.toDate}` : `?toDate=${this.toDate}`
     }
 
-    if(this.fromDate && this.toDate) {
+    if(!this.fromDate && !this.toDate) {
       let today = moment().format('YYYY-MM-DD')
       this.todaysAppointments = today == this.fromDate && today == this.toDate;
     }

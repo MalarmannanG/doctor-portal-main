@@ -101,14 +101,14 @@
                         </mat-form-field>
                       </div>
                       <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                        <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
                           <mat-label>Follow Up</mat-label>
                           <textarea maxlength="1000" matInput name="followUp" #followUp="ngModel" [(ngModel)]="model.followUp">
                         </textarea>
                         <mat-error *ngIf="followUp.invalid && (followUp.dirty || followUp.touched)">
                           <span *ngIf="followUp.errors?.['maxlength']"> Max Length is 1000</span>
                         </mat-error>
-                        </mat-form-field>
+                        </mat-form-field> -->
                       </div>
                     </div>                   
                   </form>
@@ -152,7 +152,7 @@
                 <div class="col-md-2 col-12">
                   <mat-form-field class="example-full-width mb-3" appearance="outline" required>
                     <mat-label>Strength</mat-label>
-                    <input maxlength="50" readonly matInput [(ngModel)]="activePrescription.strength" name="strength">
+                    <input maxlength="50" matInput [(ngModel)]="activePrescription.strength" name="strength">
                     <!-- <mat-select #strength="ngModel" [(ngModel)]="activePrescription.strength" required
                       name="strength">
                       <mat-option value="0.5mg">0.5mg</mat-option>
@@ -205,7 +205,7 @@
                 </div>
                 <div class="col-12 text-center">
                   <button
-                    [disabled]="!activePrescription.medicineName || !activePrescription.strength || !activePrescription.noOfDays"
+                    [disabled]="!activePrescription.medicineName || !activePrescription.noOfDays"
                     (click)="addPrescription()" class="btn btn-sm btn-success mr-2">Done</button>
                   &nbsp; <button (click)="cancelPrescription()" class="btn btn-sm btn-danger mr-2">Cancel</button>
                 </div>

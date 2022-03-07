@@ -23,8 +23,8 @@ export class AddPatientComponent implements OnInit, OnDestroy {
     
   }
 
-  public objectComparisonFunction = function( option, value ) : boolean {
-    return option.id === value.id;
+  public objectComparisonFunction = function( option, item ) : boolean {
+    return option.value === item.value;
   }
 
   onSubmit() {
@@ -42,7 +42,6 @@ export class AddPatientComponent implements OnInit, OnDestroy {
     this.patientService.put(this.model)
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
-      console.log(resp)
       this.router.navigateByUrl('/admin/patients/all-patients')
     });
   }
@@ -57,6 +56,7 @@ export class AddPatientComponent implements OnInit, OnDestroy {
 
      if(this.id && this.model.referedBy) {
       this.doctorOption = this.doctorOptions.filter(a => a.value == this.model.referedBy)[0];
+      console.log(this.doctorOption);
      }
     });
   }
