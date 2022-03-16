@@ -23,6 +23,7 @@ import { AppoinementsService } from "src/app/admin/appointment/service/Appointme
 import { Subject, takeUntil } from "rxjs";
 import * as moment from "moment";
 import { PatientModel } from "src/app/admin/patients/model/patient.model";
+import { AccountService } from "src/app/authentication/service/auth.service";
 export type areaChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -93,7 +94,10 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   constructor(private router: Router, 
     private patientsService: PatientMasterService,
     private doctorService: DoctorService,
-    private appoinementsService: AppoinementsService) {}
+    private appoinementsService: AppoinementsService,
+    private accountService: AccountService) {
+
+    }
 
   getColor(input: number) {
     let index: number = input > 6 ? input % 6 : input;
@@ -115,6 +119,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   }
 
   gotoProfile(id) {
+    console.log('gotoProfile');
     this.router.navigateByUrl(`/doctor/patient-profile/${id}`);
   }
 
@@ -265,6 +270,10 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.getAppointments(true);
     this.getPatinets();
     this.getDoctors();
+    const user = this.accountService.currentUserValue;
+    console.log(user);
+    // if(user.role == "Doctor")
+    //   this.selectedDoctor = user.username 
   }
 
   ngOnDestroy(): void {

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { PrescriptionMasterModel } from "../../patient-profile/model/patient-profile.model.service";
@@ -25,14 +26,15 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   editing: boolean = false;
   activePrescription = new TemplatePrescriptionModel();
   prescriptionOptions: PrescriptionMasterModel[] = [];
-  prescriptionList: PrescriptionMasterModel[] =[];
+  prescriptionList: PrescriptionMasterModel[] = [];
   genericName: string;
   selectedMedicine = '';
-  constructor(private router: Router, 
+  constructor(private router: Router,
     private patientProfileService: PatientProfileService,
     private templateMasterService: TemplateMasterService,
-    private activatedRoute: ActivatedRoute) {
-    
+    private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar) {
+
   }
 
   cancelPrescription() {
@@ -42,8 +44,7 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   }
 
   addPrescription() {
-    debugger;
-    if(!this.editing) {
+    if (!this.editing) {
       this.model.templatePrescriptionModel?.push(this.activePrescription);
     } else {
       this.editablePrescription.medicineName = this.activePrescription.medicineName;
@@ -58,6 +59,7 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
     }
     this.activePrescription = new TemplatePrescriptionModel();
     this.prescriptionOptions = this.prescriptionList;
+    this.selectedMedicine = '';
     this.newMed = false;
     this.editing = false;
   }
@@ -76,33 +78,52 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
   }
 
   update() {
-    debugger;
     this.templateMasterService.put(this.model)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      console.log(resp)
-      this.router.navigateByUrl('/doctor/all-template')
-    });
-  } 
-  
-  onSubmit() {
-    debugger;
-    
-    this.templateMasterService.post(this.model)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      console.log(resp)
-      this.router.navigateByUrl('/doctor/all-template')
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        console.log(resp)
+        if (resp.id == -1)
+          this.showNotification(
+            "snackbar-danger",
+            "Template Name already available!!!",
+            "bottom",
+            "center"
+          );
+        else
+          this.router.navigateByUrl('/doctor/all-template');
+      });
   }
 
+  onSubmit() {
+    this.templateMasterService.post(this.model)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        if (resp == -1)
+          this.showNotification(
+            "snackbar-danger",
+            "Template Name already available!!!",
+            "bottom",
+            "center"
+          );
+        else
+          this.router.navigateByUrl('/doctor/all-template');
+      });
+  }
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, "", {
+      duration: 3000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: colorName,
+    });
+  }
   get() {
     this.templateMasterService.get(this.id)
-    
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.model = resp;
-    });
+
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.model = resp;
+      });
   }
 
   onMedSelectionChanged(event) {
@@ -115,7 +136,9 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
       this.activePrescription.units = selected.units;
       console.log(selected.strength + '' + selected.remarks);
       this.activePrescription.remarks = selected.remarks;
-      this.selectedMedicine = selected.medicineName + '-' + selected.categoryName + '-' + selected.strength + '' + selected.units;
+      var _strength = selected.strength = null ? '-' + selected.strength : '';
+      var _units = selected.units = null ? '-' + selected.units : '';
+      this.selectedMedicine = selected.medicineName + '-' + selected.categoryName + _strength + _units;
 
     }
   }
@@ -141,24 +164,24 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
     }
   }
 
-  
-  populatePrescriptionMaster() {    
+
+  populatePrescriptionMaster() {
     this.patientProfileService.getMedicines()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {      
-      this.prescriptionList = resp?.result;
-      this.prescriptionOptions = this.prescriptionList;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.prescriptionList = resp?.result;
+        this.prescriptionOptions = this.prescriptionList;
+      });
   }
 
   id: any;
   ngOnInit() {
     this.populatePrescriptionMaster();
     let id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(id){
+    if (id) {
       this.id = id;
       this.get();
-    } 
+    }
   }
 
   ngOnDestroy(): void {

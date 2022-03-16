@@ -51,7 +51,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         const firstString = currenturl.split("/").slice(1)[0];
 
         if (role.indexOf(firstString) !== -1) {
-          this.level1Menu = event.url.split("/")[2];
+          this.level1Menu = event.url.split("/")[2].replace('all-','').replace('add-','');
           this.level2Menu = event.url.split("/")[3];
         } else {
           this.level1Menu = event.url.split("/")[1];

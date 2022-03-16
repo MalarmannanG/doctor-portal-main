@@ -15,6 +15,7 @@ import { AllTemplateMasterComponent } from "./template-master/all-template-maste
 import { AddDiagnosisMasterComponent } from "./diagnosis-master/add-diagnosis-master/add-diagnosis-master.component";
 import { NewPatientProfileComponent } from "./patient-profile/add-patient-profile/patient-profile.component";
 import { ViewPatientProfileComponent } from "./patient-profile/view-patient-profile/view-patient-profile.component";
+import {BlankComponent} from './patient-profile/blank.component';
 const routes: Routes = [
   {
     path: "dashboard",
@@ -73,8 +74,12 @@ const routes: Routes = [
     component: ViewPatientProfileComponent,
   },
   {
-    path: "patient-profile/:id",
+    path: "patient-profile1/:id",
     component: NewPatientProfileComponent,
+  },
+   {
+    path: "patient-profile/:id",
+    component: BlankComponent,
   },
   {
     path: "prescription-print/:id",

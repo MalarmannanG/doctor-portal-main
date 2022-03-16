@@ -73,7 +73,10 @@ export class BookappointmentComponent {
     if(this.patientOption?.id && this.doctorOption?.id) {
       this.model.consultingDoctorID = this.doctorOption.id;
       this.model.patientId = this.patientOption.id;
-      
+      this.model.appointmentDateTime = moment(this.model.appointmentDateTime).utcOffset(0,true);
+      var datetime = moment(this.model.appointmentDateTime).utcOffset(0,true).toLocaleString();
+      const datetimearray = datetime.split(' GMT');
+      this.model.appointmentISOString = datetimearray[0];
       this.appoinementService.post(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
@@ -91,10 +94,11 @@ export class BookappointmentComponent {
   
     //this.model.appointmentDateTime = moment(this.model.appointmentDateTime).format('YYYY-MM-DD HH:mm:ss');  
     
-    //this.model.appointmentDateTime = moment(this.model.appointmentDateTime).toLocaleString();
-    this.model.appointmentISOString = moment(this.model.appointmentDateTime).toISOString();
-    console.log(this.model.appointmentDateTime);
-    console.log(this.model.appointmentISOString);
+    this.model.appointmentDateTime = moment(this.model.appointmentDateTime).utcOffset(0,true);
+    var datetime = moment(this.model.appointmentDateTime).utcOffset(0,true).toLocaleString();
+    const datetimearray = datetime.split(' GMT');
+    this.model.appointmentISOString = datetimearray[0];
+ 
     if(!this.doctorOption?.id) {
       this.doctorRequired = true;
     }

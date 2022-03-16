@@ -136,7 +136,7 @@
                     <input matInput [matAutocomplete]="autoMed" name="medicineName" #medicineName="ngModel"
                       [disabled]="action == 'edit'" [(ngModel)]="selectedMedicine"
                       (ngModelChange)="doMedFilter(selectedMedicine)">
-                    <mat-hint> <span class="bolder font-large">
+                    <mat-hint> <span class="bolder font-large" *ngIf="selectedMedicine.length > 0">
                       {{activePrescription.medicineName}}-{{activePrescription.categoryName}}-{{activePrescription.strength}}{{activePrescription.units}}</span> </mat-hint>
                     <mat-error *ngIf="medicineName.invalid && (medicineName.dirty || medicineName.touched)">
                       <span *ngIf="medicineName.errors?.['required']"> Medicine Name is required</span>

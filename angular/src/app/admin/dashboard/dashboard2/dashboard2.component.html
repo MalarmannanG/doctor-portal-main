@@ -116,7 +116,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Temprature</mat-label>
+                    <mat-label>Temperature</mat-label>
                     <input maxlength="{{(model.temprature?.toString().includes('.') ? 5 : 4)}}" type="text"
                       (keypress)="numberOnly($event)" matInput type="text" name="temprature" #temprature="ngModel"
                       [(ngModel)]="model.temprature">

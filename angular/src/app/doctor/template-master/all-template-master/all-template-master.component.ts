@@ -29,8 +29,7 @@ export class AllTemplateMasterComponent
     "examination",
     "impression",
     "advice",
-    "plan",
-    "followUp",
+    "plan", 
     "actions"
   ];
   index: number;

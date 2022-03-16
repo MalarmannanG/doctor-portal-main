@@ -268,8 +268,8 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: "",
-    title: "MENUITEMS.STAFF.TEXT",
-    moduleName: "users",
+    title: "Staffs",
+    moduleName: "staff",
     iconType: "material-icons-two-tone",
     icon: "people_alt",
     class: "menu-toggle",
@@ -280,8 +280,8 @@ export const ROUTES: RouteInfo[] = [
     submenu: [
       {
         path: "/admin/staff/all-staff",
-        title: "MENUITEMS.STAFF.LIST.ALL-STAFF",
-        moduleName: "users",
+        title: "All Staffs",
+        moduleName: "staff",
         iconType: "",
         icon: "",
         class: "ml-menu",
@@ -293,8 +293,8 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: "/admin/staff/add-staff",
-        title: "MENUITEMS.STAFF.LIST.ADD-STAFF",
-        moduleName: "user",
+        title: "Add Staff",
+        moduleName: "staff",
         iconType: "",
         icon: "",
         class: "ml-menu",

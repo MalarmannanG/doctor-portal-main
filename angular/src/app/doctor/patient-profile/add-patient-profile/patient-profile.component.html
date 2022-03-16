@@ -87,54 +87,13 @@
             <div class="row cust-margin" *ngIf="templateLoading">
               Loading Templates...
             </div>
-            <!-- <div class="row cust-margin" *ngIf="!diagLoading">
-              <div class="col-md-12 col-12">
-                <button class="btn btn-sm btn-primary" *ngIf="showAddDiagnosis()" (click)="addDiag()">
-                  Add Diagnosis
-                </button>
-              </div>
-
-              <div class="col-12" *ngFor="let each of model.patientDiagnosisModel; let index = index; last as isLast">
-                <div class="row align-items-center" *ngIf="!each.isDeleted && diagOptions.length > 0">
-                  <div class="col-md-5 col-12">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Diagnosis</mat-label>
-                      <input matInput [matAutocomplete]="autoDiag" name="selectInvestigation"
-                        #selectInvestigation="ngModel" [(ngModel)]="each.diagnosisMasterName"
-                        (ngModelChange)="doDiagFilter(each.diagnosisMasterName)">
-                    </mat-form-field>
-                    <mat-autocomplete autoActiveFirstOption #autoDiag="matAutocomplete"
-                      (optionSelected)="onDiagSelectionChanged($event, each)">
-                      <mat-option *ngFor="let eachOption of diagOptions[index].model" [value]="eachOption.name">
-                        {{eachOption.name}}
-                      </mat-option>
-                    </mat-autocomplete>
-                  </div>
-                  <div class="col-md-6 col-12">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Description</mat-label>
-                      <input matInput [(ngModel)]="each.description" name="description{{index}}">
-                    </mat-form-field>
-                  </div>
-                  <div class="col-md-1 col-12 col-btn">
-                    <i class="fas fa-trash-alt" ngbTooltip="Delete Diagnosis" [openDelay]="500"
-                      (click)="removeDiag(index)"></i>
-                    <i class="fas fa-plus-circle" ngbTooltip="Add Diagnosis" [openDelay]="500" (click)="addDiag()"></i>
-                  </div>
-                  <div class="col-md-1 col-12 col-btn" *ngIf="index !== model.patientDiagnosisModel.length - 1">
-                    
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <div class="row align-items-center">
+             <div class="row align-items-center">
               <div class="col-12 mb-2">
                 <mat-card>
                   <h5>Diagnosis</h5>
                 </mat-card>
               </div>
               <div class="col-12 mb-2" *ngIf="!isDiagSelected">
-                <!-- <ng-template #diagsSelection> -->
                 <div class="col-9 mb-2">
                   <div class="row align-items-center">
                     <div class="col-md-9 col-12">

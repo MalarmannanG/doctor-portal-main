@@ -26,6 +26,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
+import { MatSliderModule } from "@angular/material/slider";
 import { MatExpansionModule } from "@angular/material/expansion";
 
 import { DoctorRoutingModule } from "./doctor-routing.module";
@@ -51,6 +52,7 @@ import { NgxMaskModule } from "ngx-mask";
 import { PatientService } from "./patients/patient.service";
 import { ViewPatientProfileComponent } from "./patient-profile/view-patient-profile/view-patient-profile.component";
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
+import {BlankComponent} from './patient-profile/blank.component';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -68,7 +70,8 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
     AddTemplateMasterComponent,
     AllTemplateMasterComponent,
     NewPatientProfileComponent,
-    ViewPatientProfileComponent
+    ViewPatientProfileComponent,
+    BlankComponent
   ],
   imports: [
     CommonModule,
