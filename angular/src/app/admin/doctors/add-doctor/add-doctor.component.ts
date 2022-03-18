@@ -18,39 +18,57 @@ export class AddDoctorComponent implements OnInit, OnDestroy {
   agree3 = false;
   unsubscribe$ = new Subject();
   model = new DoctorModel();
-  constructor(private router: Router, 
+  constructor(private router: Router,
     private snackBar: MatSnackBar,
     private doctorService: DoctorService,
     private activatedRoute: ActivatedRoute) {
-    
+
   }
 
   update() {
     this.doctorService.put(this.model)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.showNotification(
-        "snackbar-success",
-        "Record Updated Successfully...!!!",
-        "bottom",
-        "center"
-      );
-      this.router.navigateByUrl('/admin/doctors/allDoctors')
-    });
-  } 
-  
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        if (resp == -1)
+          this.showNotification(
+            "snackbar-danger",
+            "Facility already available!!!",
+            "bottom",
+            "center"
+          );
+        else {
+          this.showNotification(
+            "snackbar-success",
+            "Record Updated Successfully...!!!",
+            "bottom",
+            "center"
+          );
+          this.router.navigateByUrl('/admin/doctors/allDoctors')
+        }
+      });
+  }
+
   onSubmit() {
     this.doctorService.post(this.model)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.showNotification(
-        "snackbar-success",
-        "Record Added Successfully...!!!",
-        "bottom",
-        "center"
-      );
-      this.router.navigateByUrl('/admin/doctors/allDoctors')
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        if (resp.id == -1)
+          this.showNotification(
+            "snackbar-danger",
+            "Facility already available!!!",
+            "bottom",
+            "center"
+          );
+        else {
+          this.showNotification(
+            "snackbar-success",
+            "Record Added Successfully...!!!",
+            "bottom",
+            "center"
+          );
+          this.router.navigateByUrl('/admin/doctors/allDoctors')
+        }
+      });
   }
 
   showNotification(colorName, text, placementFrom, placementAlign) {
@@ -64,19 +82,19 @@ export class AddDoctorComponent implements OnInit, OnDestroy {
 
   get() {
     this.doctorService.get(this.id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.model = resp;
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.model = resp;
+      });
   }
 
   id: any;
   ngOnInit() {
     let id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(id){
+    if (id) {
       this.id = id;
       this.get();
-    } 
+    }
   }
 
   ngOnDestroy(): void {

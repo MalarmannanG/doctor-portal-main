@@ -14,6 +14,8 @@ import { TestMasterService } from "../test-master/service/test-master.service";
 import { PatientDiagnosisModel, PatientProfileModel, PatientTestModel, PrescriptionMasterModel, PrescriptionModel } from "./model/patient-profile.model.service";
 import { PatientProfileService } from "./service/patient-profile.service";
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { VitalsReportService } from "src/app/admin/dashboard/service/vitals.service";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-blank',
@@ -69,12 +71,15 @@ export class BlankComponent implements OnInit {
     private testMasterSerice: TestMasterService,
     private diagnosisMasterService: DiagnosisMasterService,
     private activatedRoute: ActivatedRoute,
-    private modalService: NgbModal) {
+    private modalService: NgbModal,
+    public vitalsReportService: VitalsReportService) {
     // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
   }
-
+  openLg(content) {
+    this.modalService.open(content, { size: 'lg', backdrop: 'static' });
+  }
   open(content) {
     this.modalService.open(content);
   }
@@ -125,8 +130,8 @@ export class BlankComponent implements OnInit {
     this.isDiagSelected = !this.isDiagSelected;
   }
   cancelTest() {
-
     this.isTestSelected = !this.isTestSelected;
+    this.modalService.dismissAll();
   }
   onMedSelectionChanged(event) {
 
@@ -196,6 +201,7 @@ export class BlankComponent implements OnInit {
     this.model.plan = this.selectedTemplateObj?.plan ?? "";
     this.model.advice = this.selectedTemplateObj?.advice ?? "";
     this.model.followUp = this.selectedTemplateObj?.followUp ?? "";
+    this.selectedComplaint = this.model.compliants;
     this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
   }
 
@@ -304,15 +310,16 @@ export class BlankComponent implements OnInit {
       confirmButtonText: "Yes, close this appoinment!",
       cancelButtonText: "No, Update patient",
     }).then((result) => {
+
       if (result.value)
         this.model.appointment.isActive = false;
       else
         this.model.appointment.isActive = true;
-      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel.filter(a => a.id || a.diagnosisMasterName)
+      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel?.filter(a => a.id || a.diagnosisMasterName)
       this.patientProfileService.put(this.model)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((resp) => {
-          this.router.navigateByUrl('/doctor/dashboard')
+          //this.router.navigateByUrl('/doctor/dashboard')
         });
     });
   }
@@ -342,6 +349,7 @@ export class BlankComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
+        this.model.prescriptionModel = this.model.prescriptionModel.filter(item=>!item.isDeleted)
         // if (!(this.model.patientDiagnosisModel?.length > 0)) {
         //   this.model.patientDiagnosisModel = [];
         //   this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
@@ -467,6 +475,7 @@ export class BlankComponent implements OnInit {
     //this.diagOptions = this.diagOptions ?? [];
     //this.diagOptions.push({ model: this.diagosisList });
     this.isTestSelected = !this.isTestSelected;
+    this.modalService.dismissAll();
   }
   saveTemplate() {
     this.selectedTemplateObjs = JSON.parse(JSON.stringify(this.selectedTemplateObjsTemp));
@@ -567,6 +576,8 @@ export class BlankComponent implements OnInit {
     // return true;
   }
   prepareQRForPrint() {
+    var ddsf = document.getElementById("section-to-print");
+ 
     return "<html><head><title>" + document.title + "</title><link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' media='all' crossorigin='anonymous'><style type='text/css' media='print'>@media print { @page { size: auto; margin: 0;} body { margin:1.6cm; } }</style><script>function step1(){\n" +
       "setTimeout('step2()', 2);}\n" +
       "function step2(){window.print();window.close()}\n" +
@@ -581,8 +592,20 @@ export class BlankComponent implements OnInit {
     pwa.document.write(this.prepareQRForPrint());
     pwa.document.close();
   }
-  ngOnDestroy(): void {
+  downloadFile(input) {
+    var fileObj = { "fileName": input.fileName, "filePath": input.filePath }
+    this.vitalsReportService.getFile(fileObj)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((result) => {
+        var blob = new Blob([result]);
+        let file = input.fileName;
+        saveAs(blob, file);
+      }, error => {
+        console.log("Something went wrong");
+      });
+    }
+    ngOnDestroy(): void {
 
-    this.unsubscribe$.complete();
+      this.unsubscribe$.complete();
+    }
   }
-}

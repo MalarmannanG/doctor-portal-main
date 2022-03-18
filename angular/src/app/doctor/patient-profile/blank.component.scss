@@ -267,7 +267,7 @@
 .left-timeline > li .left-time {
   display: block;
   width: 29%;
-  padding-right: 70px;
+  padding-right: 110px;
   position: absolute;
 }
 
@@ -290,4 +290,23 @@
 .scroll::-webkit-scrollbar-thumb {
    border-radius: 10px;
    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+
+
+@media (min-width: 576px){
+.modal-dialog {
+    max-width: 800px;
+    margin: 1.75rem auto;
+}
+
+}
+
+
+.wid_154{
+  width:154px ;
+}
+
+.report-list {
+  margin-bottom: 10px;
+  background-color: white;
 }

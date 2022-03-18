@@ -18,6 +18,7 @@ import { UserMasterService } from "../service/user.service";
 import { AppUserModel } from "../model/user.model";
 import { BaseQueryModel } from "src/app/model/base.query-model";
 import Swal from "sweetalert2";
+import { AccountService } from "src/app/authentication/service/auth.service";
 @Component({
   selector: "app-allstaff",
   templateUrl: "./allstaff.component.html",
@@ -55,7 +56,8 @@ export class AllstaffComponent
     public staffService: StaffService,
     private router: Router,
     private userMasterService: UserMasterService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private accountService : AccountService
   ) {
     super();
   }
@@ -109,6 +111,17 @@ export class AllstaffComponent
     this.router.navigateByUrl(`/admin/staff/edit-staff/${id}`)
   }
   deleteItem(id) {
+    if(this.accountService.currentUserValue.id == id)
+    {
+      this.showNotification(
+        "snackbar-danger",
+        "You cannot delete the logged in user..",
+        "bottom",
+        "center"
+      );
+    }
+    else
+    {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -132,6 +145,7 @@ export class AllstaffComponent
           });
       }
     });
+  }
   }
   private refreshTable() {
     this.getAll();

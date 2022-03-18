@@ -217,12 +217,14 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   }
 
   getDoctors() {   
-
+    const user = this.accountService.currentUserValue;
     this.doctorService.getAllUsers()
     .pipe(takeUntil(this.unsubscribe$))
     .subscribe((resp) => {
       this.doctorList = resp.result?.filter(a => a.userType == "Doctor");
       this.doctorOptions = this.doctorList;
+      if(user.role == "Doctor")
+      this.selectedDoctor  = user.username
     });
   }
 
@@ -270,8 +272,8 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.getAppointments(true);
     this.getPatinets();
     this.getDoctors();
-    const user = this.accountService.currentUserValue;
-    console.log(user);
+    
+    
     // if(user.role == "Doctor")
     //   this.selectedDoctor = user.username 
   }

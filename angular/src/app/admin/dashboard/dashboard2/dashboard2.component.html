@@ -82,54 +82,60 @@
 
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Height</mat-label>
+                    <mat-label>Height(<span matSuffix>cm</span>)</mat-label>
                     <input matInput maxlength="{{(model.height?.toString().includes('.') ? 5 : 4)}}" type="text"
                       (keypress)="numberOnly($event)" name="height" #height="ngModel" [(ngModel)]="model.height">
                     <i class="fa-input-icon fas fa-weight" matSuffix></i>
+                    
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Weight</mat-label>
+                    <mat-label>Weight(<span matSuffix>kg</span>)</mat-label>
                     <input maxlength="{{(model.weight?.toString().includes('.') ? 5 : 4)}}" type="text"
                       (keypress)="numberOnly($event)" matInput type="text" name="weight" #weight="ngModel"
                       [(ngModel)]="model.weight">
                     <i class="fa-input-icon fas fa-ruler-vertical" matSuffix></i>
+                    
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>BP</mat-label>
+                    <mat-label>BP(<span matSuffix>mmHg</span>)</mat-label>
                     <input matInput type="text" maxlength="7" mask="000/00" name="bloodPresure" #bloodPresure="ngModel"
                       [(ngModel)]="model.bloodPresure">
                     <i class="fa-input-icon fas fa-angry" matSuffix></i>
+                    
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label> Pulse</mat-label>
+                    <mat-label> Pulse(<span matSuffix>/min</span>)</mat-label>
                     <input maxlength="{{(model.pulse?.toString().includes('.') ? 5 : 4)}}" type="text"
                       (keypress)="numberOnly($event)" matInput type="text" name="pulse" #pulse="ngModel"
                       [(ngModel)]="model.pulse">
                     <i class="fa-input-icon fas fa-heartbeat" matSuffix></i>
+                   
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Temperature</mat-label>
+                    <mat-label>Temperature(<span matSuffix>F</span>)</mat-label>
                     <input maxlength="{{(model.temprature?.toString().includes('.') ? 5 : 4)}}" type="text"
                       (keypress)="numberOnly($event)" matInput type="text" name="temprature" #temprature="ngModel"
                       [(ngModel)]="model.temprature">
                     <i class="fa-input-icon fas fa-thermometer-half" matSuffix></i>
+                    
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>SPO2</mat-label>
+                    <mat-label>SPO2(<span matSuffix>%</span>)</mat-label>
                     <input maxlength="{{(model.spO2?.toString().includes('.') ? 5 : 4)}}" type="text"
                       (keypress)="numberOnly($event)" matInput type="text" name="spO2" #spO2="ngModel"
                       [(ngModel)]="model.spO2">
                     <i class="fa-input-icon fas fa-tint" matSuffix></i>
+                   
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
