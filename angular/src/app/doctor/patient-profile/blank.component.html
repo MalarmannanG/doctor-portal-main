@@ -579,7 +579,7 @@
                 <mat-icon>cancel</mat-icon>
               </button>
             </mat-chip>
-            <input #testCtrl="ngModel" name="diag" [(ngModel)]="selectedTestName" [matAutocomplete]="autoTemp"
+            <input #testCtrl="ngModel" name="test" [(ngModel)]="selectedTestName" [matAutocomplete]="autoTemp"
               [matChipInputFor]="chipTestList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
           </mat-chip-list>
           <mat-autocomplete #autoTemp="matAutocomplete" (optionSelected)="addTest($event)">

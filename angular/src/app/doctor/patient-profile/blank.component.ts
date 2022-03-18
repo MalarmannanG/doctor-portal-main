@@ -183,13 +183,15 @@ export class BlankComponent implements OnInit {
   }
   addTest(event) {
     if (this.selectedTestName) {
-
       let selectedTemplateObj = this.inestigationOptions.filter(a => a.name == this.selectedTestName)[0];
       var _patientDiag = new PatientTestModel();
       _patientDiag.testMasterName = selectedTemplateObj.name;
       _patientDiag.remarks = selectedTemplateObj.remarks;
       _patientDiag.testMasterId = selectedTemplateObj.id;
+      if (this.model.patientTestModel == null)
+        this.model.patientTestModel = [];
       this.model.patientTestModel.push(_patientDiag);
+
       //this.templateSelected();
     }
   }
@@ -200,7 +202,7 @@ export class BlankComponent implements OnInit {
     this.model.impression = this.selectedTemplateObj?.impression ?? "";
     this.model.plan = this.selectedTemplateObj?.plan ?? "";
     this.model.advice = this.selectedTemplateObj?.advice ?? "";
-    this.model.followUp = this.selectedTemplateObj?.followUp ?? "";
+    this.model.followUp = this.selectedTemplateObj?.followUp ?? null;
     this.selectedComplaint = this.model.compliants;
     this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
   }
@@ -349,7 +351,7 @@ export class BlankComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
-        this.model.prescriptionModel = this.model.prescriptionModel.filter(item=>!item.isDeleted)
+        this.model.prescriptionModel = this.model.prescriptionModel.filter(item => !item.isDeleted)
         // if (!(this.model.patientDiagnosisModel?.length > 0)) {
         //   this.model.patientDiagnosisModel = [];
         //   this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
@@ -577,7 +579,7 @@ export class BlankComponent implements OnInit {
   }
   prepareQRForPrint() {
     var ddsf = document.getElementById("section-to-print");
- 
+
     return "<html><head><title>" + document.title + "</title><link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' media='all' crossorigin='anonymous'><style type='text/css' media='print'>@media print { @page { size: auto; margin: 0;} body { margin:1.6cm; } }</style><script>function step1(){\n" +
       "setTimeout('step2()', 2);}\n" +
       "function step2(){window.print();window.close()}\n" +
@@ -603,9 +605,9 @@ export class BlankComponent implements OnInit {
       }, error => {
         console.log("Something went wrong");
       });
-    }
-    ngOnDestroy(): void {
-
-      this.unsubscribe$.complete();
-    }
   }
+  ngOnDestroy(): void {
+
+    this.unsubscribe$.complete();
+  }
+}

@@ -31,6 +31,7 @@ export class PatientProfileService {
         return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/GetByPatient/${id}`);
     }
     put(model): Observable<any> {
+        debugger;
         return this.http.put<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.PATIENT_PROFILE}/Update`, model);
     }
 
