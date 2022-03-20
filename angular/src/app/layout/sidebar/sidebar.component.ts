@@ -108,6 +108,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.accountService.currentUserValue.firstName +
         " " +
         this.accountService.currentUserValue.lastName;
+        this.userName = this.accountService.currentUserValue.username;
       this.userImg = this.accountService.currentUserValue.img;
 
       this.sidebarItems = ROUTES.filter(

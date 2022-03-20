@@ -61,7 +61,76 @@
                       <form class="m-4" #f="ngForm">
                         <section id="tab-item-1">
                           <!-- <h1>One</h1> -->
+                          <!-- <div class="row top_chips">
+                            <div class="col-md-9 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Add Template</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/impression.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input matInput placeholder="Type Template Name" />
+
+                               
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-3 m_b0">
+                              <div class="example-button-row m_t5">
+                                <div class="example-flex-container row">
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="primary" class="font-15"
+                                      aria-label="Example icon button with a delete icon">
+                                      <mat-icon>check</mat-icon>
+                                    </button>
+                                  </div>
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="warn" class="font-15"
+                                      aria-label="Example icon button with a home icon">
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>  
+                          <br>
+                          <div class="row top_chips">
+                            <div class="col-md-9 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Add Diagnosis</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/dr.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input matInput placeholder="Type Diagnosis Name" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-3 m_b0">
+                              <div class="example-button-row m_t5">
+                                <div class="example-flex-container row">
+
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="primary" class="font-15"
+                                      aria-label="Example icon button with a delete icon">
+                                      <mat-icon>check</mat-icon>
+                                    </button>
+                                  </div>
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="warn" class="font-15"
+                                      aria-label="Example icon button with a home icon">
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div> -->
+
+
                           <div class="row align-items-center" *ngIf="!templateLoading">
+                            <div class="col-12 mb-2">
+                              <h6>Template</h6>
+                          </div>
                             <div class="row align-items-center">
                               <ng-template #templateSelection>
                                 <div class="col-9 mb-2">
@@ -87,10 +156,29 @@
                                       </mat-option>
                                     </mat-autocomplete>
                                   </mat-form-field>
+
                                 </div>
-                                <div class="col-3 mb-2">
+                                <!-- <div class="col-3 mb-2">
                                   <button (click)="saveTemplate()" class="btn btn-success me-2">Done</button>
                                   <button (click)="cancel()" class="btn btn-danger">Cancel</button>
+                                </div> -->
+                                <div class="col-md-3 m_b0">
+                                  <div class="example-button-row m_t5">
+                                    <div class="example-flex-container row">
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="primary" class="font-15"  (click)="saveTemplate()"
+                                          aria-label="Example icon button with a delete icon">
+                                          <mat-icon>check</mat-icon>
+                                        </button>
+                                      </div>
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="warn" class="font-15" (click)="cancel()"
+                                          aria-label="Example icon button with a home icon">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </ng-template>
                               <div class="col-12 mb-2" *ngIf="isTemplateSelected; else templateSelection">
@@ -121,14 +209,11 @@
                           <div class="row cust-margin" *ngIf="templateLoading">
                             Loading Templates...
                           </div>
-                          <div class="row align-items-center">
+                          <div class="row align-items-center" style="margin-top: 20px;">
                             <div class="col-12 mb-2">
-                              <mat-card>
-                                <h5>Diagnosis</h5>
-                              </mat-card>
+                                <h6>Diagnosis</h6>
                             </div>
                             <div class="col-12 mb-2" *ngIf="!isDiagSelected">
-
                               <div class="row align-items-center">
                                 <div class="col-md-9 col-12">
                                   <mat-form-field class="example-full-width" appearance="outline">
@@ -153,11 +238,29 @@
                                     </mat-autocomplete>
                                   </mat-form-field>
                                 </div>
-                                <div class="col-3 mb-2">
+                                <div class="col-md-3 m_b0">
+                                  <div class="example-button-row m_t5">
+                                    <div class="example-flex-container row">
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="primary" class="font-15"  (click)="saveDiags()"
+                                          aria-label="Example icon button with a delete icon">
+                                          <mat-icon>check</mat-icon>
+                                        </button>
+                                      </div>
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="warn" class="font-15" (click)="cancelDiags()"
+                                          aria-label="Example icon button with a home icon">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- <div class="col-3 mb-2">
                                   <button (click)="saveDiags()" class="btn btn-success me-2">Done</button>
                                   <button [disabled]="model.patientDiagnosisModel?.length < 1" (click)="cancelDiags()"
                                     class="btn btn-danger">Cancel</button>
-                                </div>
+                                </div> -->
 
                               </div>
                               <!-- </ng-template> -->
@@ -341,7 +444,7 @@
                           <!-- <h1>Two</h1> -->
                           <app-prescription (editMode)="edit($event)" [medList]="model.prescriptionModel">
                           </app-prescription>
-                          <div class="row">
+                          <div class="row" *ngIf="newMed">
                             <div class="col-md-12 m_b0">
                               <mat-form-field appearance="outline">
                                 <mat-label>Add Medicine</mat-label>
@@ -441,6 +544,9 @@
                                 class="btn btn-sm btn-danger mr-2">Cancel</button>
                             </div>
                           </div>
+                          <div class="col-12 text-center" *ngIf="!newMed">
+                            <button (click)="addMed()" class="btn btn-sm btn-primary">Add</button>
+                          </div>
                         </section>
                         <section id="tab-item-3">
                           <!-- <h1>Three</h1> -->
@@ -457,8 +563,84 @@
                                 <!-- <mat-hint>Hint</mat-hint> -->
                               </mat-form-field>
                             </div>
-                          
+
                           </div>
+                          <div class="row">
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>diagnosis</mat-label>
+                                <textarea maxlength="1000" matInput name="diagnosis" #diagnosis="ngModel"
+                                  [(ngModel)]="model.procedureModel.diagnosis">
+                                </textarea>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Date</mat-label>
+                                <input matInput [owlDateTimeTrigger]="date2"
+                                  [owlDateTime]="date2" #appointmentDateTime="ngModel" name="appointmentDate"
+                                  [(ngModel)]="model.procedureModel.date" [min]="today">
+                                <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
+                                <owl-date-time #date2></owl-date-time>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Procedure</mat-label>
+                                <textarea maxlength="1000" matInput name="procedurename" #procedurename="ngModel"
+                                  [(ngModel)]="model.procedureModel.procedurename">
+                                </textarea>
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Description</mat-label>
+                                <textarea maxlength="1000" matInput name="procDescription" #procDescription="ngModel"
+                                  [(ngModel)]="model.procedureModel.description">
+                                </textarea>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Anesthesia</mat-label>
+                                <input placeholder="Anesthesia" maxlength="1000" matInput name="anesthesia"
+                                  #anesthesia="ngModel" [(ngModel)]="model.procedureModel.anesthesia" />
+                                <!-- <input maxlength="1000" matInput name="anesthesia"
+                                  #anesthesia="ngModel" [(ngModel)]="model.procedureModel.anesthesia">
+                                </input> -->
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Facility</mat-label>
+                                <input maxlength="1000" matInput name="procFacility" #procFacility="ngModel"
+                                  [(ngModel)]="model.procedureModel.referedByName" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Complication</mat-label>
+                                <input maxlength="1000" matInput name="complication" #complication="ngModel"
+                                  [(ngModel)]="model.procedureModel.complication" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Others</mat-label>
+                                <input maxlength="1000" matInput name="others" #others="ngModel"
+                                  [(ngModel)]="model.procedureModel.others" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Actual Cost</mat-label>
+                                <input type="number" maxlength="1000" matInput name="actualCost" #actualCost="ngModel"
+                                  [(ngModel)]="model.procedureModel.actualCost" />
+                              </mat-form-field>
+                            </div>
+                          </div>
+
                         </section>
                       </form>
                       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 m-4 text-center">
@@ -540,7 +722,7 @@
                             <p style="font-size: 14px;margin-top: 1rem;
                             margin-bottom: 0rem;"><strong> Past
                                 Records</strong></p>
-                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -586,6 +768,7 @@
             <mat-option *ngFor="let template of inestigationOptions" [value]="template.name">
               {{template.name}}
             </mat-option>
+            <mat-option *ngIf="inestigationOptions.length == 0">No Data Found</mat-option>
           </mat-autocomplete>
         </mat-form-field>
       </div>

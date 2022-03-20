@@ -16,6 +16,7 @@ import { PatientProfileService } from "./service/patient-profile.service";
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VitalsReportService } from "src/app/admin/dashboard/service/vitals.service";
 import { saveAs } from 'file-saver';
+import { PatientProcedureModel } from "src/app/admin/patients/model/procedureModel";
 
 @Component({
   selector: 'app-blank',
@@ -41,6 +42,7 @@ export class BlankComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   activePrescription = new PrescriptionModel();
   templateList: TemplateMasterModel[] = [];
+  temptemplateList: TemplateMasterModel[] = [];
   diagosisList: DiagnosisMasterModel[] = [];
   selectedTemplate: string;
   selectedTemplateObjs: TemplateMasterModel[] = [];
@@ -238,6 +240,7 @@ export class BlankComponent implements OnInit {
       this.editablePrescription.beforeFood = this.activePrescription.beforeFood;
       this.editablePrescription.remarks = this.activePrescription.remarks;
       this.editablePrescription.noOfDays = this.activePrescription.noOfDays;
+     
     }
     this.activePrescription = new PrescriptionModel();
     this.prescriptionOptions = this.prescriptionList;
@@ -249,6 +252,7 @@ export class BlankComponent implements OnInit {
   edit(event) {
     this.editablePrescription = event;
     this.activePrescription = JSON.parse(JSON.stringify(this.editablePrescription));
+    this.selectedMedicine  = this.activePrescription.medicineName;
     this.editing = true;
     this.newMed = true;
   }
@@ -298,6 +302,7 @@ export class BlankComponent implements OnInit {
   }
 
   addMed() {
+    this.selectedMedicine = "";
     this.newMed = true;
   }
 
@@ -352,10 +357,6 @@ export class BlankComponent implements OnInit {
       .subscribe((resp) => {
         this.model = resp;
         this.model.prescriptionModel = this.model.prescriptionModel.filter(item => !item.isDeleted)
-        // if (!(this.model.patientDiagnosisModel?.length > 0)) {
-        //   this.model.patientDiagnosisModel = [];
-        //   this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
-        // }
         this.selectedComplaint = this.model.compliants;
         this.isDiagSelected = this.model.patientDiagnosisModel?.length > 0;
         this.isDiagSelected = this.model.patientDiagnosisModel?.length > 0;
@@ -365,6 +366,9 @@ export class BlankComponent implements OnInit {
         this.populateDiagnosis();
         this.getPastHistories();
         this.populatePrescriptionMaster();
+        if (this.model.procedureModel == null)
+          this.model.procedureModel = new PatientProcedureModel();
+
       });
   }
 

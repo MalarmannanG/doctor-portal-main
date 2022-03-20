@@ -1,5 +1,6 @@
 import { AppoinemtModel } from "src/app/admin/appointment/model/appointmentt.model";
 import { PatientModel } from "src/app/admin/patients/model/patient.model";
+import { PatientProcedureModel } from "src/app/admin/patients/model/procedureModel";
 
 export class PatientProfileModel {
     constructor() {
@@ -31,6 +32,7 @@ export class PatientProfileModel {
     modifiedDate: any;
     prescriptionModel: PrescriptionModel[];
     patientModel: PatientModel;
+    procedureModel: PatientProcedureModel;
     appointment: AppoinemtModel;
     patientDiagnosisModel: PatientDiagnosisModel[];
     patientTestModel: PatientTestModel[];
