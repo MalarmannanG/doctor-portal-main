@@ -554,13 +554,9 @@
                             <div class="col-md-12 m_b0">
                               <mat-form-field appearance="outline">
                                 <mat-label>Procedure</mat-label>
-                                <span matPrefix>
-                                  <img matSuffix src="assets/images/icons/pres.png" width="24px" height="24px"
-                                    class="icon_frm" />
-                                </span>
-                                <input matInput placeholder="Add Medicine" />
-
-                                <!-- <mat-hint>Hint</mat-hint> -->
+                                <textarea maxlength="1000" matInput name="procedurename" #procedurename="ngModel"
+                                  [(ngModel)]="model.procedureModel.procedurename">
+                                </textarea>
                               </mat-form-field>
                             </div>
 
@@ -584,15 +580,6 @@
                                 <owl-date-time #date2></owl-date-time>
                               </mat-form-field>
                             </div>
-                            <div class="col-md-6 m_b0">
-                              <mat-form-field appearance="outline">
-                                <mat-label>Procedure</mat-label>
-                                <textarea maxlength="1000" matInput name="procedurename" #procedurename="ngModel"
-                                  [(ngModel)]="model.procedureModel.procedurename">
-                                </textarea>
-                              </mat-form-field>
-                            </div>
-
                             <div class="col-md-6 m_b0">
                               <mat-form-field appearance="outline">
                                 <mat-label>Description</mat-label>

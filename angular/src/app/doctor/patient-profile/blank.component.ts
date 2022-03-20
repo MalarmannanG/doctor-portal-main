@@ -366,9 +366,6 @@ export class BlankComponent implements OnInit {
         this.populateDiagnosis();
         this.getPastHistories();
         this.populatePrescriptionMaster();
-        if (this.model.procedureModel == null)
-          this.model.procedureModel = new PatientProcedureModel();
-
       });
   }
 
