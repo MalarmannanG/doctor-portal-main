@@ -130,7 +130,7 @@
                           <div class="row align-items-center" *ngIf="!templateLoading">
                             <div class="col-12 mb-2">
                               <h6>Template</h6>
-                          </div>
+                            </div>
                             <div class="row align-items-center">
                               <ng-template #templateSelection>
                                 <div class="col-9 mb-2">
@@ -166,7 +166,7 @@
                                   <div class="example-button-row m_t5">
                                     <div class="example-flex-container row">
                                       <div class="example-button-container col-md-6">
-                                        <button mat-fab color="primary" class="font-15"  (click)="saveTemplate()"
+                                        <button mat-fab color="primary" class="font-15" (click)="saveTemplate()"
                                           aria-label="Example icon button with a delete icon">
                                           <mat-icon>check</mat-icon>
                                         </button>
@@ -211,7 +211,7 @@
                           </div>
                           <div class="row align-items-center" style="margin-top: 20px;">
                             <div class="col-12 mb-2">
-                                <h6>Diagnosis</h6>
+                              <h6>Diagnosis</h6>
                             </div>
                             <div class="col-12 mb-2" *ngIf="!isDiagSelected">
                               <div class="row align-items-center">
@@ -242,7 +242,7 @@
                                   <div class="example-button-row m_t5">
                                     <div class="example-flex-container row">
                                       <div class="example-button-container col-md-6">
-                                        <button mat-fab color="primary" class="font-15"  (click)="saveDiags()"
+                                        <button mat-fab color="primary" class="font-15" (click)="saveDiags()"
                                           aria-label="Example icon button with a delete icon">
                                           <mat-icon>check</mat-icon>
                                         </button>
@@ -387,12 +387,24 @@
                                   <img matSuffix src="assets/images/icons/advice.png" width="24px" height="24px"
                                     class="icon_frm" /></span>
 
-                                <textarea maxlength="1000" matInput name="advice" #advice="ngModel"
+                                <!-- <textarea maxlength="1000" matInput name="advice" #advice="ngModel"
                                   [(ngModel)]="model.advice">
                                 </textarea>
                                 <mat-error *ngIf="advice.invalid && (advice.dirty || advice.touched)">
                                   <span *ngIf="advice.errors?.['maxlength']"> Max Length is 1000</span>
-                                </mat-error>
+                                </mat-error> -->
+
+                                <input matInput [matAutocomplete]="autoAdvice" name="advice"
+                                #advice="ngModel" [(ngModel)]="selectedAdvice"
+                                (ngModelChange)="doAdviceFilter(selectedAdvice)">
+                              <mat-autocomplete #autoAdvice="matAutocomplete">
+                                <mat-option *ngFor="let template of adviceOptions" [value]="template">
+                                  {{template}}
+                                </mat-option>
+                              </mat-autocomplete>
+                              <mat-error *ngIf="compliants.invalid && (compliants.dirty || compliants.touched)">
+                                <span *ngIf="compliants.errors?.['maxlength']"> Max Length is 1000</span>
+                              </mat-error>
 
                                 <!-- <mat-hint>Hint</mat-hint> -->
                               </mat-form-field>
@@ -573,8 +585,8 @@
                             <div class="col-md-6 m_b0">
                               <mat-form-field appearance="outline">
                                 <mat-label>Date</mat-label>
-                                <input matInput [owlDateTimeTrigger]="date2"
-                                  [owlDateTime]="date2" #appointmentDateTime="ngModel" name="appointmentDate"
+                                <input matInput [owlDateTimeTrigger]="date2" [owlDateTime]="date2"
+                                  #appointmentDateTime="ngModel" name="appointmentDate"
                                   [(ngModel)]="model.procedureModel.date" [min]="today">
                                 <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
                                 <owl-date-time #date2></owl-date-time>
@@ -593,16 +605,18 @@
                                 <mat-label>Anesthesia</mat-label>
                                 <input placeholder="Anesthesia" maxlength="1000" matInput name="anesthesia"
                                   #anesthesia="ngModel" [(ngModel)]="model.procedureModel.anesthesia" />
-                                <!-- <input maxlength="1000" matInput name="anesthesia"
-                                  #anesthesia="ngModel" [(ngModel)]="model.procedureModel.anesthesia">
-                                </input> -->
                               </mat-form-field>
                             </div>
                             <div class="col-md-6 m_b0">
-                              <mat-form-field appearance="outline">
+                              <mat-form-field class="example-full-width" appearance="outline">
                                 <mat-label>Facility</mat-label>
-                                <input maxlength="1000" matInput name="procFacility" #procFacility="ngModel"
-                                  [(ngModel)]="model.procedureModel.referedByName" />
+                                <mat-select [compareWith]="objectComparisonFunction" name="referedBy"
+                                  #referedBy="ngModel" [(ngModel)]="doctorOption">
+                                  <mat-option *ngFor="let each of doctorOptions" [value]="each">
+                                    {{each.name}}
+                                  </mat-option>
+                                </mat-select>
+                                <i class="fa-input-icon fas fa-hospital-alt" matSuffix></i>
                               </mat-form-field>
                             </div>
                             <div class="col-md-6 m_b0">
@@ -633,8 +647,10 @@
                       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 m-4 text-center">
                         <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid || newMed"
                           mat-raised-button color="primary">Submit</button>
+                        <button *ngIf="id" (click)="finish()" class="btn-space" [disabled]="!f.form.valid || newMed"
+                          mat-raised-button color="success">Finish</button>
                         <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid || newMed"
-                          mat-raised-button color="primary">Update</button>
+                          mat-raised-button color="primary">Save</button>
                         <button routerLink="/doctor/dashboard" type="button" mat-button>Cancel</button>
                       </div>
                     </div>
@@ -791,7 +807,8 @@
           <ul class="left-timeline">
             <li *ngFor="let each of pastHistoryList">
               <time class="left-time" datetime="2017-10-22T12:13">
-                <span class="mb-0 btn-link" (click)="goto(each?.appointmentId)">
+                <span class="mb-0 btn-link" style="cursor: pointer;color: cornflowerblue;"
+                  (click)="goto(each?.appointmentId)">
                   {{each?.appointment?.appointmentDateTime | date: 'dd/MM/yyyy'}}
                 </span>
               </time>
@@ -964,7 +981,7 @@
           <button id="print-btn" onclick="printing()" class="mt-1 btn btn-sm btn-primary">Print</button>
         </div>
       </div> -->
-      <div class="col-md-8 col-sm-8 col-xs-8" style="border: 1px solid #000;padding: 10px;">
+      <div class="col-md-8 col-sm-8 col-xs-8" style=" padding: 15px;">
         <div>
           <strong> Name: </strong> {{model?.patientModel?.patientName}}
         </div>
@@ -975,7 +992,7 @@
           <strong> Consultant:</strong> {{model.appointment?.consultingDoctorName}}
         </div>
       </div>
-      <div class="col-md-4 col-sm-4 col-xs-4" style="border: 1px solid #000;padding: 10px;border-left: none;">
+      <div class="col-md-4 col-sm-4 col-xs-4" style=" padding: 25px;border-left: none;">
         <div>
           <strong>Date: </strong> {{model?.appointment?.appointmentDateTime | date}}
         </div>
@@ -984,8 +1001,8 @@
         </div>
         <div style="color: transparent">.</div>
       </div>
-      <div class="col-md-12 col-sm-12" style="padding: 25px;"
-        style="border: 1px solid #000;border-top: none;padding-top: 10px;">
+      <div class="col-md-12 col-sm-12" style="padding: 25px; margin-top: 15px;"
+        style=" border-top: none;padding-top: 10px;">
         <div class="row clearfix">
           <div class="col-md-12 col-sm-12 col-xs-12">
             <div *ngIf="model.compliants" class="row">
@@ -1023,7 +1040,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-1 col-sm-1 col-xs-12" style="margin-top: 10px;">
+          <div class="col-md-1 col-sm-1 col-xs-12" style="margin-top: 20px;">
             <table class="table table-bordered">
               <thead>
                 <tr class="row">
@@ -1069,6 +1086,10 @@
           </div>
         </div>
       </div>
+      <div class="col-md-12 col-sm-12" style="padding: 25px; margin-top: 15px;"
+      style=" border-top: none;padding-top: 10px;">
+    
+    </div>
     </div>
   </div>
 </div>

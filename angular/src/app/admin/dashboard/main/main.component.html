@@ -191,6 +191,7 @@
             <h6 class="name-group col-green">
               <i class="material-icons">account_circle</i>
               <span class="icon-name">{{each.patient?.patientName}}</span>
+              <mat-icon class="md-18 " matSuffix *ngIf="each.vitalsReportModel">check</mat-icon>
             </h6>
             <h6 class="name-group2">
               <i class="material-icons">phone</i>

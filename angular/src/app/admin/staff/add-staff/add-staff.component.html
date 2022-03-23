@@ -82,18 +82,33 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div *ngIf="model.userType == 'Doctor'" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Specialization</mat-label>
+                    <mat-select [compareWith]="objectComparisonFunction" name="specialization"
+                    #specialization="ngModel" [(ngModel)]="specializationOption">
+                    <mat-option *ngFor="let each of specializationOptions" [value]="each">
+                      {{each.name}}
+                    </mat-option>
+                  </mat-select>
+                    <!-- <mat-error *ngIf="compliants.invalid && (compliants.dirty || compliants.touched)">
+                      <span *ngIf="compliants.errors?.['maxlength']"> Max Length is 1000</span>
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div *ngIf="model.userType == 'Doctor'" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Registeration No</mat-label>
+                    <input  matInput name="registrationNo"
+                      #registrationNo="ngModel" [(ngModel)]="model.registrationNo">
+                    <i class="fa-input-icon fas fa-mobile-alt" matSuffix></i>
+                    <!-- <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
+                      <span *ngIf="mobile.errors?.['required']"> Mobile No is Required</span>
+                      <span *ngIf="mobile.errors?.['pattern']"> Invalid Mobile No</span>
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
-                  <!-- <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>User name</mat-label>
-                    <input maxlength="50" minlength="8" matInput name="userName" #userName="ngModel"
-                      [(ngModel)]="model.userName" required>
-                    <i class="fa-input-icon fas fa-user-circle" matSuffix></i>
-                    <mat-error *ngIf="userName.invalid && (userName.dirty || name.touched)">
-                      <span *ngIf="userName.errors?.['required']">User Name is required</span>
-                      <span *ngIf="userName.errors?.['maxlength']"> Name must be maximum of 50 characters</span>
-                      <span *ngIf="userName.errors?.['minlength']"> Name must be minimum of 8 characters</span>
-                    </mat-error>
-                  </mat-form-field> -->
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Mobile No</mat-label>
                     <input pattern="^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$" matInput name="mobile"

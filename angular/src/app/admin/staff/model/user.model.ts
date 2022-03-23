@@ -12,4 +12,7 @@ export class AppUserModel {
     userName: string;
     createdDate: string;
     lastLoggedIn: string;
+    specializationId : number;
+    specializationName : string
+    registrationNo : string
 }

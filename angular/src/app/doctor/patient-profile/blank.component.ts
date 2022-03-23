@@ -17,6 +17,8 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VitalsReportService } from "src/app/admin/dashboard/service/vitals.service";
 import { saveAs } from 'file-saver';
 import { PatientProcedureModel } from "src/app/admin/patients/model/procedureModel";
+import { PatientModel } from "src/app/admin/patients/model/patient.model";
+import { DoctorService } from "src/app/admin/doctors/service/doctor.service";
 
 @Component({
   selector: 'app-blank',
@@ -53,19 +55,24 @@ export class BlankComponent implements OnInit {
   inestigationOptions: TestMasterModel[] = [];
   testMaster: TestMasterModel[] = [];
   complaintsList: string[] = [];
+  adviceList: string[] = [];
   selectedInvestigation: any;
   pastHistoryList: PatientProfileModel[] = [];
   selectedprescrptionObj: PrescriptionMasterModel = new PrescriptionMasterModel();
   prescriptionOptions: PrescriptionMasterModel[] = [];
   prescriptionList: PrescriptionMasterModel[] = [];
   complaintsOptions: string[] = [];
+  adviceOptions : string[] = [];
   selectedTemplateName: string;
   selectedDiagName: string;
   selectedTestName: string;
   templateLoading = true;
   selectedMedicine = '';
   selectedComplaint = '';
+  selectedAdvice = '';
   today = new Date();
+  doctorOptions: any[] = [];
+  doctorOption: any;
   // constructor() {}
   constructor(config: NgbModalConfig, private router: Router,
     private patientProfileService: PatientProfileService,
@@ -74,7 +81,8 @@ export class BlankComponent implements OnInit {
     private diagnosisMasterService: DiagnosisMasterService,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
-    public vitalsReportService: VitalsReportService) {
+    public vitalsReportService: VitalsReportService,
+    private doctorService: DoctorService) {
     // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
@@ -87,7 +95,8 @@ export class BlankComponent implements OnInit {
   }
   getAllComplaints() {
     this.patientProfileService.getAllComplaints().subscribe(res => {
-      this.complaintsList = this.complaintsOptions = res;
+      this.complaintsList = this.complaintsOptions = res.complaints;
+      this.adviceList = this.adviceOptions = res.advices;
     });
   }
   focusInput(element: ElementRef) {
@@ -206,6 +215,7 @@ export class BlankComponent implements OnInit {
     this.model.advice = this.selectedTemplateObj?.advice ?? "";
     this.model.followUp = this.selectedTemplateObj?.followUp ?? null;
     this.selectedComplaint = this.model.compliants;
+    this.selectedAdvice =  this.model.advice;
     this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
   }
 
@@ -240,7 +250,7 @@ export class BlankComponent implements OnInit {
       this.editablePrescription.beforeFood = this.activePrescription.beforeFood;
       this.editablePrescription.remarks = this.activePrescription.remarks;
       this.editablePrescription.noOfDays = this.activePrescription.noOfDays;
-     
+
     }
     this.activePrescription = new PrescriptionModel();
     this.prescriptionOptions = this.prescriptionList;
@@ -252,7 +262,7 @@ export class BlankComponent implements OnInit {
   edit(event) {
     this.editablePrescription = event;
     this.activePrescription = JSON.parse(JSON.stringify(this.editablePrescription));
-    this.selectedMedicine  = this.activePrescription.medicineName;
+    this.selectedMedicine = this.activePrescription.medicineName;
     this.editing = true;
     this.newMed = true;
   }
@@ -305,8 +315,11 @@ export class BlankComponent implements OnInit {
     this.selectedMedicine = "";
     this.newMed = true;
   }
-
   update() {
+    this.savePatientProfile(false);
+  }
+  finish() {
+    this.model.procedureModel.referedBy = this.doctorOption.value;
     Swal.fire({
       title: "Are you sure to close this appoinment?",
       text: "You won't be able to revert this!",
@@ -314,23 +327,44 @@ export class BlankComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, close this appoinment!",
-      cancelButtonText: "No, Update patient",
+      confirmButtonText: "Yes, Finish this appoinment!",
+      cancelButtonText: "No",
     }).then((result) => {
-
       if (result.value)
-        this.model.appointment.isActive = false;
+        this.savePatientProfile(true);
       else
-        this.model.appointment.isActive = true;
-      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel?.filter(a => a.id || a.diagnosisMasterName)
-      this.patientProfileService.put(this.model)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((resp) => {
-          //this.router.navigateByUrl('/doctor/dashboard')
-        });
+        return false;
     });
   }
-
+  savePatientProfile(result: boolean) {
+    this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel?.filter(a => a.id || a.diagnosisMasterName)
+    this.patientProfileService.put(this.model)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        if (result)
+          this.router.navigateByUrl('/doctor/dashboard');
+      });
+  }
+  public objectComparisonFunction = function (option, item): boolean {
+    return option.value === item.value;
+  }
+  getDoctors() {
+    this.doctorService.getAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.doctorOptions = resp?.result?.map(a => {
+          return { name: a.name, value: a.id };
+        })
+        this.doctorOptions.splice(0, 0, { name: 'Select Facility', value: -1 });
+        if (this.id && this.model.procedureModel?.referedBy) {
+          this.doctorOption = this.doctorOptions.filter(a => a.value == this.model.procedureModel.referedBy)[0];
+          console.log(this.doctorOption);
+        }
+        else {
+          this.doctorOption = this.doctorOptions[0];
+        }
+      });
+  }
   getPastHistories() {
     let query = `?patientId=${this.model.patientId}&appointmentDate=${this.model.appointment.appointmentDateTime}`
     this.patientProfileService.getAll(query)
@@ -352,12 +386,14 @@ export class BlankComponent implements OnInit {
   }
 
   get() {
+
     this.patientProfileService.get(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
         this.model.prescriptionModel = this.model.prescriptionModel.filter(item => !item.isDeleted)
         this.selectedComplaint = this.model.compliants;
+        this.selectedAdvice = this.model.advice;
         this.isDiagSelected = this.model.patientDiagnosisModel?.length > 0;
         this.isDiagSelected = this.model.patientDiagnosisModel?.length > 0;
         this.isTestSelected = this.model.patientTestModel?.length > 0;
@@ -366,7 +402,9 @@ export class BlankComponent implements OnInit {
         this.populateDiagnosis();
         this.getPastHistories();
         this.populatePrescriptionMaster();
+        this.getDoctors();
       });
+
   }
 
   getPrescriptionMaster() {
@@ -491,6 +529,11 @@ export class BlankComponent implements OnInit {
     this.complaintsOptions = [];
     this.complaintsOptions = this.complaintsList.filter(a => a.toLowerCase().includes(filter.toLowerCase()));
   }
+  doAdviceFilter(filter) {
+    this.model.advice = filter;
+    this.adviceOptions = [];
+    this.adviceOptions = this.adviceList.filter(a => a.toLowerCase().includes(filter.toLowerCase()));
+  }
   doMedFilter(filter) {
     if (Number.parseInt(filter)) {
       this.prescriptionOptions = [];
@@ -549,8 +592,9 @@ export class BlankComponent implements OnInit {
       this.populateTestMaster()
       this.populateDiagnosis();
       this.populateTemplateList();
-
+      this.getDoctors();
     }
+
     this.getAllComplaints();
   }
 

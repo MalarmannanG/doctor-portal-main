@@ -1,3 +1,5 @@
+import { AddProcedureMasterComponent } from './procedure-master/add-procedure-master/add-procedure-master.component';
+import { AllProcedureMasterComponent } from './procedure-master/all-procedure-master/all-procedure-master.component';
 import { Page404Component } from "./../authentication/page404/page404.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
@@ -84,6 +86,14 @@ const routes: Routes = [
   {
     path: "prescription-print/:id",
     component: SettingsComponent,
+  },
+  {
+    path: "all-procedure",
+    component: AllProcedureMasterComponent,
+  },
+  {
+    path: "add-procedure",
+    component: AddProcedureMasterComponent,
   },
   { path: "**", component: Page404Component },
 ];

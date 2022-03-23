@@ -1,0 +1,127 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{id ? 'Update' : 'Add'}} Procedure</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/doctor/all-procedure">Procedure</a>
+            </li>
+            <li class="breadcrumb-item active"> {{id ? 'Update' : 'Add'}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2> {{id ? 'Update' : 'Add'}} Procedure</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" #f="ngForm">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Diagnosis</mat-label>
+                    <input maxlength="25" matInput name="name" #name="ngModel" [(ngModel)]="model.name" required>
+                    <mat-error  *ngIf="name.invalid && (name.dirty || name.touched)">
+                     <span *ngIf="name.errors?.['required']"> Name is required</span>
+                     <span *ngIf="name.errors?.['maxlength']"> Max Length is 25 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Date</mat-label>
+                    <input maxlength="25" matInput name="department" #department="ngModel" [(ngModel)]="model.department" required>
+                    <mat-error  *ngIf="department.invalid && (department.dirty || department.touched)">
+                     <span *ngIf="department.errors?.['required']"> Department is required</span>
+                     <span *ngIf="department.errors?.['maxlength']"> Max Length is 25 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Procedurename</mat-label>
+                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    </textarea>
+                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
+                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label> Anesthesia</mat-label>
+                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    </textarea>
+                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
+                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Description</mat-label>
+                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    </textarea>
+                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
+                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Complication</mat-label>
+                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    </textarea>
+                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
+                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Others</mat-label>
+                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    </textarea>
+                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
+                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>ActualCost</mat-label>
+                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    </textarea>
+                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
+                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
+                    color="primary">Submit</button>
+                    <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
+                    color="primary">Update</button>
+                  <button routerLink="/doctor/all-procedure" type="button" mat-button>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

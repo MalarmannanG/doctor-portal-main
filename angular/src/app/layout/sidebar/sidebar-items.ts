@@ -492,6 +492,46 @@ export const ROUTES: RouteInfo[] = [
       }
     ],
   },
+  {
+    path: "",
+    title: "Procedure Master",
+    moduleName: "procedure",
+    iconType: "material-icons-two-tone",
+    icon: "assignment",
+    class: "menu-toggle",
+    groupTitle: false,
+    badge: "",
+    badgeClass: "",
+    role: ["Doctor"],
+    submenu: [
+      {
+        path: "/doctor/all-procedure",
+        title: "All Procedure",
+        moduleName: "procedure",
+        iconType: "",
+        icon: "",
+        class: "ml-menu",
+        groupTitle: false,
+        badge: "",
+        badgeClass: "",
+        role: [""],
+        submenu: [],
+      },
+      {
+        path: "/doctor/add-procedure",
+        title: "Add Procedure",
+        moduleName: "procedure",
+        iconType: "",
+        icon: "",
+        class: "ml-menu",
+        groupTitle: false,
+        badge: "",
+        badgeClass: "",
+        role: ["All"],
+        submenu: [],
+      }
+    ],
+  }
   // {
   //   path: "",
   //   title: "MENUITEMS.ROOMS.TEXT",

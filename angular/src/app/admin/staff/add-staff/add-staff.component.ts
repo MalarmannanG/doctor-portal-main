@@ -17,12 +17,15 @@ export class AddStaffComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
   model: AppUserModel = new AppUserModel();
   confirmPassword: string;
+  selectedSpecialization: string
+  specializationOptions: any[] = [];
+  specializationOption: any = {};
   constructor(private userMasterService: UserMasterService,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
     private router: Router
-    ) {
-   
+  ) {
+
   }
 
   showNotification(colorName, text, placementFrom, placementAlign) {
@@ -33,53 +36,69 @@ export class AddStaffComponent implements OnInit, OnDestroy {
       panelClass: colorName,
     });
   }
-
+  public objectComparisonFunction = function (option, item): boolean {
+    return option.id === item.id;
+  }
   onSubmit() {
+    this.model.specializationId = this.specializationOption.id;
     this.userMasterService.post(this.model)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.showNotification(
-        "snackbar-success",
-        "Record Added Successfully...!!!",
-        "bottom",
-        "center"
-      );
-      this.router.navigateByUrl('/admin/staff/all-staff')
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.showNotification(
+          "snackbar-success",
+          "Record Added Successfully...!!!",
+          "bottom",
+          "center"
+        );
+        this.router.navigateByUrl('/admin/staff/all-staff')
+      });
   }
 
   update() {
+    this.model.specializationId = this.specializationOption.id;
     this.userMasterService.put(this.model)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.showNotification(
-        "snackbar-success",
-        "Record Updated Successfully...!!!",
-        "bottom",
-        "center"
-      );
-      this.router.navigateByUrl('/admin/staff/all-staff')
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.showNotification(
+          "snackbar-success",
+          "Record Updated Successfully...!!!",
+          "bottom",
+          "center"
+        );
+        this.router.navigateByUrl('/admin/staff/all-staff')
+      });
   }
 
   get() {
     this.userMasterService.get(this.id)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.model = resp;      
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.model = resp;
+        this.getAllSpecialization(this.model.specializationId);
+      });
   }
 
-  
+
   id: any;
   ngOnInit() {
     let id = this.activatedRoute.snapshot.paramMap.get('id');
-    if(id){
+    if (id) {
       this.id = id;
       this.get();
-    }     
+    }
+    else
+      this.getAllSpecialization(-1);
   }
-
+  getAllSpecialization(value) {
+   
+    this.userMasterService.getAllSpecialization(this.id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.specializationOptions = resp;
+        this.specializationOptions.splice(0, 0, { name: 'Select Specilization', id: -1 });
+        this.specializationOption = this.specializationOptions.filter(a => a.id == value)[0];
+      });
+  }
   ngOnDestroy(): void {
     this.unsubscribe$.complete();
   }

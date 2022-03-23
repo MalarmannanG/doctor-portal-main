@@ -22,6 +22,8 @@ const users: User[] = [
     lastName: "Smith",
     role: Role.Admin,
     token: "admin-token",
+    registrationNo : '',
+    name : ''
   },
   {
     id: 2,
@@ -32,6 +34,8 @@ const users: User[] = [
     lastName: "Cox",
     role: Role.Doctor,
     token: "doctor-token",
+    registrationNo : '',
+    name : ''
   },
   {
     id: 3,
@@ -42,6 +46,8 @@ const users: User[] = [
     lastName: "Stevens",
     role: Role.Patient,
     token: "patient-token",
+    registrationNo : '',
+    name : ''
   },
 ];
 

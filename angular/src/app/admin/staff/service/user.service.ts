@@ -31,6 +31,8 @@ export class UserMasterService {
     delete(id): Observable<any> {
         return this.http.delete<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.USERS}/Delete/${id}`);
     }
-
+    getAllSpecialization(name): Observable<any> {
+        return this.http.get<any>(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.USERS}/GeAllSpecialization`);
+    }
 
 }

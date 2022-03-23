@@ -1,3 +1,5 @@
+import { AllProcedureMasterComponent } from './procedure-master/all-procedure-master/all-procedure-master.component';
+import { AddProcedureMasterComponent } from './procedure-master/add-procedure-master/add-procedure-master.component';
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
@@ -71,7 +73,9 @@ import {BlankComponent} from './patient-profile/blank.component';
     AllTemplateMasterComponent,
     NewPatientProfileComponent,
     ViewPatientProfileComponent,
-    BlankComponent
+    BlankComponent,
+    AddProcedureMasterComponent,
+    AllProcedureMasterComponent
   ],
   imports: [
     CommonModule,

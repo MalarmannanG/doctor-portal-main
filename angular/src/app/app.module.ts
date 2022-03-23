@@ -33,6 +33,9 @@ import {
 
 import { LoadingBarRouterModule } from "@ngx-loading-bar/router";
 import { GlobalErrorHandler } from "./shared/globalErrorHandler";
+import { MyLoaderComponent } from "./shared/Loading/custome.loader.component";
+import { LoadingService } from "./shared/Loading/loading-services";
+import { LoaderInterceptor } from "./shared/Loading/loading-interceptor";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -52,6 +55,7 @@ export function createTranslateLoader(http: HttpClient): any {
         RightSidebarComponent,
         AuthLayoutComponent,
         MainLayoutComponent,
+        MyLoaderComponent
     ],
     imports: [
         BrowserModule,
@@ -80,8 +84,10 @@ export function createTranslateLoader(http: HttpClient): any {
         },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-        {provide: ErrorHandler, useClass: GlobalErrorHandler},
+        { provide: ErrorHandler, useClass: GlobalErrorHandler},
+        { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
         fakeBackendProvider,
+        LoadingService,
     ],
     bootstrap: [AppComponent]
 })
