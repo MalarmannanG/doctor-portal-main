@@ -1,0 +1,1182 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{model.patientModel?.patientName}} ({{model.patientModel?.age}})</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Patient Profile</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="card" style="
+            background: #ecf0f4;
+            -webkit-box-shadow: 0 0 10px 0 rgb(183 192 206 / 0%);
+            border: none;
+          ">
+          <div class="body">
+            <!-- Add content here -->
+            <div class="row">
+              <div class="col-lg-10 col-md-12">
+                <div class="card">
+                  <div class="tabs effect-2">
+                    <!-- tab-title -->
+                    <!-- <div class="tab_Sec" > -->
+
+                    <input type="radio" id="tab-1" name="tab-effect-2" checked="checked" />
+                    <span>
+                      <img src="assets/images/icons/dr.png" width="24px" />
+                      <span><strong>&nbsp;&nbsp;&nbsp;Profile </strong></span>
+                    </span>
+
+
+
+                    <input type="radio" id="tab-2" name="tab-effect-2" />
+                    <span>
+                      <img src="assets/images/icons/pres.png" width="24px" />
+                      <span><strong>&nbsp;&nbsp;&nbsp;Prescription </strong></span>
+                    </span>
+
+
+
+
+                    <input type="radio" id="tab-3" name="tab-effect-2">
+                    <span>
+                      <img src="assets/images/icons/vitals.png" width="24px" />
+                      <span><strong>&nbsp;&nbsp;&nbsp;Procedure </strong></span>
+                    </span>
+
+
+                    <!-- tab-content -->
+                    <div class="tab-content white_card">
+                      <form class="m-4" #f="ngForm">
+                        <section id="tab-item-1">
+                          <!-- <h1>One</h1> -->
+                          <!-- <div class="row top_chips">
+                            <div class="col-md-9 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Add Template</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/impression.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input matInput placeholder="Type Template Name" />
+
+                               
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-3 m_b0">
+                              <div class="example-button-row m_t5">
+                                <div class="example-flex-container row">
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="primary" class="font-15"
+                                      aria-label="Example icon button with a delete icon">
+                                      <mat-icon>check</mat-icon>
+                                    </button>
+                                  </div>
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="warn" class="font-15"
+                                      aria-label="Example icon button with a home icon">
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>  
+                          <br>
+                          <div class="row top_chips">
+                            <div class="col-md-9 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Add Diagnosis</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/dr.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input matInput placeholder="Type Diagnosis Name" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-3 m_b0">
+                              <div class="example-button-row m_t5">
+                                <div class="example-flex-container row">
+
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="primary" class="font-15"
+                                      aria-label="Example icon button with a delete icon">
+                                      <mat-icon>check</mat-icon>
+                                    </button>
+                                  </div>
+                                  <div class="example-button-container col-md-6">
+                                    <button mat-fab color="warn" class="font-15"
+                                      aria-label="Example icon button with a home icon">
+                                      <mat-icon>cancel</mat-icon>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div> -->
+                          <div class="row align-items-center" *ngIf="!templateLoading">
+                            <div class="col-12 mb-2">
+                              <h6>Template</h6>
+                            </div>
+                            <div class="row align-items-center">
+                              <ng-template #templateSelection>
+                                <div class="col-9 mb-2">
+                                  <mat-form-field class="example-full-width" appearance="outline">
+                                    <mat-label>Select Template</mat-label>
+                                    <mat-chip-list #chipList aria-label="Template selection">
+                                      <mat-chip *ngFor="let template of selectedTemplateObjsTemp; let index = index"
+                                        selectable="true" removable="true">
+                                        {{template.name}}
+                                        <button matChipRemove (click)="removeChip(index, true)">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </mat-chip>
+                                      <input placeholder="Template Name" #templateCtrl="ngModel" name="template"
+                                        [(ngModel)]="selectedTemplateName" [matAutocomplete]="autoTemp"
+                                        [matChipInputFor]="chipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                                    </mat-chip-list>
+                                    <mat-autocomplete #autoTemp="matAutocomplete"
+                                      (optionSelected)="addTemplate($event)">
+                                      <mat-option *ngFor="let template of templateList" [value]="template.name">
+                                        {{template.name}}
+                                      </mat-option>
+                                    </mat-autocomplete>
+                                  </mat-form-field>
+
+                                </div>
+                                <!-- <div class="col-3 mb-2">
+                                  <button (click)="saveTemplate()" class="btn btn-success me-2">Done</button>
+                                  <button (click)="cancel()" class="btn btn-danger">Cancel</button>
+                                </div> -->
+                                <div class="col-md-3 m_b0">
+                                  <div class="example-button-row m_t5">
+                                    <div class="example-flex-container row">
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="primary" class="font-15" (click)="saveTemplate()"
+                                          aria-label="Example icon button with a delete icon">
+                                          <mat-icon>check</mat-icon>
+                                        </button>
+                                      </div>
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="warn" class="font-15" (click)="cancel()"
+                                          aria-label="Example icon button with a home icon">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-template>
+                              <div class="col-12 mb-2" *ngIf="isTemplateSelected; else templateSelection">
+                                <ng-template #displayTemp>
+                                  <mat-chip-list aria-label="Template Display">
+                                    <mat-chip *ngFor="let template of selectedTemplateObjs; let index = index"
+                                      selectable="true" removable="true">
+                                      {{template.name}}
+                                      <button matChipRemove (click)="removeChip(index)">
+                                        <mat-icon>cancel</mat-icon>
+                                      </button>
+                                    </mat-chip>
+                                    <mat-chip *ngIf="selectedTemplateObjs?.length > 0">
+                                      <button class="btn btn-link" (click)="addMore()">
+                                        Add More
+                                      </button>
+                                    </mat-chip>
+                                  </mat-chip-list>
+                                </ng-template>
+                                <button *ngIf="!selectedTemplateObj.name; else displayTemp"
+                                  (click)="isTemplateSelected = !isTemplateSelected" ngbTooltip="Add template"
+                                  class="pull-right btn btn-sm btn-primary">
+                                  <i class="fas fa-plus-circle primary"></i> Template
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row cust-margin" *ngIf="templateLoading">
+                            Loading Templates...
+                          </div>
+                          <div class="row align-items-center" style="margin-top: 20px;">
+                            <div class="col-12 mb-2">
+                              <h6>Diagnosis</h6>
+                            </div>
+                            <div class="col-12 mb-2" *ngIf="!isDiagSelected">
+                              <div class="row align-items-center">
+                                <div class="col-md-9 col-12">
+                                  <mat-form-field class="example-full-width" appearance="outline">
+                                    <mat-label>Diagnosis</mat-label>
+                                    <mat-chip-list #chipDiagList aria-label="Diagnosis selection">
+                                      <mat-chip *ngFor="let template of model.patientDiagnosisModel; let index = index"
+                                        selectable="true" removable="true">
+                                        {{template.diagnosisMasterName}}
+                                        <button matChipRemove (click)="removeDiagChip(index, true)">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </mat-chip>
+                                      <input placeholder="Diagnosis Name" #diagCtrl="ngModel" name="diag"
+                                        [(ngModel)]="selectedDiagName" [matAutocomplete]="autoTemp"
+                                        [matChipInputFor]="chipDiagList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                                    </mat-chip-list>
+                                    <mat-autocomplete #autoTemp="matAutocomplete" (optionSelected)="addDiag($event)">
+                                      <mat-option *ngFor="let template of diagosisList" [value]="template.name">
+                                        {{template.name}}
+                                      </mat-option>
+                                    </mat-autocomplete>
+                                  </mat-form-field>
+                                </div>
+                                <div class="col-md-3 m_b0">
+                                  <div class="example-button-row m_t5">
+                                    <div class="example-flex-container row">
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="primary" class="font-15" (click)="saveDiags()"
+                                          aria-label="Example icon button with a delete icon">
+                                          <mat-icon>check</mat-icon>
+                                        </button>
+                                      </div>
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="warn" class="font-15" (click)="cancelDiags()"
+                                          aria-label="Example icon button with a home icon">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- <div class="col-3 mb-2">
+                                  <button (click)="saveDiags()" class="btn btn-success me-2">Done</button>
+                                  <button [disabled]="model.patientDiagnosisModel?.length < 1" (click)="cancelDiags()"
+                                    class="btn btn-danger">Cancel</button>
+                                </div> -->
+
+                              </div>
+                              <!-- </ng-template> -->
+                            </div>
+                            <div class="col-12 mb-2" *ngIf="isDiagSelected">
+                              <!-- <ng-template #displayDiags> -->
+                              <mat-chip-list aria-label="Template Display">
+                                <mat-chip *ngFor="let template of model.patientDiagnosisModel; let index = index"
+                                  selectable="true" removable="true">
+                                  {{template.diagnosisMasterName}}
+                                  <button matChipRemove (click)="removeDiagChip(index)">
+                                    <mat-icon>cancel</mat-icon>
+                                  </button>
+                                </mat-chip>
+                                <mat-chip *ngIf="model.patientDiagnosisModel?.length > 0">
+                                  <button class="btn btn-link" (click)="addMoreDigs()">
+                                    Add More
+                                  </button>
+                                </mat-chip>
+                              </mat-chip-list>
+                              <!-- </ng-template> -->
+                              <button *ngIf="!selectedTemplateObj.name; else displayTemp"
+                                (click)="isDiagSelected = !isDiagSelected" ngbTooltip="Add Diagnosis"
+                                class="pull-right btn btn-sm btn-primary">
+                                <i class="fas fa-plus-circle primary"></i> Diagnosis
+                              </button>
+                            </div>
+                          </div>
+                          <div class="row">
+
+
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <mat-label>Complaints</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/complaint.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input matInput [matAutocomplete]="autoCompliants" name="compliants"
+                                  #compliants="ngModel" [(ngModel)]="selectedComplaint"
+                                  (ngModelChange)="doComplaintFilter(selectedComplaint)">
+                                <mat-autocomplete #autoCompliants="matAutocomplete">
+                                  <mat-option *ngFor="let template of complaintsOptions" [value]="template">
+                                    {{template}}
+                                  </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="compliants.invalid && (compliants.dirty || compliants.touched)">
+                                  <span *ngIf="compliants.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+                              </mat-form-field>
+
+                            </div>
+
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Examination </mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/exam.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+                                <textarea maxlength="1000" matInput name="examination" #examination="ngModel"
+                                  [(ngModel)]="model.examination">
+                                                  </textarea>
+                                <mat-error *ngIf="examination.invalid && (examination.dirty || examination.touched)">
+                                  <span *ngIf="examination.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+
+                                <!-- <mat-hint>Hint</mat-hint> -->
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Past History</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/dr.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <textarea maxlength="1000" matInput name="pastHistory" #pastHistory="ngModel"
+                                  [(ngModel)]="model.pastHistory">
+                              </textarea>
+                                <mat-error *ngIf="pastHistory.invalid && (pastHistory.dirty || pastHistory.touched)">
+                                  <span *ngIf="pastHistory.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Investigation Results</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/dr.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <textarea maxlength="1000" matInput name="investigationResults"
+                                  #investigationResults="ngModel" [(ngModel)]="model.investigationResults">
+                          </textarea>
+                                <mat-error
+                                  *ngIf="investigationResults.invalid && (investigationResults.dirty || investigationResults.touched)">
+                                  <span *ngIf="investigationResults.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+
+
+                            <div class="col-md-12 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Impression</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/impression.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+                                <textarea maxlength="1000" matInput name="impression" #impression="ngModel"
+                                  [(ngModel)]="model.impression">
+                                </textarea>
+                                <mat-error *ngIf="impression.invalid && (impression.dirty || impression.touched)">
+                                  <span *ngIf="impression.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+
+                            <div class="col-md-12 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Advice </mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/advice.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+ 
+
+                                <input matInput [matAutocomplete]="autoAdvice" name="advice" #advice="ngModel"
+                                  [(ngModel)]="selectedAdvice" (ngModelChange)="doAdviceFilter(selectedAdvice)">
+                                <mat-autocomplete #autoAdvice="matAutocomplete">
+                                  <mat-option *ngFor="let template of adviceOptions" [value]="template">
+                                    {{template}}
+                                  </mat-option>
+                                </mat-autocomplete>
+                                <mat-error *ngIf="compliants.invalid && (compliants.dirty || compliants.touched)">
+                                  <span *ngIf="compliants.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Plan</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/plan.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+
+                                <textarea maxlength="1000" matInput name="plan" #plan="ngModel"
+                                  [(ngModel)]="model.plan">
+                                  </textarea>
+                                <mat-error *ngIf="plan.invalid && (plan.dirty || plan.touched)">
+                                  <span *ngIf="plan.errors?.['maxlength']"> Max Length is 1000</span>
+                                </mat-error>
+                                <!-- <mat-hint>Hint</mat-hint> -->
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Referred By</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/dr.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+                                <input maxlength="1000" matInput name="referredDoctor" #referredDoctor="ngModel"
+                                  [(ngModel)]="model.referredDoctor">
+                                <mat-error *ngIf="referredDoctor.invalid && (referredDoctor.dirty || referredDoctor.touched)">
+                                  <span *ngIf="referredDoctor.errors?.['maxlength']"> Max Length is 200</span>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-5 m_b0">
+                              <mat-checkbox class="mb-3" [(ngModel)]="model.isfollowUpNeed" name="isfollowUpNeed">Follow
+                                Up Needed
+                              </mat-checkbox>
+                            </div>
+                            <div class="col-md-6 m_b0" *ngIf="model.isfollowUpNeed">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <mat-label> Date & Time</mat-label>
+                               
+                                <input matInput [owlDateTimeTrigger]="date2" [owlDateTime]="date2" #followUp="ngModel"
+                                  name="followUp" [(ngModel)]="model.followUp" [min]="today">
+                                <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
+                                <owl-date-time #date2></owl-date-time>
+                                <mat-error *ngIf="followUp.invalid && (followUp.dirty || followUp.touched)">
+                                  <span *ngIf="followUp.errors?.['required']"> FollowUp is required</span>
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+
+                          </div>
+                        </section>
+                        <section id="tab-item-2">
+                          <div class="col-12 text-right m-1">
+                            <button class="btn btn-primary btn-sm" (click)="printPrescrption()">
+                              Print Preview
+                            </button>
+                          </div>
+                          <!-- <h1>Two</h1> -->
+                          <app-prescription (editMode)="edit($event)" [medList]="model.prescriptionModel">
+                          </app-prescription>
+                          <div class="row" *ngIf="newMed">
+                            <div class="col-md-12 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Add Medicine</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/pres.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input matInput [matAutocomplete]="autoMed" name="medicineName" #medicineName="ngModel"
+                                  [(ngModel)]="selectedMedicine" (ngModelChange)="doMedFilter(selectedMedicine)">
+                                <!-- <mat-hint> <span class="bolder font-large">
+                                  {{activePrescription.medicineName}}-{{activePrescription.categoryName}}-{{activePrescription.strength}}{{activePrescription.units}}</span>
+                              </mat-hint> -->
+                                <mat-error *ngIf="medicineName.invalid && (medicineName.dirty || medicineName.touched)">
+                                  <span *ngIf="medicineName.errors?.['required']"> Medicine Name is required</span>
+                                </mat-error>
+                              </mat-form-field>
+                              <mat-autocomplete autoActiveFirstOption #autoMed="matAutocomplete"
+                                (optionSelected)="onMedSelectionChanged($event)">
+                                <mat-option *ngFor="let eachOption of prescriptionOptions" [value]="eachOption.id">
+                                  {{eachOption.medicineName}}-{{eachOption.categoryName}}-{{eachOption.strength}}{{eachOption.units}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Dosa / Strength</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/complaint.png" width="24px" height="24px"
+                                    class="icon_frm" />
+                                </span>
+                                <input maxlength="50" readonly matInput [(ngModel)]="activePrescription.strength"
+                                  name="strength">
+
+
+                                <!-- <mat-hint>Hint</mat-hint> -->
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>No. Of Days </mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/exam.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+                                <input #noOfDays="ngModel" matInput [(ngModel)]="activePrescription.noOfDays"
+                                  name="noOfDays" type="number" [min]="1">
+                                <!-- <mat-error *ngIf="noOfDays.invalid && (noOfDays.dirty || noOfDays.touched)">
+                                <span *ngIf="noOfDays.errors?.['required']"> No Of Days is required</span>
+                                <span *ngIf="noOfDays.errors?.['min']"> No Of Days must be minimum of 1</span>
+                              </mat-error> -->
+
+                                <!-- <mat-hint>Hint</mat-hint> -->
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-3 m_b0">
+                              <mat-checkbox class="form-control" style="border: none;"
+                                [(ngModel)]="activePrescription.sos" name="sos">
+                                Sos</mat-checkbox>
+                            </div>
+                            <div class="col-md-3 m_b0">
+                              <mat-checkbox class="form-control" style="border: none;"
+                                [(ngModel)]="activePrescription.stat" name="stat">
+                                Stat</mat-checkbox>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-radio-group class="form-control" style="border: none;" aria-label="schedule"
+                                [(ngModel)]="activePrescription.beforeFood">
+                                <mat-radio-button [value]="true">Before Food</mat-radio-button>
+                                <mat-radio-button [value]="false">After Food</mat-radio-button>
+                              </mat-radio-group>
+                              <br />
+                              <div class="form-control" style="border: none;">
+                                <mat-checkbox [(ngModel)]="activePrescription.morning" name="morning">
+                                  Morning</mat-checkbox>
+                                <mat-checkbox style="margin-left: 20px;" [(ngModel)]="activePrescription.noon"
+                                  name="noon">Noon
+                                </mat-checkbox>
+                                <mat-checkbox style="margin-left: 20px;" [(ngModel)]="activePrescription.night"
+                                  name="night">Night
+                                </mat-checkbox>
+                              </div>
+                            </div>
+                            <div class="col-md-12 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Remarks</mat-label>
+                                <span matPrefix>
+                                  <img matSuffix src="assets/images/icons/plan.png" width="24px" height="24px"
+                                    class="icon_frm" /></span>
+                                <input maxlength="500" matInput [(ngModel)]="activePrescription.remarks" name="remarks">
+
+                                <!-- <mat-hint>Hint</mat-hint> -->
+                              </mat-form-field>
+                            </div>
+                            <div class="col-12 text-center">
+                              <button [disabled]="!activePrescription.medicineName ||  !activePrescription.noOfDays"
+                                (click)="addPrescription()" class="btn btn-sm btn-success mr-2">Done</button>
+                              &nbsp; <button (click)="cancelPrescription()"
+                                class="btn btn-sm btn-danger mr-2">Cancel</button>
+                            </div>
+                          </div>
+                          <div class="col-12 text-center" *ngIf="!newMed">
+                            <button (click)="addMed()" class="btn btn-sm btn-primary">Add</button>
+                          </div>
+                        </section>
+                        <section id="tab-item-3">
+                          <!-- <h1>Three</h1> -->
+
+                          <div class="row align-items-center" *ngIf="!procedureLoading">
+                            <div class="col-12 mb-2">
+                              <h6>Procedure</h6>
+                            </div>
+                            <div class="row align-items-center">
+                              <ng-template #proceureSelection>
+                                <div class="col-9 mb-2">
+                                  <mat-form-field class="example-full-width" appearance="outline">
+                                    <mat-label>Select Procedure</mat-label>
+                                    <mat-chip-list #procedureChipList aria-label="Procedure Selection">
+                                      <mat-chip *ngFor="let template of selectedProcedureObjsTemp; let index = index"
+                                        selectable="true" removable="true">
+                                        {{template.procedurename}}
+                                        <button matChipRemove (click)="removeProcedureChip(index, true)">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </mat-chip>
+                                      <input placeholder="Procedure" #procedureCtrl="ngModel" name="procedure"
+                                        [(ngModel)]="selectedProcedureName" [matAutocomplete]="autoProcedure"
+                                        [matChipInputFor]="procedureChipList"
+                                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                                    </mat-chip-list>
+                                    <mat-autocomplete #autoProcedure="matAutocomplete"
+                                      (optionSelected)="addProcedure($event)">
+                                      <mat-option *ngFor="let template of procedureList"
+                                        [value]="template.procedurename">
+                                        {{template.procedurename}}
+                                      </mat-option>
+                                    </mat-autocomplete>
+                                  </mat-form-field>
+
+                                </div>
+
+                                <div class="col-md-3 m_b0">
+                                  <div class="example-button-row m_t5">
+                                    <div class="example-flex-container row">
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="primary" class="font-15" (click)="saveProcedure()"
+                                          aria-label="Example icon button with a delete icon">
+                                          <mat-icon>check</mat-icon>
+                                        </button>
+                                      </div>
+                                      <div class="example-button-container col-md-6">
+                                        <button mat-fab color="warn" class="font-15"
+                                          (click)="isProcedureSelected = !isProcedureSelected"
+                                          aria-label="Example icon button with a home icon">
+                                          <mat-icon>cancel</mat-icon>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </ng-template>
+                              <div class="col-12 mb-2" *ngIf="isProcedureSelected; else proceureSelection">
+                                <ng-template #displayProcedure>
+                                  <mat-chip-list aria-label="Template Display">
+                                    <mat-chip *ngFor="let template of selectedProcedureObjs; let index = index"
+                                      selectable="true" removable="true">
+                                      {{template.procedurename}}
+                                      <button matChipRemove (click)="removeProcedureChip(index)">
+                                        <mat-icon>cancel</mat-icon>
+                                      </button>
+                                    </mat-chip>
+                                    <mat-chip *ngIf="selectedProcedureObjs?.length > 0">
+                                      <button class="btn btn-link" (click)="addMoreProcedure()">
+                                        Add More
+                                      </button>
+                                    </mat-chip>
+                                  </mat-chip-list>
+                                </ng-template>
+                                <button *ngIf="!selectedProcedureObj.procedurename; else displayProcedure"
+                                  (click)="isProcedureSelected = !isProcedureSelected" ngbTooltip="Add Procedure"
+                                  class="pull-right btn btn-sm btn-primary">
+                                  <i class="fas fa-plus-circle primary"></i> Procedure
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row cust-margin" *ngIf="procedureLoading">
+                            Loading Procedure...
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Procedure</mat-label>
+                                <textarea maxlength="1000" matInput name="procedurename" #procedurename="ngModel"
+                                  [(ngModel)]="model.procedureModel.procedurename">
+                                </textarea>
+                              </mat-form-field>
+                            </div>
+
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>diagnosis</mat-label>
+                                <textarea maxlength="1000" matInput name="diagnosis" #diagnosis="ngModel"
+                                  [(ngModel)]="model.procedureModel.diagnosis">
+                                </textarea>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Date</mat-label>
+                                <input matInput [owlDateTimeTrigger]="date2" [owlDateTime]="date2"
+                                  #appointmentDateTime="ngModel" name="appointmentDate"
+                                  [(ngModel)]="model.procedureModel.date" [min]="today">
+                                <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
+                                <owl-date-time #date2></owl-date-time>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Description</mat-label>
+                                <textarea maxlength="1000" matInput name="procDescription" #procDescription="ngModel"
+                                  [(ngModel)]="model.procedureModel.description">
+                                </textarea>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Anesthesia</mat-label>
+                                <input placeholder="Anesthesia" maxlength="1000" matInput name="anesthesia"
+                                  #anesthesia="ngModel" [(ngModel)]="model.procedureModel.anesthesia" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Facility</mat-label>
+                                <mat-select [compareWith]="objectComparisonFunction" name="referedBy"
+                                  #referedBy="ngModel" [(ngModel)]="doctorOption">
+                                  <mat-option *ngFor="let each of doctorOptions" [value]="each">
+                                    {{each.name}}
+                                  </mat-option>
+                                </mat-select>
+                                <i class="fa-input-icon fas fa-hospital-alt" matSuffix></i>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Complication</mat-label>
+                                <input maxlength="1000" matInput name="complication" #complication="ngModel"
+                                  [(ngModel)]="model.procedureModel.complication" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Others</mat-label>
+                                <input maxlength="1000" matInput name="others" #others="ngModel"
+                                  [(ngModel)]="model.procedureModel.others" />
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-6 m_b0">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Actual Cost</mat-label>
+                                <input type="number" maxlength="1000" matInput name="actualCost" #actualCost="ngModel"
+                                  [(ngModel)]="model.procedureModel.actualCost" />
+                              </mat-form-field>
+                            </div>
+                          </div>
+
+                        </section>
+                      </form>
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 m-4 text-center">
+                        <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid || newMed"
+                          mat-raised-button color="primary">Submit</button>
+                        <button *ngIf="id" (click)="finish()" class="btn-space" [disabled]="!f.form.valid || newMed"
+                          mat-raised-button color="success">Finish</button>
+                        <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid || newMed"
+                          mat-raised-button color="primary">Save</button>
+                        <button routerLink="/doctor/dashboard" type="button" mat-button>Cancel</button>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+              <div class="col-lg-2 col-md-12">
+                <div class="card">
+                  <div class="col-lg-12 col-md-12 res_head" style="text-align: center">
+                    <br />
+                    <h4><strong>Results</strong></h4>
+                  </div>
+                  <div class="header">
+                    <div class="row">
+                      <!-- <div class="col-lg-12 col-md-12">
+                        <div (click)="openLg(content)" class="card">
+                          <div style="cursor: pointer;
+                              text-align: center;
+                              padding: 10px;
+                              border: solid 1px gray;
+                              border-radius: 10px;
+                            ">
+                            <img src="assets/images/icons/invistigation.png" width="40px" />
+                            <p style="font-size: 14px;margin-top: 1rem;
+                            margin-bottom: 0rem;"><strong>Investigations</strong></p>
+                          </div>
+                        </div>
+                      </div> -->
+                     <div class="col-lg-12 col-md-12">
+                        <div (click)="openLg(content2)" class="card">
+                          <div style="
+                              text-align: center;
+                              padding: 10px;
+                              border: solid 1px gray;
+                              border-radius: 10px;
+                            ">
+                            <img src="assets/images/icons/vitals.png" width="40px" />
+                            <p style="font-size: 14px;margin-top: 1rem;
+                            margin-bottom: 0rem;"><strong>Past Visits</strong></p>
+                          </div>
+                        </div>
+                      </div>  
+                      <div class="col-lg-12 col-md-12">
+                        <div (click)="open(content3)" class="card">
+                          <div style="
+                              text-align: center;
+                              padding: 10px;
+                              border: solid 1px gray;
+                              border-radius: 10px;
+                            ">
+                            <img src="assets/images/icons/pro.png" width="45px" />
+                            <p style="font-size: 14px;margin-top: 1rem;
+                            margin-bottom: 0rem;"><strong>Vitals</strong></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-12 col-md-12">
+                        <div (click)="openLg(content4)" class="card">
+                          <div style=" cursor: pointer;
+                              text-align: center;
+                              padding: 10px;
+                              border: solid 1px gray;
+                              border-radius: 10px;
+                            ">
+                            <!-- <img src="https://cdn-icons-png.flaticon.com/512/2764/2764540.png" width="45px" /> -->
+                            <i class="fas fa-solid fa-download"></i>&nbsp;&nbsp;
+                            <p style="font-size: 14px;margin-top: 1rem;
+                            margin-bottom: 0rem;"><strong> Past
+                                Records</strong></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!--///////////////// Model Investigations Dilaoge///////////////// -->
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header" style="text-align: center;padding: 10px;">
+    <h4 class="modal-title" id="modal-basic-title"><img width="25px"
+        src="assets/images/icons/invistigation.png">&nbsp;&nbsp; Investigations</h4>
+
+    <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+  </div>
+  <div class="modal-body modal-lg">
+    <!-- <p>Hello, World!</p> -->
+    <div class="row align-items-center">
+
+      <div class="col-md-9 col-12">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Investigation</mat-label>
+          <mat-chip-list #chipTestList aria-label="Diagnosis selection">
+            <mat-chip *ngFor="let template of model.patientTestModel; let index = index" selectable="true"
+              removable="true">
+              {{template.testMasterName}}
+              <button matChipRemove (click)="removeTestChip(index, true)">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+            <input #testCtrl="ngModel" name="test" [(ngModel)]="selectedTestName" [matAutocomplete]="autoTemp"
+              [matChipInputFor]="chipTestList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+          </mat-chip-list>
+          <mat-autocomplete #autoTemp="matAutocomplete" (optionSelected)="addTest($event)">
+            <mat-option *ngFor="let template of inestigationOptions" [value]="template.name">
+              {{template.name}}
+            </mat-option>
+            <mat-option *ngIf="inestigationOptions.length == 0">No Data Found</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="col-3 mb-2">
+        <button (click)="saveTest()" class="btn btn-success me-2">Done</button>
+        <button [disabled]="model.patientTestModel?.length < 1" (click)="cancelTest()"
+          class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!--///////////////// Model Investigations Dilaoge///////////////// -->
+
+
+
+
+
+
+<!--///////////////// Model Past Record Dilaoge///////////////// -->
+<ng-template #content2 let-c="close" let-d="dismiss">
+  <div class="modal-header" style="text-align: center;padding: 10px;">
+    <h4 class="modal-title" id="modal-basic-title"><img width="25px" src="assets/images/icons/vitals.png">&nbsp;&nbsp;
+      Past Record</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+  </div>
+  <div class="modal-body scroll" style="overflow-y: auto;height: 450px;padding: 11px 5px;max-width: 825px;">
+    <!-- <p>Hello, World!</p> -->
+    <div style="clear: both;height: 15px;">&nbsp;</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+      <div class="body">
+        <div class="col-md-12">
+          <ul class="left-timeline">
+            <li *ngFor="let each of pastHistoryList">
+              <time class="left-time" datetime="2017-10-22T12:13">
+                <span class="mb-0 btn-link" style="cursor: pointer;color: cornflowerblue;"
+                  (click)="goto(each?.appointmentId)">
+                  {{each?.appointment?.appointmentDateTime | date: 'dd/MM/yyyy'}}
+                </span>
+              </time>
+              <div class="left-icon"> <img
+                  src="https://www.einfosoft.com/templates/admin/cliniva/source/light/assets/images/user/user3.jpg"
+                  alt="">
+              </div>
+              <div class="left-label">
+                <h2><a href="#" onClick=" false;">{{each?.appointment?.consultingDoctorName}}</a><br>
+
+                </h2>
+                <div class="row">
+                  <div class="header">
+                    <h2>Prescription / Reports</h2>
+                  </div>
+                  <div class="body">
+                    <ul class="list-unstyled list-unstyled-border list-unstyled-noborder">
+                      <li class="report-list" *ngFor="let item of each.prescriptionModel">
+                        <div class="d-flex">
+                          <i class="fas fa-solid fa-pills file-style col-red font-20"></i>
+
+                          <div class="media-title font-15 wid_154">
+                            {{item.medicineName}}
+                            <span>({{item.genericName ? item.genericName : item.medicineName}}) {{item.categoryName ?
+                              item.categoryName : ''}} {{item.strength}}{{item.units ? item.units : ''}}</span>
+                          </div>
+
+                          <div class="media-title font-16" style="text-align: center;
+                                      font-size: 11px;"> {{item.morning ? 1 : 0}}-{{item.noon? 1:0}}-{{item.night? 1:
+                            0}}<br>{{item.beforeFood ? "Before Food": "After Food"}}</div>
+                        </div>
+                        <div class="ms-auto">
+                          <td>
+
+                            <i class="fas fa-solid fa-eye"></i>
+                          </td>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+
+          </ul>
+
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="d('Cross click')">Close</button>
+  </div>
+</ng-template>
+<!--///////////////// Model Past Record Dilaoge///////////////// -->
+
+
+
+
+<!--///////////////// Model Vitals Dilaoge///////////////// -->
+<ng-template #content3 let-c="close" let-d="dismiss">
+  <div class="modal-header" style="text-align: center;padding: 10px;">
+    <h4 class="modal-title" id="modal-basic-title"><img width="25px" src="assets/images/icons/pro.png">&nbsp;&nbsp;
+      Vitals</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+  </div>
+  <div class="modal-body scroll" style="overflow-y: auto;height: 500px;padding: 11px 5px;">
+    <!-- <p>Hello, World!</p> -->
+    <div style="clear: both;height: 15px;">&nbsp;</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="row" *ngIf="model?.appointment?.vitalsReportModel?.height|| model?.appointment?.vitalsReportModel?.weight
+      || model?.appointment?.vitalsReportModel?.spO2 || model?.appointment?.vitalsReportModel?.pulse 
+      || model?.appointment?.vitalsReportModel?.temprature">
+        <div class="col-md-12 mb-0">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Temperature</mat-label>
+            <input matInput type="number" readonly [(ngModel)]="model.appointment.vitalsReportModel.temprature"
+              name="temprature" />
+            <span matSuffix>&#8451;</span>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 mb-0">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>SpO2</mat-label>
+            <input matInput type="number" readonly [(ngModel)]="model.appointment.vitalsReportModel.spO2" name="spO2">
+            <span matSuffix>%</span>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 mb-0">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Pulse</mat-label>
+            <input matInput type="number" readonly [(ngModel)]="model.appointment.vitalsReportModel.pulse" name="pulse">
+            <span matSuffix>/min</span>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 mb-0">
+          <mat-form-field class="example-full-width mb-3" appearance="outline" name="bp">
+            <mat-label>BP</mat-label>
+            <input matInput type="text" readonly mask="000/00"
+              [(ngModel)]="model.appointment.vitalsReportModel.bloodPresure">
+            <span matSuffix>mmHg</span>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 mb-0">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Weight</mat-label>
+            <input matInput type="number" readonly [(ngModel)]="model.appointment.vitalsReportModel.weight"
+              name="weight">
+            <span matSuffix>kg</span>
+          </mat-form-field>
+        </div>
+        <div class="col-md-12 mb-0">
+          <mat-form-field class="example-full-width mb-3" appearance="outline">
+            <mat-label>Height</mat-label>
+            <input matInput type="number" readonly [(ngModel)]="model.appointment.vitalsReportModel.height"
+              name="height">
+            <span matSuffix>cm</span>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+<!--///////////////// Model Vitals Dilaoge///////////////// -->
+
+
+<!--///////////////// Model Reports///////////////// -->
+<ng-template #content4 let-c="close" let-d="dismiss">
+  <div class="modal-header" style="text-align: center;padding: 10px;">
+    <h4 class="modal-title" id="modal-basic-title"><img width="25px" src="assets/images/icons/pro.png">&nbsp;&nbsp;
+      Reports</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+  </div>
+  <div class="modal-body scroll" style="overflow-y: auto;height: 450px;padding: 11px 5px;">
+    <!-- <p>Hello, World!</p> -->
+    <div style="clear: both;height: 15px;">&nbsp;</div>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="row" *ngIf="model.appointment?.patientFiles?.length > 0">
+        <div class="card p-2">
+          <h5 class="p-3">
+            Files
+          </h5>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let eachFile of model.appointment.patientFiles">
+              <a style="color:#0d6efd; cursor:pointer;" (click)="downloadFile(eachFile)">{{eachFile.fileName}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+<!--///////////////// Model Reports///////////////// -->
+
+<div class="hidden">
+  <div class="card" id="section-to-print" *ngIf="model?.patientModel?.patientName">
+    <div class="container-fluid">
+      <!-- <div class="row">
+        <div class="col-md-10 col-sm-10 col-xs-10">
+           <img style="width: 250px;padding: 10px;" class="mx-auto d-block"
+            src="http://pisystemsimran-001-site1.dtempurl.com/assets/images/pih-logo.png">
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2 text-right">
+          <button id="print-btn" onclick="printing()" class="mt-1 btn btn-sm btn-primary">Print</button>
+        </div>
+      </div> -->
+      <div class="col-md-8 col-sm-8 col-xs-8" style=" padding: 15px;">
+        <div>
+          <strong> Name: </strong> {{model?.patientModel?.patientName}}
+        </div>
+        <div>
+          <strong>Gender (Age): </strong> {{model.patientModel?.gender}} {{model.patientModel?.age}}
+        </div>
+        <div>
+          <strong> Consultant:</strong> {{model.appointment?.consultingDoctorName}}
+        </div>
+      </div>
+      <div class="col-md-4 col-sm-4 col-xs-4" style=" padding: 25px;border-left: none;">
+        <div>
+          <strong>Date: </strong> {{model?.appointment?.appointmentDateTime | date}}
+        </div>
+        <div>
+          <strong>UHID: </strong> {{model?.patientModel?.ulId}}
+        </div>
+        <div style="color: transparent">.</div>
+      </div>
+      <div class="col-md-12 col-sm-12" style="padding: 25px; margin-top: 15px;"
+        style=" border-top: none;padding-top: 10px;">
+        <div class="row clearfix">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div *ngIf="model.compliants" class="row">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Complaints</strong>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : {{model.compliants}}
+              </div>
+            </div>
+            <div *ngIf="model.patientTestModel?.length > 0" class="row clearfix">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Investigation Results</strong>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : <span *ngFor="let each of model.patientTestModel">
+                  {{each.testMasterName}} {{each.remarks}} &nbsp;
+                </span>
+              </div>
+            </div>
+            <div *ngIf="model.impression" class="row clearfix">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Impression</strong>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : {{model.impression}}
+              </div>
+            </div>
+            <div *ngIf="model.advice" class="row clearfix">
+              <div class="col-md-3 col-sm-3 col-xs-3">
+                <strong>Advice</strong>
+              </div>
+              <div class="col-md-9 col-sm-9 col-xs-9">
+                : {{model.advice}}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-1 col-sm-1 col-xs-12" style="margin-top: 20px;">
+            <table class="table table-bordered">
+              <thead>
+                <tr class="row">
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Rx
+                  </th>
+                  <th class="col-md-8 col-sm-8 col-xs-8">
+                    Medicine Name
+                  </th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Frequency
+                  </th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Duration
+                  </th>
+                  <th class="col-md-1 col-sm-1 col-xs-1">
+                    Notes
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row" *ngFor="let each of model.prescriptionModel; let index = index">
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{index + 1}}
+                  </td>
+                  <td class="col-md-8 col-sm-8 col-xs-8">
+                    {{each.medicineName}} - {{each.strength}} ({{each.genericName ? each.genericName :
+                    each.medicineName}}) {{each.categoryName ? each.categoryName : ''}}{{each.units ? each.units : ''}}
+                  </td>
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{each.morning ? 1 : 0}}-{{each.noon? 1:0}}-{{each.night? 1: 0}}
+                  </td>
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{each.noOfDays}} Day(s)
+                  </td>
+                  <td class="col-md-1 col-sm-1 col-xs-1">
+                    {{each.beforeFood ? "Before Food": "After Food"}} {{each.remarks?.toLowerCase().indexOf('food') > -1
+                    ? '' : each.remarks}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-sm-12" style="padding: 25px; margin-top: 15px;" style=" border-top: none;padding-top: 10px;">
+        <div style="text-align: right;">
+          <strong style="width: 150px;"> Doctor Name: </strong> 
+          <span style="width: 250px;">{{user.name}}</span>
+        </div>
+        <div style="text-align: right;">
+          <strong style="width: 150px;">Registration No: </strong> 
+          <span style="width: 250px;"> {{user.registrationNo}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

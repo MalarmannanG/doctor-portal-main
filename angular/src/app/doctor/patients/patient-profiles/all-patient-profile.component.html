@@ -1,0 +1,103 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">View Patient Visits</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/patients"> Patients</a>
+            </li>
+            <li class="breadcrumb-item active">View</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive">
+              <div class="materialTableHeader">
+                <div class="row">
+                  <div class="col-8">
+                    <ul class="header-buttons-left ms-0">
+                      <li class="dropdown">
+                        <h2>
+                          <strong>Patients</strong>
+                        </h2>
+                      </li>
+                      <li class="dropdown m-l-20">
+                        <label for="search-input"><i class="material-icons search-icon">search</i></label>
+                        <input placeholder="Search" type="text" [(ngModel)]="searchPatient" (keyup)="getAll()" #filter
+                          class="browser-default search-field" aria-label="Search box">
+                      </li>
+                      <li>
+                        <div class="icon-button-demo m-l-10" [hidden]=!selection.hasValue()>
+                          <button mat-mini-fab color="warn" (click)="removeSelectedRows()">
+                            <mat-icon class="col-white">delete</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-4">
+                    <ul class="header-buttons">
+                      <!-- <li>
+                        <div class="icon-button-demo">
+                          <button mat-mini-fab color="primary" (click)="addNew()">
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                        </div>
+                      </li> -->
+                      <li>
+                        <div class="icon-button-demo">
+                          <button mat-mini-fab color="primary" (click)="refresh()">
+                            <mat-icon class="col-white">refresh</mat-icon>
+                          </button>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <mat-table #table [dataSource]="model" matSort class="mat-cell">
+                <ng-container matColumnDef="appointmentDateTime">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Visited Date</mat-header-cell>
+                  <mat-cell *matCellDef="let row">  {{row.appointment?.appointmentDateTime}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="consultingDoctorName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Doctor Name</mat-header-cell>
+                  <mat-cell *matCellDef="let row">  {{row.appointment?.consultingDoctorName}}</mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <!-- <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row> -->
+                <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row.appointment?.id)"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <!-- Loading spinner -->
+              <div *ngIf="isTblLoading" class="tbl-spinner">
+                <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+                </mat-progress-spinner>
+              </div>
+              <div *ngIf="!isTblLoading" class="no-results" [style.display]="model.length == 0 ? '' : 'none'">
+                No results
+              </div>
+              <mat-paginator #paginator [length]="totalCount" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]" (page)="paginate($event)">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

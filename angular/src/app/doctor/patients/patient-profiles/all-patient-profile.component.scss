@@ -1,0 +1,29 @@
+.tblActnBtn i {
+    font-size: 20px;
+  }
+  .col-btn {
+    display: flex;
+    justify-content: space-around;
+    i {
+      font-size: 20px;
+      cursor: pointer;
+      &.bi-pencil,
+      &.bi-plus-circle {
+        color: #00bcd4;
+      }
+      &.bi-trash {
+        color: #dc3545;
+      }
+    }
+  }
+  .cust-margin {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .btn-link {
+    padding: 0.5rem;
+  }
+  
+  .head-row {
+    padding: 0.5rem 1.25rem;
+  }
