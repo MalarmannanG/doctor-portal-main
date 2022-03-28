@@ -18,6 +18,10 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VitalsReportService } from "src/app/admin/dashboard/service/vitals.service";
 import { saveAs } from 'file-saver';
 import { PatientProcedureModel } from "src/app/admin/patients/model/procedureModel";
+import { ProcedureMasterModel } from "src/shared/service-proxies/service-proxies";
+import { ProcedureMasterService } from "../../procedure-master/service/procedure-master.service";
+import { DoctorService } from "src/app/admin/doctors/service/doctor.service";
+import { AccountService } from "src/app/authentication/service/auth.service";
 
 @Component({
   selector: "app-view-patient-profile",
@@ -45,6 +49,11 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
   activePrescription = new PrescriptionModel();
   templateList: TemplateMasterModel[] = [];
   temptemplateList: TemplateMasterModel[] = [];
+  procedureList: ProcedureMasterModel[] = [];
+  tempProcedureList: ProcedureMasterModel[] = [];
+  selectedProcedureObjs: ProcedureMasterModel[] = [];
+  selectedProcedureObjsTemp: ProcedureMasterModel[] = [];
+  selectedProcedureObj: ProcedureMasterModel = new ProcedureMasterModel();
   diagosisList: DiagnosisMasterModel[] = [];
   selectedTemplate: string;
   selectedTemplateObjs: TemplateMasterModel[] = [];
@@ -55,19 +64,27 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
   inestigationOptions: TestMasterModel[] = [];
   testMaster: TestMasterModel[] = [];
   complaintsList: string[] = [];
+  adviceList: string[] = [];
   selectedInvestigation: any;
   pastHistoryList: PatientProfileModel[] = [];
   selectedprescrptionObj: PrescriptionMasterModel = new PrescriptionMasterModel();
   prescriptionOptions: PrescriptionMasterModel[] = [];
   prescriptionList: PrescriptionMasterModel[] = [];
   complaintsOptions: string[] = [];
+  adviceOptions: string[] = [];
   selectedTemplateName: string;
+  selectedProcedureName: string;
   selectedDiagName: string;
-  selectedTestName : string;
-  templateLoading = false;
+  selectedTestName: string;
+  templateLoading = true;
+  procedureLoading = true;
   selectedMedicine = '';
   selectedComplaint = '';
+  selectedAdvice = '';
   today = new Date();
+  doctorOptions: any[] = [];
+  doctorOption: any;
+  user: any = {};
   // constructor() {}
   constructor(config: NgbModalConfig, private router: Router,
     private patientProfileService: PatientProfileService,
@@ -76,7 +93,10 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
     private diagnosisMasterService: DiagnosisMasterService,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
-    public vitalsReportService: VitalsReportService) {
+    public vitalsReportService: VitalsReportService,
+    public procedureMasterService: ProcedureMasterService,
+    public accountService: AccountService,
+    private doctorService: DoctorService) {
     // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
@@ -89,115 +109,21 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
   }
   getAllComplaints() {
     this.patientProfileService.getAllComplaints().subscribe(res => {
-      this.complaintsList = this.complaintsOptions = res;
+      this.complaintsList = this.complaintsOptions = res.complaints;
+      this.adviceList = this.adviceOptions = res.advices;
     });
   }
   focusInput(element: ElementRef) {
     element.nativeElement.focus();
   }
-
-  removeDiag(index) {
-    if (this.model.patientDiagnosisModel?.length > 0) {
-      this.model.patientDiagnosisModel[index].isDeleted = true;
-    }
-  }
-
+ 
   onSelectionChanged(event, obj: PatientTestModel) {
     if (event.option.value) {
       obj.testMasterId = this.testMaster.filter(a => a.name == event.option.value)[0].id;
     }
   }
-  addMoreTest() {
-
-    // this.diagOptions = this.diagOptions ?? [];
-    // this.diagOptions.push({ model: this.diagosisList });
-    this.isTestSelected = !this.isTestSelected;
-  }
-
-  addMoreDigs() {
-
-    // this.diagOptions = this.diagOptions ?? [];
-    // this.diagOptions.push({ model: this.diagosisList });
-    this.isDiagSelected = !this.isDiagSelected;
-  }
-
-  addMore() {
-    this.selectedTemplateObjsTemp = JSON.parse(JSON.stringify(this.selectedTemplateObjs));
-    this.isTemplateSelected = !this.isTemplateSelected;
-  }
-
-  cancel() {
-    this.isTemplateSelected = !this.isTemplateSelected;
-  }
-  cancelDiags() {
-
-    this.isDiagSelected = !this.isDiagSelected;
-  }
-  cancelTest() {
-
-    this.isTestSelected = !this.isTestSelected;
-    this.modalService.dismissAll();
-  }
-  onMedSelectionChanged(event) {
-
-    if (event.option.value) {
-      let selected = this.prescriptionList.filter(a => a.id == event.option.value)[0];
-      this.activePrescription.medicineName = selected.medicineName;
-      this.activePrescription.strength = selected.strength;
-      this.activePrescription.genericName = selected.genericName;
-      this.activePrescription.categoryName = selected.categoryName;
-      this.activePrescription.units = selected.units;
-      var strength = selected.strength != null ? '- ' + selected.strength : '';
-      var categoryName = selected.categoryName != null ? '- ' + selected.categoryName : '';
-      var units = selected.units != null ? '- ' + selected.units : '';
-      this.activePrescription.remarks = selected.remarks;
-      this.selectedMedicine = selected.medicineName + categoryName + strength + units;
-
-    }
-  }
-
-  onDiagSelectionChanged(event, each) {
-    if (event.option.value) {
-      let selected = this.diagosisList.filter(a => a.name == event.option.value)[0];
-      each.diagnosisMasterId = selected.id;
-    } else {
-      each.diagnosisMasterId = undefined;
-    }
-  }
-
-  addTemplate(event) {
-    if (this.selectedTemplateName) {
-      let selectedTemplateObj = this.templateList.filter(a => a.name == this.selectedTemplateName)[0];
-      this.selectedTemplateObjsTemp.push(selectedTemplateObj);
-      this.templateSelected();
-    }
-  }
-  addDiag(event) {
-    if (this.selectedDiagName) {
-      let selectedTemplateObj = this.diagosisList.filter(a => a.name == this.selectedDiagName)[0];
-      var _patientDiag = new PatientDiagnosisModel();
-      _patientDiag.diagnosisMasterName = selectedTemplateObj.name;
-      _patientDiag.description = selectedTemplateObj.description;
-      _patientDiag.diagnosisMasterId = selectedTemplateObj.id;
-      if (this.model.patientDiagnosisModel == null) {
-        this.model.patientDiagnosisModel = [];
-      }
-      this.model.patientDiagnosisModel.push(_patientDiag);
-      //this.templateSelected();
-    }
-  }
-  addTest(event) {
-    if (this.selectedTestName) {
-      
-      let selectedTemplateObj = this.inestigationOptions.filter(a => a.name == this.selectedTestName)[0];
-      var _patientDiag = new PatientTestModel();
-      _patientDiag.testMasterName = selectedTemplateObj.name;
-      _patientDiag.remarks = selectedTemplateObj.remarks;
-      _patientDiag.testMasterId = selectedTemplateObj.id;
-      this.model.patientTestModel.push(_patientDiag);
-      //this.templateSelected();
-    }
-  }
+   
+   
   templateSelected() {
     this.model.templateMasterId = this.selectedTemplateObj?.id;
     this.model.compliants = this.selectedTemplateObj?.compliants ?? "";
@@ -207,9 +133,28 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
     this.model.advice = this.selectedTemplateObj?.advice ?? "";
     this.model.followUp = this.selectedTemplateObj?.followUp ?? null;
     this.selectedComplaint = this.model.compliants;
+    this.selectedAdvice = this.model.advice;
     this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
   }
+  procedureSelected() {
+    this.model.procedureMasterId = this.selectedProcedureObj?.id
+    this.model.procedureModel.actualCost = this.selectedProcedureObj?.actualCost;
+    this.model.procedureModel.anesthesia = this.selectedProcedureObj?.anesthesia ?? "";
+    this.model.procedureModel.complication = this.selectedProcedureObj?.complication ?? "";
+    this.model.procedureModel.description = this.selectedProcedureObj?.description ?? "";
+    this.model.procedureModel.diagnosis = this.selectedProcedureObj?.diagnosis ?? "";
+    this.model.procedureModel.others = this.selectedProcedureObj?.others ?? "";
+    this.model.procedureModel.procedurename = this.selectedProcedureObj?.procedurename ?? "";
 
+    // this.model.examination = this.selectedTemplateObj?.examination ?? "";
+    // this.model.impression = this.selectedTemplateObj?.impression ?? "";
+    // this.model.plan = this.selectedTemplateObj?.plan ?? "";
+    // this.model.advice = this.selectedTemplateObj?.advice ?? "";
+    // this.model.followUp = this.selectedTemplateObj?.followUp ?? null;
+    // this.selectedComplaint = this.model.compliants;
+    // this.selectedAdvice =  this.model.advice;
+    // this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
+  }
   clearTemplate() {
     this.selectedTemplateObj = null;
     this.templateSelected();
@@ -250,7 +195,11 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
 
   editablePrescription = new PrescriptionModel();
   edit(event) {
-     
+    this.editablePrescription = event;
+    this.activePrescription = JSON.parse(JSON.stringify(this.editablePrescription));
+    this.selectedMedicine = this.activePrescription.medicineName;
+    this.editing = true;
+    this.newMed = true;
   }
 
   populatePrescriptionMaster() {
@@ -263,6 +212,23 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
   }
   changeOpened(item) {
     item.appointment.isOpened = !item.appointment.isOpened;
+  }
+  populateProcedureList() {
+    this.procedureMasterService.getAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.procedureLoading = false;
+        this.procedureList = resp?.result;
+        if (this.model.procedureMasterId) {
+          let template = this.procedureList?.filter(a => a.id == this.model.procedureMasterId);
+          if (template?.length > 0) {
+            this.selectedProcedureObj = template[0];
+            this.selectedProcedureObjs.push(template[0]);
+            this.procedureSelected();
+          
+          }
+        }
+      });
   }
   populateTemplateList() {
     this.templateMasterService.getAll()
@@ -277,7 +243,6 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
             this.selectedTemplateObjs.push(template[0]);
             this.selectedTemplateObjsTemp.push(template[0]);
             this.isTemplateSelected = true;
-            this.isDiagSelected = true;
           }
         }
       });
@@ -298,33 +263,25 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
       });
   }
 
-  addMed() {
-    this.selectedMedicine = "";
-    this.newMed = true;
+  public objectComparisonFunction = function (option, item): boolean {
+    return option.value === item.value;
   }
-
-  update() {
-    Swal.fire({
-      title: "Are you sure to close this appoinment?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, close this appoinment!",
-      cancelButtonText: "No, Update patient",
-    }).then((result) => {
-      if (result.value)
-        this.model.appointment.isActive = false;
-      else
-        this.model.appointment.isActive = true;
-      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel.filter(a => a.id || a.diagnosisMasterName)
-      this.patientProfileService.put(this.model)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((resp) => {
-          this.router.navigateByUrl('/doctor/dashboard')
-        });
-    });
+  getDoctors() {
+    this.doctorService.getAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.doctorOptions = resp?.result?.map(a => {
+          return { name: a.name, value: a.id };
+        })
+        this.doctorOptions.splice(0, 0, { name: 'Select Facility', value: -1 });
+        if (this.id && this.model.procedureModel?.referedBy) {
+          this.doctorOption = this.doctorOptions.filter(a => a.value == this.model.procedureModel.referedBy)[0];
+          console.log(this.doctorOption);
+        }
+        else {
+          this.doctorOption = this.doctorOptions[0];
+        }
+      });
   }
 
   getPastHistories() {
@@ -339,191 +296,24 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
         })
       });
   }
-
-  onSubmit() {
-    this.patientProfileService.post(this.model)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((resp) => {
-        this.router.navigateByUrl('/doctor/dashboard')
-      });
-  }
+ 
 
   get() {
     this.patientProfileService.get(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
-        // if (!(this.model.patientDiagnosisModel?.length > 0)) {
-        //   this.model.patientDiagnosisModel = [];
-        //   this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
-        // }
-        this.isTemplateSelected = false;
-        this.isDiagSelected = false;
-        this.isTestSelected = true;
-        //this.populateTestMaster();
         this.populateTemplateList();
-        //this.populateDiagnosis();
-        this.getPastHistories();
         this.populatePrescriptionMaster();
+        this.populateProcedureList();
+        this.getDoctors();
       });
-  }
-
-  getPrescriptionMaster() {
-    this.patientProfileService.getMedicines()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((resp) => {
-        this.model = resp;
-      });
-  }
-
-  addInestigation() {
-    if (this.model.patientTestModel?.length > 0) {
-      this.model.patientTestModel?.push(new PatientTestModel());
-    } else {
-      this.model.patientTestModel = [];
-      this.model.patientTestModel?.push(new PatientTestModel());
-    }
-  }
-
-  cancelPrescription() {
-    this.activePrescription = new PrescriptionModel();
-    this.prescriptionOptions = this.prescriptionList;
-    this.newMed = false;
-  }
-
-  removeInestigation() {
-    this.model.patientTestModel.pop()
   }
 
   openModel(content) {
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
-
-  doFilter(filter) {
-    filter = filter;
-    this.inestigationOptions = [];
-    this.testMaster.forEach(element => {
-      if (element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
-        this.inestigationOptions.push(element)
-      }
-    });
-  }
-  removeDiagChip(removeIndex: number, edit = false) {
-    if (edit) {
-      this.model.patientDiagnosisModel = this.model.patientDiagnosisModel?.filter((a, i) => i != removeIndex);
-      if (this.model.patientDiagnosisModel?.length > 0)
-        this.isDiagSelected = !this.isDiagSelected;
-    } else {
-      this.model.patientDiagnosisModel = this.model.patientDiagnosisModel?.filter((a, i) => i != removeIndex);
-      if (this.model.patientDiagnosisModel?.length < 1)
-        this.isDiagSelected = !this.isDiagSelected;
-
-    }
-  }
-  removeTestChip(removeIndex: number, edit = false) {
-    if (edit) {
-      this.model.patientTestModel = this.model.patientTestModel?.filter((a, i) => i != removeIndex);
-      if (this.model.patientTestModel?.length > 0)
-        this.isTemplateSelected = !this.isTemplateSelected;
-    } else {
-      this.model.patientTestModel = this.model.patientTestModel?.filter((a, i) => i != removeIndex);
-      if (this.model.patientTestModel?.length < 1)
-        this.isTemplateSelected = !this.isTemplateSelected;
-
-    }
-  }
-  removeChip(removeIndex: number, edit = false) {
-    if (edit) {
-      this.selectedTemplateObjsTemp = this.selectedTemplateObjsTemp?.filter((a, i) => i != removeIndex);
-    } else {
-      this.selectedTemplateObjs = this.selectedTemplateObjs?.filter((a, i) => i != removeIndex);
-      if (this.selectedTemplateObjs?.length > 0) {
-        this.selectedTemplateObj = this.selectedTemplateObjs[0];
-        this.templateSelected();
-      } else {
-        this.selectedTemplateObj = new TemplateMasterModel();
-      }
-    }
-  }
-
-  showDiagnosisAdd() {
-    let patientDiagsCount = this.model.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;
-    return patientDiagsCount == 0;
-  }
-
-
-  showAddDiagnosis() {
-    let patientDiagsCount = this.model?.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;
-    return patientDiagsCount == 0;
-  }
-
-  showDiagnosisDelete(index) {
-    let patientDiagsCount = this.model?.patientDiagnosisModel?.filter(a => !a.isDeleted)?.length ?? 0;
-    return index == (patientDiagsCount - 1);
-  }
-
-  showInvestigationDelete(index) {
-    let investcationsCount = this.model?.patientTestModel?.filter(a => !a.isDeleted)?.length ?? 0;
-    return index == (investcationsCount - 1);
-  }
-  saveDiags() {
-    //this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
-    //this.diagOptions = this.diagOptions ?? [];
-    //this.diagOptions.push({ model: this.diagosisList });
-    this.isDiagSelected = !this.isDiagSelected;
-  }
-  saveTest() {
-    //this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
-    //this.diagOptions = this.diagOptions ?? [];
-    //this.diagOptions.push({ model: this.diagosisList });
-    this.isTestSelected = !this.isTestSelected;
-    this.modalService.dismissAll();
-  }
-  saveTemplate() {
-    this.selectedTemplateObjs = JSON.parse(JSON.stringify(this.selectedTemplateObjsTemp));
-    this.selectedTemplateObj = this.selectedTemplateObjs[0];
-    this.isTemplateSelected = !this.isTemplateSelected;
-    this.templateSelected();
-  }
-  doComplaintFilter(filter) {
-    this.model.compliants = filter;
-    this.complaintsOptions = [];
-    this.complaintsOptions = this.complaintsList.filter(a => a.toLowerCase().includes(filter.toLowerCase()));
-  }
-  doMedFilter(filter) {
-    if (Number.parseInt(filter)) {
-      this.prescriptionOptions = [];
-      this.prescriptionList.forEach(element => {
-        if (element.id == filter) {
-          this.prescriptionOptions.push(element);
-          var strength = element.strength == null ? '- ' + element.strength : '';
-          var categoryName = element.categoryName == null ? '- ' + element.categoryName : '';
-          var units = element.units == null ? '- ' + element.units : '';
-          this.selectedMedicine = element.medicineName + categoryName + strength + units;
-        }
-      });
-    }
-    else {
-      var _filter = filter?.toLocaleLowerCase();
-      this.prescriptionOptions = [];
-      this.prescriptionList.forEach(element => {
-        if (element.medicineName?.toLocaleLowerCase().includes(_filter)) {
-          this.prescriptionOptions.push(element)
-        }
-      });
-    }
-  }
-
-  doDiagFilter(filter, index) {
-    filter = filter;
-    this.diagOptions[index].model = [];
-    this.diagosisList.forEach(element => {
-      if (element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
-        this.diagOptions[index].model.push(element)
-      }
-    });
-  }
-
+  
   populateTestMaster() {
     this.testMasterSerice.getAll()
       .pipe(takeUntil(this.unsubscribe$))
@@ -535,6 +325,7 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
 
   id: any;
   ngOnInit() {
+    this.user = this.accountService.currentUserValue;
     let id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
       this.id = id;
@@ -544,42 +335,18 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
         this.model.patientDiagnosisModel = [];
         this.model.patientDiagnosisModel.push(new PatientDiagnosisModel());
       }
-      //this.populatePrescriptionMaster();
-      //this.populateTestMaster()
-      //this.populateDiagnosis();
-      //this.populateTemplateList();
-
     }
     this.getAllComplaints();
   }
 
   printPrescrption() {
-    // this.router.navigateByUrl(`/doctor/prescription-print/${this.id}`)
-
     let Pagelink = "about:blank";
     var pwa = window.open(Pagelink, "_new");
-    //pwa.document.open();
-
     pwa.document.write(this.prepareQRForPrint());
     pwa.document.close();
-
-    // var mywindow = window.open('A4', 'PRINT');
-
-    // mywindow.document.write('<html><head><title>' + document.title + '</title>');
-
-    // mywindow.document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" media="all" crossorigin="anonymous">');
-    // mywindow.document.write('<style>@page { size: A4; margin: 0; }</style>');
-    // mywindow.document.write('</head><body>');
-    // mywindow.document.write('<script> function printing() {  document.getElementById("print-btn").remove(); document.getElementsByTagName("img").remove(); window.print(); window.close(); } </script>');
-    // mywindow.document.write(document.getElementById("section-to-print").innerHTML);
-    // mywindow.document.write('</body></html>');
-    // mywindow.document.close(); // necessary for IE >= 10
-    // mywindow.focus(); // necessary for IE >= 10*/
-    // return true;
   }
-  prepareQRForPrint() {
-    var ddsf = document.getElementById("section-to-print");
 
+  prepareQRForPrint() {
     return "<html><head><title>" + document.title + "</title><link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u' media='all' crossorigin='anonymous'><style type='text/css' media='print'>@media print { @page { size: auto; margin: 0;} body { margin:1.6cm; } }</style><script>function step1(){\n" +
       "setTimeout('step2()', 2);}\n" +
       "function step2(){window.print();window.close()}\n" +
