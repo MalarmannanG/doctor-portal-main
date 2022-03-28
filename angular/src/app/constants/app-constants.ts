@@ -15,6 +15,7 @@ export const APP_CONSTANTS = {
         APPOINTMENT: '/Api/Appointment',
         POP_USERS: '/Api/Account/Users',
         VITALS: '/Api/VitalsReport',
-        PRESCRIPTION_MASTER: '/Api/PrescriptionMaster'
+        PRESCRIPTION_MASTER: '/Api/PrescriptionMaster',
+        PROCEDURE_MASTER: '/Api/ProcedureMaster'
     }
 }

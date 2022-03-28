@@ -20,12 +20,13 @@ export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 @Injectable()
 export class AccessRightsController {
     private http: HttpClient;
-    private baseUrl: string;
+    private baseUrl: string = "http://localhost:49564/";
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
 
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
-        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        //this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+        //this.baseUrl = "http://localhost:49564/";
     }
 
     /**
@@ -93,7 +94,7 @@ export class AccessRightsController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -157,7 +158,7 @@ export class AccountController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -414,7 +415,7 @@ export class AccountController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -577,7 +578,7 @@ export class AppointmentController {
      * @param order_by (optional) 
      * @return Success
      */
-    getAll(patientName: string | undefined, isProcedure: boolean | undefined, doctorName: string | undefined, fromDate: DateTime | undefined, toDate: DateTime | undefined, todayPatients: boolean | undefined, skip: number | undefined, take: number | undefined, order_by: string | undefined): Observable<void> {
+    getAll(patientName: string | undefined, isProcedure: boolean | undefined, doctorName: string | undefined, fromDate: string | undefined, toDate: string | undefined, todayPatients: boolean | undefined, skip: number | undefined, take: number | undefined, order_by: string | undefined): Observable<void> {
         let url_ = this.baseUrl + "/Api/Appointment/GetAll?";
         if (patientName === null)
             throw new Error("The parameter 'patientName' cannot be null.");
@@ -594,11 +595,11 @@ export class AppointmentController {
         if (fromDate === null)
             throw new Error("The parameter 'fromDate' cannot be null.");
         else if (fromDate !== undefined)
-            url_ += "fromDate=" + encodeURIComponent(fromDate ? "" + fromDate.toString() : "") + "&";
+            url_ += "fromDate=" + encodeURIComponent("" + fromDate) + "&";
         if (toDate === null)
             throw new Error("The parameter 'toDate' cannot be null.");
         else if (toDate !== undefined)
-            url_ += "toDate=" + encodeURIComponent(toDate ? "" + toDate.toString() : "") + "&";
+            url_ += "toDate=" + encodeURIComponent("" + toDate) + "&";
         if (todayPatients === null)
             throw new Error("The parameter 'todayPatients' cannot be null.");
         else if (todayPatients !== undefined)
@@ -672,7 +673,7 @@ export class AppointmentController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -724,7 +725,7 @@ export class AppointmentController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -935,7 +936,7 @@ export class DepartmentMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -987,7 +988,7 @@ export class DepartmentMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1039,7 +1040,7 @@ export class DepartmentMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1220,7 +1221,7 @@ export class DiagnosisMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1272,7 +1273,7 @@ export class DiagnosisMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1555,7 +1556,7 @@ export class DoctorMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1607,7 +1608,7 @@ export class DoctorMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1853,7 +1854,7 @@ export class PatientMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -1905,7 +1906,7 @@ export class PatientMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -2270,7 +2271,8 @@ export class PatientProfileController {
      * @param appointmentDate (optional) 
      * @return Success
      */
-    getAllInActive(patientId: number | undefined, appointmentDate: DateTime | undefined): Observable<void> {
+    getAllInActive(patientId: number | undefined, appointmentDate: DateTime | undefined): Observable<PatientProfileModel[]> {
+        debugger;
         let url_ = this.baseUrl + "/Api/PatientProfile/GetAllInActive?";
         if (patientId === null)
             throw new Error("The parameter 'patientId' cannot be null.");
@@ -2286,6 +2288,7 @@ export class PatientProfileController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Accept": "application/json"
             })
         };
 
@@ -2296,6 +2299,63 @@ export class PatientProfileController {
                 try {
                     return this.processGetAllInActive(response_ as any);
                 } catch (e) {
+                    return _observableThrow(e) as any as Observable<PatientProfileModel[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<PatientProfileModel[]>;
+        }));
+    }
+
+    protected processGetAllInActive(response: HttpResponseBase): Observable<PatientProfileModel[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(PatientProfileModel.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<PatientProfileModel[]>();
+    }
+
+    /**
+     * @return Success
+     */
+    getAllComplaints(): Observable<void> {
+        let url_ = this.baseUrl + "/Api/PatientProfile/GetAllComplaints";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllComplaints(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllComplaints(response_ as any);
+                } catch (e) {
                     return _observableThrow(e) as any as Observable<void>;
                 }
             } else
@@ -2303,7 +2363,7 @@ export class PatientProfileController {
         }));
     }
 
-    protected processGetAllInActive(response: HttpResponseBase): Observable<void> {
+    protected processGetAllComplaints(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -2337,7 +2397,7 @@ export class PatientProfileController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -2389,7 +2449,7 @@ export class PatientProfileController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -2615,7 +2675,7 @@ export class PrescriptionMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -2667,7 +2727,7 @@ export class PrescriptionMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -2709,6 +2769,289 @@ export class PrescriptionMasterController {
      */
     delete(id: number): Observable<void> {
         let url_ = this.baseUrl + "/Api/PrescriptionMaster/Delete/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(null as any);
+    }
+}
+
+@Injectable()
+export class ProcedureMasterController {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    get(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProcedureMaster/Get/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(null as any);
+    }
+
+    /**
+     * @param name (optional) 
+     * @param orderBy (optional) 
+     * @param skip (optional) 
+     * @param take (optional) 
+     * @return Success
+     */
+    getAll(name: string | undefined, orderBy: string | undefined, skip: number | undefined, take: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProcedureMaster/GetAll?";
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        if (orderBy === null)
+            throw new Error("The parameter 'orderBy' cannot be null.");
+        else if (orderBy !== undefined)
+            url_ += "orderBy=" + encodeURIComponent("" + orderBy) + "&";
+        if (skip === null)
+            throw new Error("The parameter 'skip' cannot be null.");
+        else if (skip !== undefined)
+            url_ += "skip=" + encodeURIComponent("" + skip) + "&";
+        if (take === null)
+            throw new Error("The parameter 'take' cannot be null.");
+        else if (take !== undefined)
+            url_ += "take=" + encodeURIComponent("" + take) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    create(body: ProcedureMasterModel | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProcedureMaster/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    update(body: ProcedureMasterModel | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProcedureMaster/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    delete(id: number): Observable<void> {
+        let url_ = this.baseUrl + "/api/ProcedureMaster/Delete/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{id}", encodeURIComponent("" + id));
@@ -2898,7 +3241,7 @@ export class TemplateMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -2950,7 +3293,7 @@ export class TemplateMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3181,7 +3524,7 @@ export class TestMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3233,7 +3576,7 @@ export class TestMasterController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3566,7 +3909,7 @@ export class UserController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3618,7 +3961,7 @@ export class UserController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3637,6 +3980,58 @@ export class UserController {
     }
 
     protected processUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return _observableOf<void>(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<void>(null as any);
+    }
+
+    /**
+     * @param name (optional) 
+     * @return Success
+     */
+    geAllSpecialization(name: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/Api/User/GeAllSpecialization?";
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "name=" + encodeURIComponent("" + name) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGeAllSpecialization(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGeAllSpecialization(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processGeAllSpecialization(response: HttpResponseBase): Observable<void> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -3779,7 +4174,7 @@ export class VitalsReportController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3831,7 +4226,7 @@ export class VitalsReportController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -3933,7 +4328,7 @@ export class VitalsReportController {
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
-                "Content-Type": "application/json-patch+json",
+                "Content-Type": "application/json",
             })
         };
 
@@ -4043,6 +4438,7 @@ export class AppointmentModel implements IAppointmentModel {
     timeOfAppintment!: string | undefined;
     isActive!: boolean;
     appointmentDateTime!: DateTime;
+    appointmentISOString!: string | undefined;
     createdDate!: DateTime;
     createdBy!: number;
     updatedDate!: DateTime | undefined;
@@ -4073,6 +4469,7 @@ export class AppointmentModel implements IAppointmentModel {
             this.timeOfAppintment = _data["timeOfAppintment"];
             this.isActive = _data["isActive"];
             this.appointmentDateTime = _data["appointmentDateTime"] ? DateTime.fromISO(_data["appointmentDateTime"].toString()) : <any>undefined;
+            this.appointmentISOString = _data["appointmentISOString"];
             this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
             this.createdBy = _data["createdBy"];
             this.updatedDate = _data["updatedDate"] ? DateTime.fromISO(_data["updatedDate"].toString()) : <any>undefined;
@@ -4107,6 +4504,7 @@ export class AppointmentModel implements IAppointmentModel {
         data["timeOfAppintment"] = this.timeOfAppintment;
         data["isActive"] = this.isActive;
         data["appointmentDateTime"] = this.appointmentDateTime ? this.appointmentDateTime.toString() : <any>undefined;
+        data["appointmentISOString"] = this.appointmentISOString;
         data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
         data["createdBy"] = this.createdBy;
         data["updatedDate"] = this.updatedDate ? this.updatedDate.toString() : <any>undefined;
@@ -4134,6 +4532,7 @@ export interface IAppointmentModel {
     timeOfAppintment: string | undefined;
     isActive: boolean;
     appointmentDateTime: DateTime;
+    appointmentISOString: string | undefined;
     createdDate: DateTime;
     createdBy: number;
     updatedDate: DateTime | undefined;
@@ -4326,6 +4725,7 @@ export class DoctorMasterModel implements IDoctorMasterModel {
     phoneNo1!: string | undefined;
     phoneNo2!: string | undefined;
     email!: string | undefined;
+    pinCode!: number;
     isDeleted!: boolean;
     percentage!: number;
     createdDate!: DateTime;
@@ -4358,6 +4758,7 @@ export class DoctorMasterModel implements IDoctorMasterModel {
             this.phoneNo1 = _data["phoneNo1"];
             this.phoneNo2 = _data["phoneNo2"];
             this.email = _data["email"];
+            this.pinCode = _data["pinCode"];
             this.isDeleted = _data["isDeleted"];
             this.percentage = _data["percentage"];
             this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
@@ -4390,6 +4791,7 @@ export class DoctorMasterModel implements IDoctorMasterModel {
         data["phoneNo1"] = this.phoneNo1;
         data["phoneNo2"] = this.phoneNo2;
         data["email"] = this.email;
+        data["pinCode"] = this.pinCode;
         data["isDeleted"] = this.isDeleted;
         data["percentage"] = this.percentage;
         data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
@@ -4415,6 +4817,7 @@ export interface IDoctorMasterModel {
     phoneNo1: string | undefined;
     phoneNo2: string | undefined;
     email: string | undefined;
+    pinCode: number;
     isDeleted: boolean;
     percentage: number;
     createdDate: DateTime;
@@ -4906,6 +5309,7 @@ export interface IPatientNewFilesModel {
 export class PatientProfileModel implements IPatientProfileModel {
     id!: number;
     templateMasterId!: number | undefined;
+    procedureMasterId!: number | undefined;
     patientId!: number;
     doctorId!: number;
     appointmentId!: number;
@@ -4916,16 +5320,17 @@ export class PatientProfileModel implements IPatientProfileModel {
     impression!: string | undefined;
     advice!: string | undefined;
     plan!: string | undefined;
-    followUp!: string | undefined;
+    isfollowUpNeed!: boolean;
+    followUp!: DateTime | undefined;
     isDeleted!: boolean;
-    sos!: boolean;
-    stat!: boolean;
+    referredDoctor!: string | undefined;
     createdDate!: DateTime;
     modifiedDate!: DateTime | undefined;
     createdBy!: number;
     modifiedBy!: number | undefined;
     patientModel!: PatientModel;
     appointment!: AppointmentModel;
+    procedureModel!: ProcedureModel;
     patientDiagnosisModel!: PatientDiagnosisModel[] | undefined;
     prescriptionModel!: PrescriptionModel[] | undefined;
     patientTestModel!: PatientTestModel[] | undefined;
@@ -4943,6 +5348,7 @@ export class PatientProfileModel implements IPatientProfileModel {
         if (_data) {
             this.id = _data["id"];
             this.templateMasterId = _data["templateMasterId"];
+            this.procedureMasterId = _data["procedureMasterId"];
             this.patientId = _data["patientId"];
             this.doctorId = _data["doctorId"];
             this.appointmentId = _data["appointmentId"];
@@ -4953,16 +5359,17 @@ export class PatientProfileModel implements IPatientProfileModel {
             this.impression = _data["impression"];
             this.advice = _data["advice"];
             this.plan = _data["plan"];
-            this.followUp = _data["followUp"];
+            this.isfollowUpNeed = _data["isfollowUpNeed"];
+            this.followUp = _data["followUp"] ? DateTime.fromISO(_data["followUp"].toString()) : <any>undefined;
             this.isDeleted = _data["isDeleted"];
-            this.sos = _data["sos"];
-            this.stat = _data["stat"];
+            this.referredDoctor = _data["referredDoctor"];
             this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
             this.modifiedDate = _data["modifiedDate"] ? DateTime.fromISO(_data["modifiedDate"].toString()) : <any>undefined;
             this.createdBy = _data["createdBy"];
             this.modifiedBy = _data["modifiedBy"];
             this.patientModel = _data["patientModel"] ? PatientModel.fromJS(_data["patientModel"]) : <any>undefined;
             this.appointment = _data["appointment"] ? AppointmentModel.fromJS(_data["appointment"]) : <any>undefined;
+            this.procedureModel = _data["procedureModel"] ? ProcedureModel.fromJS(_data["procedureModel"]) : <any>undefined;
             if (Array.isArray(_data["patientDiagnosisModel"])) {
                 this.patientDiagnosisModel = [] as any;
                 for (let item of _data["patientDiagnosisModel"])
@@ -4992,6 +5399,7 @@ export class PatientProfileModel implements IPatientProfileModel {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["templateMasterId"] = this.templateMasterId;
+        data["procedureMasterId"] = this.procedureMasterId;
         data["patientId"] = this.patientId;
         data["doctorId"] = this.doctorId;
         data["appointmentId"] = this.appointmentId;
@@ -5002,16 +5410,17 @@ export class PatientProfileModel implements IPatientProfileModel {
         data["impression"] = this.impression;
         data["advice"] = this.advice;
         data["plan"] = this.plan;
-        data["followUp"] = this.followUp;
+        data["isfollowUpNeed"] = this.isfollowUpNeed;
+        data["followUp"] = this.followUp ? this.followUp.toString() : <any>undefined;
         data["isDeleted"] = this.isDeleted;
-        data["sos"] = this.sos;
-        data["stat"] = this.stat;
+        data["referredDoctor"] = this.referredDoctor;
         data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
         data["modifiedDate"] = this.modifiedDate ? this.modifiedDate.toString() : <any>undefined;
         data["createdBy"] = this.createdBy;
         data["modifiedBy"] = this.modifiedBy;
         data["patientModel"] = this.patientModel ? this.patientModel.toJSON() : <any>undefined;
         data["appointment"] = this.appointment ? this.appointment.toJSON() : <any>undefined;
+        data["procedureModel"] = this.procedureModel ? this.procedureModel.toJSON() : <any>undefined;
         if (Array.isArray(this.patientDiagnosisModel)) {
             data["patientDiagnosisModel"] = [];
             for (let item of this.patientDiagnosisModel)
@@ -5034,6 +5443,7 @@ export class PatientProfileModel implements IPatientProfileModel {
 export interface IPatientProfileModel {
     id: number;
     templateMasterId: number | undefined;
+    procedureMasterId: number | undefined;
     patientId: number;
     doctorId: number;
     appointmentId: number;
@@ -5044,16 +5454,17 @@ export interface IPatientProfileModel {
     impression: string | undefined;
     advice: string | undefined;
     plan: string | undefined;
-    followUp: string | undefined;
+    isfollowUpNeed: boolean;
+    followUp: DateTime | undefined;
     isDeleted: boolean;
-    sos: boolean;
-    stat: boolean;
+    referredDoctor: string | undefined;
     createdDate: DateTime;
     modifiedDate: DateTime | undefined;
     createdBy: number;
     modifiedBy: number | undefined;
     patientModel: PatientModel;
     appointment: AppointmentModel;
+    procedureModel: ProcedureModel;
     patientDiagnosisModel: PatientDiagnosisModel[] | undefined;
     prescriptionModel: PrescriptionModel[] | undefined;
     patientTestModel: PatientTestModel[] | undefined;
@@ -5226,6 +5637,8 @@ export class PrescriptionModel implements IPrescriptionModel {
     night!: boolean;
     noOfDays!: number;
     isDeleted!: boolean;
+    sos!: boolean;
+    stat!: boolean;
     createdDate!: DateTime;
     modifiedDate!: DateTime | undefined;
     createdBy!: number;
@@ -5256,6 +5669,8 @@ export class PrescriptionModel implements IPrescriptionModel {
             this.night = _data["night"];
             this.noOfDays = _data["noOfDays"];
             this.isDeleted = _data["isDeleted"];
+            this.sos = _data["sos"];
+            this.stat = _data["stat"];
             this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
             this.modifiedDate = _data["modifiedDate"] ? DateTime.fromISO(_data["modifiedDate"].toString()) : <any>undefined;
             this.createdBy = _data["createdBy"];
@@ -5286,6 +5701,8 @@ export class PrescriptionModel implements IPrescriptionModel {
         data["night"] = this.night;
         data["noOfDays"] = this.noOfDays;
         data["isDeleted"] = this.isDeleted;
+        data["sos"] = this.sos;
+        data["stat"] = this.stat;
         data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
         data["modifiedDate"] = this.modifiedDate ? this.modifiedDate.toString() : <any>undefined;
         data["createdBy"] = this.createdBy;
@@ -5309,6 +5726,188 @@ export interface IPrescriptionModel {
     night: boolean;
     noOfDays: number;
     isDeleted: boolean;
+    sos: boolean;
+    stat: boolean;
+    createdDate: DateTime;
+    modifiedDate: DateTime | undefined;
+    createdBy: number;
+    modifiedBy: number | undefined;
+}
+
+export class ProcedureMasterModel implements IProcedureMasterModel {
+    id!: number;
+    diagnosis!: string | undefined;
+    date!: string | undefined;
+    procedurename!: string | undefined;
+    anesthesia!: string | undefined;
+    description!: string | undefined;
+    complication!: string | undefined;
+    others!: string | undefined;
+    actualCost!: number;
+    isDeleted!: boolean;
+    createdDate!: DateTime;
+    createdBy!: number;
+    updatedDate!: DateTime | undefined;
+    updatedBy!: number | undefined;
+
+    constructor(data?: IProcedureMasterModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.diagnosis = _data["diagnosis"];
+            this.date = _data["date"];
+            this.procedurename = _data["procedurename"];
+            this.anesthesia = _data["anesthesia"];
+            this.description = _data["description"];
+            this.complication = _data["complication"];
+            this.others = _data["others"];
+            this.actualCost = _data["actualCost"];
+            this.isDeleted = _data["isDeleted"];
+            this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
+            this.createdBy = _data["createdBy"];
+            this.updatedDate = _data["updatedDate"] ? DateTime.fromISO(_data["updatedDate"].toString()) : <any>undefined;
+            this.updatedBy = _data["updatedBy"];
+        }
+    }
+
+    static fromJS(data: any): ProcedureMasterModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProcedureMasterModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["diagnosis"] = this.diagnosis;
+        data["date"] = this.date;
+        data["procedurename"] = this.procedurename;
+        data["anesthesia"] = this.anesthesia;
+        data["description"] = this.description;
+        data["complication"] = this.complication;
+        data["others"] = this.others;
+        data["actualCost"] = this.actualCost;
+        data["isDeleted"] = this.isDeleted;
+        data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["updatedDate"] = this.updatedDate ? this.updatedDate.toString() : <any>undefined;
+        data["updatedBy"] = this.updatedBy;
+        return data;
+    }
+}
+
+export interface IProcedureMasterModel {
+    id: number;
+    diagnosis: string | undefined;
+    date: string | undefined;
+    procedurename: string | undefined;
+    anesthesia: string | undefined;
+    description: string | undefined;
+    complication: string | undefined;
+    others: string | undefined;
+    actualCost: number;
+    isDeleted: boolean;
+    createdDate: DateTime;
+    createdBy: number;
+    updatedDate: DateTime | undefined;
+    updatedBy: number | undefined;
+}
+
+export class ProcedureModel implements IProcedureModel {
+    id!: number;
+    diagnosis!: string | undefined;
+    date!: string | undefined;
+    procedurename!: string | undefined;
+    referedBy!: number | undefined;
+    referedByName!: string | undefined;
+    anesthesia!: string | undefined;
+    description!: string | undefined;
+    complication!: string | undefined;
+    others!: string | undefined;
+    actualCost!: number | undefined;
+    createdDate!: DateTime;
+    modifiedDate!: DateTime | undefined;
+    createdBy!: number;
+    modifiedBy!: number | undefined;
+
+    constructor(data?: IProcedureModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.diagnosis = _data["diagnosis"];
+            this.date = _data["date"];
+            this.procedurename = _data["procedurename"];
+            this.referedBy = _data["referedBy"];
+            this.referedByName = _data["referedByName"];
+            this.anesthesia = _data["anesthesia"];
+            this.description = _data["description"];
+            this.complication = _data["complication"];
+            this.others = _data["others"];
+            this.actualCost = _data["actualCost"];
+            this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
+            this.modifiedDate = _data["modifiedDate"] ? DateTime.fromISO(_data["modifiedDate"].toString()) : <any>undefined;
+            this.createdBy = _data["createdBy"];
+            this.modifiedBy = _data["modifiedBy"];
+        }
+    }
+
+    static fromJS(data: any): ProcedureModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProcedureModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["diagnosis"] = this.diagnosis;
+        data["date"] = this.date;
+        data["procedurename"] = this.procedurename;
+        data["referedBy"] = this.referedBy;
+        data["referedByName"] = this.referedByName;
+        data["anesthesia"] = this.anesthesia;
+        data["description"] = this.description;
+        data["complication"] = this.complication;
+        data["others"] = this.others;
+        data["actualCost"] = this.actualCost;
+        data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
+        data["modifiedDate"] = this.modifiedDate ? this.modifiedDate.toString() : <any>undefined;
+        data["createdBy"] = this.createdBy;
+        data["modifiedBy"] = this.modifiedBy;
+        return data;
+    }
+}
+
+export interface IProcedureModel {
+    id: number;
+    diagnosis: string | undefined;
+    date: string | undefined;
+    procedurename: string | undefined;
+    referedBy: number | undefined;
+    referedByName: string | undefined;
+    anesthesia: string | undefined;
+    description: string | undefined;
+    complication: string | undefined;
+    others: string | undefined;
+    actualCost: number | undefined;
     createdDate: DateTime;
     modifiedDate: DateTime | undefined;
     createdBy: number;
@@ -5628,6 +6227,9 @@ export class UserModel implements IUserModel {
     serialNo!: string | undefined;
     userType!: string | undefined;
     userName!: string | undefined;
+    specializationId!: number | undefined;
+    specializationName!: string | undefined;
+    registrationNo!: string | undefined;
     createdDate!: DateTime | undefined;
 
     constructor(data?: IUserModel) {
@@ -5653,6 +6255,9 @@ export class UserModel implements IUserModel {
             this.serialNo = _data["serialNo"];
             this.userType = _data["userType"];
             this.userName = _data["userName"];
+            this.specializationId = _data["specializationId"];
+            this.specializationName = _data["specializationName"];
+            this.registrationNo = _data["registrationNo"];
             this.createdDate = _data["createdDate"] ? DateTime.fromISO(_data["createdDate"].toString()) : <any>undefined;
         }
     }
@@ -5678,6 +6283,9 @@ export class UserModel implements IUserModel {
         data["serialNo"] = this.serialNo;
         data["userType"] = this.userType;
         data["userName"] = this.userName;
+        data["specializationId"] = this.specializationId;
+        data["specializationName"] = this.specializationName;
+        data["registrationNo"] = this.registrationNo;
         data["createdDate"] = this.createdDate ? this.createdDate.toString() : <any>undefined;
         return data;
     }
@@ -5696,6 +6304,9 @@ export interface IUserModel {
     serialNo: string | undefined;
     userType: string | undefined;
     userName: string | undefined;
+    specializationId: number | undefined;
+    specializationName: string | undefined;
+    registrationNo: string | undefined;
     createdDate: DateTime | undefined;
 }
 

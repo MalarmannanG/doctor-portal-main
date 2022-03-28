@@ -49,12 +49,14 @@ import { AddDiagnosisMasterComponent } from "./diagnosis-master/add-diagnosis-ma
 import { AllDiagnosisMasterComponent } from "./diagnosis-master/all-diagnosis-master/all-diagnosis-master.component";
 import { AddTemplateMasterComponent } from "./template-master/add-template-master/add-template-master.component";
 import { AllTemplateMasterComponent } from "./template-master/all-template-master/all-template-master.component";
-import { NewPatientProfileComponent } from "./patient-profile/add-patient-profile/patient-profile.component";
+import { PatientProfileOldComponent } from "./patient-profile/add-patient-profile/patient-profile-old.component";
 import { NgxMaskModule } from "ngx-mask";
 import { PatientService } from "./patients/patient.service";
 import { ViewPatientProfileComponent } from "./patient-profile/view-patient-profile/view-patient-profile.component";
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
-import {BlankComponent} from './patient-profile/blank.component';
+import {PatientProfileComponent} from './patient-profile/patient-profile.component';
+import { AllPatientProfileComponent } from './patients/patient-profiles/all-patient-profile.component';
+import { PatientProfileController } from 'src/shared/service-proxies/service-proxies';
 @NgModule({
   declarations: [
     DashboardComponent,
@@ -71,11 +73,12 @@ import {BlankComponent} from './patient-profile/blank.component';
     AllDiagnosisMasterComponent,
     AddTemplateMasterComponent,
     AllTemplateMasterComponent,
-    NewPatientProfileComponent,
+     PatientProfileOldComponent,
     ViewPatientProfileComponent,
-    BlankComponent,
+    PatientProfileComponent,
     AddProcedureMasterComponent,
-    AllProcedureMasterComponent
+    AllProcedureMasterComponent,
+    AllPatientProfileComponent
   ],
   imports: [
     CommonModule,
@@ -115,6 +118,6 @@ import {BlankComponent} from './patient-profile/blank.component';
     OwlDateTimeModule, 
     OwlNativeDateTimeModule
   ],
-  providers: [AppointmentsService,PatientService],
+  providers: [AppointmentsService,PatientService, PatientProfileController],
 })
 export class DoctorModule {}

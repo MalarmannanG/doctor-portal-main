@@ -13,6 +13,7 @@ export class PatientProfileModel {
     doctorId: number;
     appointmentId: number;
     templateMasterId?: number;
+    procedureMasterId? : number;
     description: string;
     compliants: string;
     examination: string;
@@ -21,6 +22,7 @@ export class PatientProfileModel {
     impression: string;
     advice: string;
     plan: string;
+    referredDoctor : string;
     isfollowUpNeed : boolean;
     followUp: any;
     isDeleted: boolean;

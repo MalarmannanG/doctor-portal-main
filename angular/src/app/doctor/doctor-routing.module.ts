@@ -15,9 +15,11 @@ import { AllDiagnosisMasterComponent } from "./diagnosis-master/all-diagnosis-ma
 import { AddTemplateMasterComponent } from "./template-master/add-template-master/add-template-master.component";
 import { AllTemplateMasterComponent } from "./template-master/all-template-master/all-template-master.component";
 import { AddDiagnosisMasterComponent } from "./diagnosis-master/add-diagnosis-master/add-diagnosis-master.component";
-import { NewPatientProfileComponent } from "./patient-profile/add-patient-profile/patient-profile.component";
+import { PatientProfileOldComponent } from "./patient-profile/add-patient-profile/patient-profile-old.component";
 import { ViewPatientProfileComponent } from "./patient-profile/view-patient-profile/view-patient-profile.component";
-import {BlankComponent} from './patient-profile/blank.component';
+import {PatientProfileComponent} from './patient-profile/patient-profile.component';
+import { AllpatientsComponent } from '../admin/patients/allpatients/allpatients.component';
+import { AllPatientProfileComponent } from './patients/patient-profiles/all-patient-profile.component';
 const routes: Routes = [
   {
     path: "dashboard",
@@ -72,16 +74,20 @@ const routes: Routes = [
     component: DoctorsComponent,
   },
   {
-    path: "patients/:id",
+    path: "patient-profile/:id",
     component: ViewPatientProfileComponent,
   },
   {
+    path: "patients/:id",
+    component: AllPatientProfileComponent,
+  },
+  {
     path: "patient-profile1/:id",
-    component: NewPatientProfileComponent,
+    component:  PatientProfileOldComponent,
   },
    {
     path: "patient-profile/:id",
-    component: BlankComponent,
+    component: PatientProfileComponent,
   },
   {
     path: "prescription-print/:id",
@@ -93,6 +99,10 @@ const routes: Routes = [
   },
   {
     path: "add-procedure",
+    component: AddProcedureMasterComponent,
+  },
+  {
+    path: "edit-procedure/:id",
     component: AddProcedureMasterComponent,
   },
   { path: "**", component: Page404Component },

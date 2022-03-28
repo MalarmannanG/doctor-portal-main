@@ -11,9 +11,9 @@ import { SelectionModel } from "@angular/cdk/collections";
 import { UnsubscribeOnDestroyAdapter } from "src/app/shared/UnsubscribeOnDestroyAdapter";
 import { Router } from "@angular/router";
 import { BaseQueryModel } from "src/app/model/base.query-model";
-import { TestMasterService } from "../service/test-master.service";
+import { ProcedureMasterService } from "../service/procedure-master.service";
 
-import { TestMasterModel } from "../model/test-master.model.service";
+import { ProcedureMasterModel } from "../model/procedure-master.model.service";
 import Swal from "sweetalert2";
 @Component({
   selector: "app-all-procedure-master",
@@ -24,14 +24,19 @@ export class AllProcedureMasterComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit, OnDestroy {
   displayedColumns = [
-    "name",
-    "department",
-    "remarks",
+    "diagnosis",
+    //"date",
+    "procedurename",
+    "anesthesia",
+    "description",
+    "complication",
+    "others",
+    "actualcost",
     "actions"
   ];
   index: number;
   id: number;
-  model: TestMasterModel[] = [];
+  model: ProcedureMasterModel[] = [];
   unsubscribe$ = new Subject();
   isTblLoading = false;
   searchTest: string;
@@ -41,7 +46,7 @@ export class AllProcedureMasterComponent
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    private testMasterService: TestMasterService,
+    private procedureMasterService: ProcedureMasterService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
@@ -71,7 +76,7 @@ export class AllProcedureMasterComponent
     query = query ? `${query}&` : "?";
     query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
     this.isTblLoading = true;
-    this.testMasterService.getAll(query)
+    this.procedureMasterService.getAll(query)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.isTblLoading = false;
@@ -88,10 +93,10 @@ export class AllProcedureMasterComponent
   }
 
   addNew() {
-    this.router.navigateByUrl('/doctor/add-test');
+    this.router.navigateByUrl('/doctor/add-procedure');
   }
   editCall(id) {
-    this.router.navigateByUrl(`/doctor/edit-test/${id}`)
+    this.router.navigateByUrl(`/doctor/edit-procedure/${id}`)
   }
   deleteItem(id) {
     Swal.fire({
@@ -104,7 +109,7 @@ export class AllProcedureMasterComponent
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.value) {
-        this.testMasterService.delete(id)
+        this.procedureMasterService.delete(id)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe((resp) => {
             this.refreshTable();

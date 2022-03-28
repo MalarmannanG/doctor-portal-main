@@ -105,6 +105,7 @@ export class PatientsComponent
     this.router.navigateByUrl('/doctor/patient-profile');
   }
   editCall(id) {
+    debugger;
     this.router.navigateByUrl('/doctor/patients/' + id)
   }
   deleteItem(id) {

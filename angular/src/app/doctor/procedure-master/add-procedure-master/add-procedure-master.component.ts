@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
-import { TestMasterModel } from "../model/test-master.model.service";
-import { TestMasterService } from "../service/test-master.service";
+import { ProcedureMasterModel } from "../model/procedure-master.model.service";
+import { ProcedureMasterService } from "../service/procedure-master.service";
 
 @Component({
   selector: "app-add-procedure-master",
@@ -17,15 +17,16 @@ export class AddProcedureMasterComponent implements OnInit, OnDestroy {
   hide3 = true;
   agree3 = false;
   unsubscribe$ = new Subject();
-  model = new TestMasterModel();
+  today = new Date();
+  model = new ProcedureMasterModel();
   constructor(private router: Router,
-    private testMasterService: TestMasterService,
+    private procedureMasterService: ProcedureMasterService,
     private activatedRoute: ActivatedRoute, private snackBar: MatSnackBar) {
 
   }
 
   update() {
-    this.testMasterService.put(this.model)
+    this.procedureMasterService.put(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         console.log(resp)
@@ -37,23 +38,23 @@ export class AddProcedureMasterComponent implements OnInit, OnDestroy {
             "center"
           );
         else
-          this.router.navigateByUrl('/doctor/all-test');
+          this.router.navigateByUrl('/doctor/all-procedure');
       });
   }
 
   onSubmit() {
-    this.testMasterService.post(this.model)
+    this.procedureMasterService.post(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         if (resp == -1)
           this.showNotification(
             "snackbar-danger",
-            "Test Name already available!!!",
+            "Diagnosis Name already available!!!",
             "bottom",
             "center"
           );
         else
-          this.router.navigateByUrl('/doctor/all-test');
+          this.router.navigateByUrl('/doctor/all-procedure');
       });
   }
   showNotification(colorName, text, placementFrom, placementAlign) {
@@ -65,7 +66,7 @@ export class AddProcedureMasterComponent implements OnInit, OnDestroy {
     });
   }
   get() {
-    this.testMasterService.get(this.id)
+    this.procedureMasterService.get(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;

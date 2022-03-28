@@ -62,12 +62,12 @@ export type radialChartOptions = {
   templateUrl: "./dashboard.component.html",
   styleUrls: ["./dashboard.component.scss"],
 })
-export class DashboardComponent implements OnInit, OnDestroy  {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild("chart") chart: ChartComponent;
   public areaChartOptions: Partial<areaChartOptions>;
   public radialChartOptions: Partial<radialChartOptions>;
   public linechartOptions: Partial<linechartOptions>;
-  patients = [1, 2, 3, 4, 5, 6]  
+  patients = [1, 2, 3, 4, 5, 6]
   appointments: AppoinemtModel[] = [];
   todayPatientsCount: number = 0;
   totalPatientsCount: number = 0;
@@ -91,13 +91,13 @@ export class DashboardComponent implements OnInit, OnDestroy  {
   doctorList: DoctorModel[] = [];
   selected: string;
 
-  constructor(private router: Router, 
+  constructor(private router: Router,
     private patientsService: PatientMasterService,
     private doctorService: DoctorService,
     private appoinementsService: AppoinementsService,
     private accountService: AccountService) {
 
-    }
+  }
 
   getColor(input: number) {
     let index: number = input > 6 ? input % 6 : input;
@@ -123,18 +123,18 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.router.navigateByUrl(`/doctor/patient-profile/${id}`);
   }
 
-  
-  selectedColor(code) {    
-    if (this.selected == code){
+
+  selectedColor(code) {
+    if (this.selected == code) {
       return "background-color: #99e2f4"
     } else {
       return "";
     }
   }
 
-  selection(code) { 
-    this.selected = code;   
-    if(this.selected == 'Appointments') {
+  selection(code) {
+    this.selected = code;
+    if (this.selected == 'Appointments') {
       this.todayPatients = false;
       this.isProcedure = null;
       this.getAppointments()
@@ -146,7 +146,7 @@ export class DashboardComponent implements OnInit, OnDestroy  {
       this.todayPatients = false;
       this.isProcedure = false;
       this.getAppointments()
-    } else {      
+    } else {
       this.todayPatients = false;
       this.isProcedure = null;
       this.getAppointments()
@@ -160,23 +160,22 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.isProcedure = null;
     this.selectedPatient = "";
     this.selectedDoctor = "";
-      this.getAppointments()
+    this.getAppointments()
   }
-  dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement,isProcedure = null) {
+  dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement, isProcedure = null) {
     //console.log(dateRangeStart.value);
     //console.log(dateRangeEnd.value);
     this.fromDate = dateRangeStart.value;
     this.toDate = dateRangeEnd.value;
-    this.isProcedure = isProcedure;    
+    this.isProcedure = isProcedure;
     this.getAppointments();
   }
-  getAppointments(isInit? : boolean) {   
+  getAppointments(isInit?: boolean) {
     let query = "";
 
     if (this.selectedPatient) {
       query = `?patientName=${this.selectedPatient}`
     }
-
     if (this.selectedDoctor) {
       query = query ? query + `&doctorName=${this.selectedDoctor}` : `?doctorName=${this.selectedDoctor}`
     }
@@ -188,80 +187,80 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     if (this.isProcedure != null && this.isProcedure != undefined) {
       query = query ? query + `&isProcedure=${this.isProcedure}` : `?isProcedure=${this.isProcedure}`
     }
-    
+
     if (this.fromDate) {
       this.fromDate = moment(this.fromDate).format('YYYY-MM-DD');
       query = query ? query + `&fromDate=${this.fromDate}` : `?fromDate=${this.fromDate}`
     }
-    
-    if (this.toDate) {      
+
+    if (this.toDate) {
       this.toDate = moment(this.toDate).format('YYYY-MM-DD');
       query = query ? query + `&toDate=${this.toDate}` : `?toDate=${this.toDate}`
     }
 
-    if(this.fromDate && this.toDate) {
+    if (this.fromDate && this.toDate) {
       let today = moment().format('YYYY-MM-DD')
       this.todaysAppointments = today == this.fromDate && today == this.toDate;
     }
-    
+
     this.appoinementsService.getAll(query)
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.appointments = resp.result;
-      if(isInit)
-      {
-      this.procedureCount = resp?.result?.filter(a => a.visitType == 'Procedure')?.length ?? 0;
-      this.appointmentsCount = resp?.result?.filter(a => a.visitType != 'Procedure')?.length ?? 0;
-      }
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.appointments = resp.result;
+        if (isInit) {
+          this.procedureCount = resp?.result?.filter(a => a.visitType == 'Procedure')?.length ?? 0;
+          this.appointmentsCount = resp?.result?.filter(a => a.visitType != 'Procedure')?.length ?? 0;
+        }
+      });
   }
 
-  getDoctors() {   
+  getDoctors() {
     const user = this.accountService.currentUserValue;
     this.doctorService.getAllUsers()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {
-      this.doctorList = resp.result?.filter(a => a.userType == "Doctor");
-      this.doctorOptions = this.doctorList;
-      if(user.role == "Doctor")
-      this.selectedDoctor  = user.username
-    });
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.doctorList = resp.result?.filter(a => a.userType == "Doctor");
+        this.doctorOptions = this.doctorList;
+        if (user.role.toLocaleLowerCase() == "doctor")
+          this.selectedDoctor = user.username;
+        this.getAppointments(true);
+      });
   }
 
   doDoctorFilter(filter) {
     filter = filter;
-    this.doctorOptions = [];  
+    this.doctorOptions = [];
     this.doctorList.forEach(element => {
-      if(element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
+      if (element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
         this.doctorOptions.push(element)
       }
-    });     
-  } 
+    });
+  }
 
-  
+
   doFilter(filter) {
     filter = filter;
-    this.patientOptions = [];  
+    this.patientOptions = [];
     this.patientList.forEach(element => {
-      if(element.patientName.toLocaleLowerCase().includes(filter?.toLocaleLowerCase()) || element.mobileNumber?.includes(filter)) {
+      if (element.patientName.toLocaleLowerCase().includes(filter?.toLocaleLowerCase()) || element.mobileNumber?.includes(filter)) {
         this.patientOptions.push(element)
       }
-    });     
-  }  
+    });
+  }
 
   filterChange(isProcedure = null) {
-    this.isProcedure = isProcedure;    
+    this.isProcedure = isProcedure;
     this.getAppointments();
   }
 
-  getPatinets() {    
+  getPatinets() {
     this.patientsService.getAll()
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((resp) => {    
-      this.patientList = resp.result;
-      this.patientOptions = this.patientList;
-      this.totalPatientsCount = resp?.total ?? 0;
-    });   
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.patientList = resp.result;
+        this.patientOptions = this.patientList;
+        this.totalPatientsCount = resp?.total ?? 0;
+      });
   }
 
 
@@ -269,11 +268,11 @@ export class DashboardComponent implements OnInit, OnDestroy  {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     this.fromDate = moment().startOf('day');
     this.toDate = moment().endOf('day');
-    this.getAppointments(true);
+
     this.getPatinets();
     this.getDoctors();
-    
-    
+
+
     // if(user.role == "Doctor")
     //   this.selectedDoctor = user.username 
   }

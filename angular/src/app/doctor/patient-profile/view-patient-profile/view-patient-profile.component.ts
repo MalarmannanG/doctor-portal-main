@@ -349,7 +349,7 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
   }
 
   get() {
-    this.patientProfileService.getByPatient(this.id)
+    this.patientProfileService.get(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;

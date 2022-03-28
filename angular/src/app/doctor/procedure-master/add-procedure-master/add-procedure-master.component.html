@@ -31,89 +31,95 @@
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Diagnosis</mat-label>
-                    <input maxlength="25" matInput name="name" #name="ngModel" [(ngModel)]="model.name" required>
-                    <mat-error  *ngIf="name.invalid && (name.dirty || name.touched)">
-                     <span *ngIf="name.errors?.['required']"> Name is required</span>
-                     <span *ngIf="name.errors?.['maxlength']"> Max Length is 25 characters</span>
+                    <input maxlength="25" matInput name="diagnosis" #diagnosis="ngModel" [(ngModel)]="model.diagnosis"
+                      required>
+                    <mat-error *ngIf="diagnosis.invalid && (diagnosis.dirty || diagnosis.touched)">
+                      <span *ngIf="diagnosis.errors?.['required']"> Diagnosis is required</span>
+                      <span *ngIf="diagnosis.errors?.['maxlength']"> Max Length is 25 characters</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Date</mat-label>
-                    <input maxlength="25" matInput name="department" #department="ngModel" [(ngModel)]="model.department" required>
-                    <mat-error  *ngIf="department.invalid && (department.dirty || department.touched)">
-                     <span *ngIf="department.errors?.['required']"> Department is required</span>
-                     <span *ngIf="department.errors?.['maxlength']"> Max Length is 25 characters</span>
-                    </mat-error>
+                    <input matInput [owlDateTimeTrigger]="date2"
+                      [owlDateTime]="date2" #date="ngModel" name="date"
+                      [(ngModel)]="model.date" [min]="today">
+                    <mat-icon matSuffix [owlDateTimeTrigger]="date2" class="date-icon">today</mat-icon>
+                    <owl-date-time #date2></owl-date-time>
+                     
                   </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
-                    <mat-label>Procedurename</mat-label>
-                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    <mat-label>Procedure Name</mat-label>
+                    <textarea maxlength="500" matInput name="procedurename" #procedurename="ngModel"
+                      [(ngModel)]="model.procedurename" required>
                     </textarea>
-                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
-                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    <mat-error *ngIf="procedurename.invalid && (procedurename.dirty || procedurename.touched)">
+                      <span *ngIf="procedurename.errors?.['required']"> Procedure Name is required</span>
+                      <span *ngIf="procedurename.errors?.['maxlength']"> Max Length is 500</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label> Anesthesia</mat-label>
-                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
-                    </textarea>
-                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
-                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    <input maxlength="500" matInput name="anesthesia" #anesthesia="ngModel"
+                      [(ngModel)]="model.anesthesia" />
+                    <mat-error *ngIf="anesthesia.invalid && (anesthesia.dirty || anesthesia.touched)">
+                      <span *ngIf="anesthesia.errors?.['maxlength']"> Max Length is 500</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Description</mat-label>
-                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    <textarea maxlength="500" matInput name="description" #description="ngModel"
+                      [(ngModel)]="model.description">
                     </textarea>
-                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
-                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    <mat-error *ngIf="description.invalid && (description.dirty || description.touched)">
+                      <span *ngIf="description.errors?.['maxlength']"> Max Length is 500</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Complication</mat-label>
-                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    <textarea maxlength="500" matInput name="complication" #complication="ngModel"
+                      [(ngModel)]="model.complication">
                     </textarea>
-                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
-                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    <mat-error *ngIf="complication.invalid && (complication.dirty || complication.touched)">
+                      <span *ngIf="complication.errors?.['maxlength']"> Max Length is 500</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Others</mat-label>
-                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
+                    <textarea maxlength="500" matInput name=" others" #others="ngModel" [(ngModel)]="model.others">
                     </textarea>
-                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
-                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    <mat-error *ngIf="others.invalid && (others.dirty || others.touched)">
+                      <span *ngIf="others.errors?.['maxlength']"> Max Length is 500</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>ActualCost</mat-label>
-                    <textarea maxlength="500" matInput name="remarks" #remarks="ngModel" [(ngModel)]="model.remarks">                      
-                    </textarea>
-                    <mat-error *ngIf="remarks.invalid && (remarks.dirty || remarks.touched)">
-                      <span *ngIf="remarks.errors?.['maxlength']"> Max Length is 500</span>
+                    <input type="number" maxlength="500" matInput name="actualcost" #actualcost="ngModel"
+                      [(ngModel)]="model.actualCost" />
+                    <mat-error *ngIf="actualcost.invalid && (actualcost.dirty || actualcost.touched)">
+                      <span *ngIf="actualcost.errors?.['maxlength']"> Max Length is 500</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
               </div>
               <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
-                  <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
-                    color="primary">Submit</button>
-                    <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
+                  <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid "
+                    mat-raised-button color="primary">Submit</button>
+                  <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
                     color="primary">Update</button>
                   <button routerLink="/doctor/all-procedure" type="button" mat-button>Cancel</button>
                 </div>
