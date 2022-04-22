@@ -24,6 +24,7 @@ import { Subject, takeUntil } from "rxjs";
 import * as moment from "moment";
 import { PatientModel } from "src/app/admin/patients/model/patient.model";
 import { AccountService } from "src/app/authentication/service/auth.service";
+
 export type areaChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;

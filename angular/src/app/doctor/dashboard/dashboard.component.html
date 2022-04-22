@@ -32,6 +32,7 @@
           </mat-error>
         </mat-form-field>
         <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete" (optionSelected)="filterChange()">
+          <mat-option disabled style="color: crimson;" *ngIf="doctorOptions.length == 0">No data found </mat-option>
           <mat-option *ngFor="let eachOption of doctorOptions" [value]="eachOption.name">
             {{eachOption.name}}
           </mat-option>
@@ -50,6 +51,7 @@
           </mat-error>
         </mat-form-field>
         <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="filterChange()">
+          <mat-option disabled style="color: crimson;" *ngIf="patientOptions.length == 0">No data found </mat-option>
           <mat-option *ngFor="let eachOption of patientOptions" [value]="eachOption.patientName">
             {{eachOption.patientName}}
           </mat-option>

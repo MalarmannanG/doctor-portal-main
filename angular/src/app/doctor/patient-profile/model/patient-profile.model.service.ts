@@ -14,7 +14,6 @@ export class PatientProfileModel {
     appointmentId: number;
     templateMasterId?: number;
     procedureMasterId? : number;
-    description: string;
     compliants: string;
     examination: string;
     pastHistory : string;
@@ -22,12 +21,12 @@ export class PatientProfileModel {
     impression: string;
     advice: string;
     plan: string;
+    fees: number;
     referredDoctor : string;
     isfollowUpNeed : boolean;
     followUp: any;
+    followUpDate: any;
     isDeleted: boolean;
-    sos: boolean;
-    stat: boolean;
     createdBy: number;
     modifiedBy: number;
     createdDate: any;
@@ -47,6 +46,7 @@ export class PrescriptionModel {
     }
 
     id: number;
+    patientProfileId : number
     templateMasterId: number;
     medicineName: string;
     genericName: string;
@@ -58,7 +58,7 @@ export class PrescriptionModel {
     morning: boolean;
     noon: boolean;
     night: boolean;
-    noOfDays: string;
+    noOfDays: number;
     isDeleted: boolean;
     sos: boolean;
     stat: boolean;
@@ -76,7 +76,7 @@ export class PatientDiagnosisModel {
     id: number;
     patientProfileId: number;
     diagnosisMasterId: number;
-    diagnosisMasterName: string;
+    name: string;
     description: string;
     isDeleted: boolean;
     createdBy: number;

@@ -33,8 +33,8 @@ export class AllstaffComponent
     "email",
     "userType",
     "phoneNo",
-    "gender",
-    "address",
+    "specializationName",
+    "registrationNo",
     "actions",
   ];
   unsubscribe$ = new Subject();

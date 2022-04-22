@@ -55,12 +55,12 @@
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Name</mat-label>
-                    <input maxlength="30" minlength="2" matInput name="name" #name="ngModel" [(ngModel)]="model.name"
+                    <input maxlength="100" minlength="2" matInput name="name" #name="ngModel" [(ngModel)]="model.name"
                       required>
                     <mat-icon matSuffix>face</mat-icon>
                     <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
                       <span *ngIf="name.errors?.['required']"> Name is required</span>
-                      <span *ngIf="name.errors?.['maxlength']"> Name must be maximum of 30 characters</span>
+                      <span *ngIf="name.errors?.['maxlength']"> Name must be maximum of 100 characters</span>
                       <span *ngIf="name.errors?.['minlength']"> Name must be minimum of 2 characters</span>
                     </mat-error>
                   </mat-form-field>
@@ -86,26 +86,25 @@
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Specialization</mat-label>
                     <mat-select [compareWith]="objectComparisonFunction" name="specialization"
-                    #specialization="ngModel" [(ngModel)]="specializationOption">
+                    #specialization="ngModel" [(ngModel)]="specializationOption" required>
                     <mat-option *ngFor="let each of specializationOptions" [value]="each">
                       {{each.name}}
                     </mat-option>
                   </mat-select>
-                    <!-- <mat-error *ngIf="compliants.invalid && (compliants.dirty || compliants.touched)">
-                      <span *ngIf="compliants.errors?.['maxlength']"> Max Length is 1000</span>
-                    </mat-error> -->
+                    <mat-error *ngIf="specialization.invalid && (specialization.dirty || specialization.touched)">
+                      <span *ngIf="specialization.errors?.['required']"> Specialization is Required</span>
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div *ngIf="model.userType == 'Doctor'" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Registeration No</mat-label>
                     <input  matInput name="registrationNo"
-                      #registrationNo="ngModel" [(ngModel)]="model.registrationNo">
+                      #registrationNo="ngModel" [(ngModel)]="model.registrationNo" required>
                     <i class="fa-input-icon fas fa-mobile-alt" matSuffix></i>
-                    <!-- <mat-error *ngIf="mobile.invalid && (mobile.dirty || mobile.touched)">
-                      <span *ngIf="mobile.errors?.['required']"> Mobile No is Required</span>
-                      <span *ngIf="mobile.errors?.['pattern']"> Invalid Mobile No</span>
-                    </mat-error> -->
+                    <mat-error *ngIf="registrationNo.invalid && (registrationNo.dirty || registrationNo.touched)">
+                      <span *ngIf="registrationNo.errors?.['required']"> RegistrationNo No is Required</span>
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">

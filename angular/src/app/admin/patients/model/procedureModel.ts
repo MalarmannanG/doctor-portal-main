@@ -1,8 +1,8 @@
 export class PatientProcedureModel {
     id: number;
     diagnosis: string;
-    date: string;
-    procedurename: string;
+    date: any;
+    name: string;
     referedBy: number;
     referedByName: string;
     anesthesia: string;

@@ -30,12 +30,13 @@
                     <ul class="header-buttons-left ms-0">
                       <li class="dropdown">
                         <h2>
-                          <strong>Staff</strong></h2>
+                          <strong>Staff</strong>
+                        </h2>
                       </li>
                       <li class="dropdown m-l-20">
                         <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                        <input placeholder="Search" type="text" [(ngModel)]="searchUser" (keyup)="getAll()" #filter class="browser-default search-field"
-                          aria-label="Search box">
+                        <input placeholder="Search" type="text" [(ngModel)]="searchUser" (keyup)="getAll()" #filter
+                          class="browser-default search-field" aria-label="Search box">
                       </li>
                       <li>
                         <div class="icon-button-demo m-l-10" [hidden]=!selection.hasValue()>
@@ -75,10 +76,7 @@
                   <mat-header-cell *matHeaderCellDef mat-sort-header>User Type</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.userType}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="gender">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Gender</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.gender}}</mat-cell>
-                </ng-container>
+               
                 <!-- <ng-container matColumnDef="username">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>User Name</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.userName}}</mat-cell>
@@ -88,12 +86,17 @@
                   <mat-cell *matCellDef="let row"> {{row.phoneNo}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="email">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>User Name</mat-header-cell>
                   <mat-cell *matCellDef="let row"> {{row.email}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="address">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Address</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> {{row.address}}</mat-cell>
+             
+                <ng-container matColumnDef="specializationName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Specialization</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.specializationName}}</mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="registrationNo">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Registration No</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> {{row.registrationNo}}</mat-cell>
                 </ng-container>
                 <!-- actions -->
                 <ng-container matColumnDef="actions">

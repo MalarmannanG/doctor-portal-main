@@ -18,6 +18,7 @@ export class AppoinemtModel {
     appointmentDateTime: any;
     appointmentISOString : string;
     description: number;
+    referredBy : string;
     patient: PatientModel;
     patientFiles: PatientFilesModel[];
     vitalsReportModel: VitalsReportModel;

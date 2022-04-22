@@ -1,3 +1,5 @@
+import { AllDrugMasterComponent } from './drug-master/all-drug-master/all-drug-master.component';
+import { AddDrugMasterComponent } from './drug-master/add-drug-master/add-drug-master.component';
 import { AddProcedureMasterComponent } from './procedure-master/add-procedure-master/add-procedure-master.component';
 import { AllProcedureMasterComponent } from './procedure-master/all-procedure-master/all-procedure-master.component';
 import { Page404Component } from "./../authentication/page404/page404.component";
@@ -74,7 +76,7 @@ const routes: Routes = [
     component: DoctorsComponent,
   },
   {
-    path: "patient-profile/:id",
+    path: "view-patient-profile/:id",
     component: ViewPatientProfileComponent,
   },
   {
@@ -104,6 +106,18 @@ const routes: Routes = [
   {
     path: "edit-procedure/:id",
     component: AddProcedureMasterComponent,
+  },
+  {
+    path: "all-drug",
+    component: AllDrugMasterComponent,
+  },
+  {
+    path: "add-drug",
+    component: AddDrugMasterComponent,
+  },
+  {
+    path: "edit-drug/:id",
+    component: AddDrugMasterComponent,
   },
   { path: "**", component: Page404Component },
 ];

@@ -33,17 +33,18 @@
                     <mat-label>Consulting Doctor</mat-label>
                     <input matInput [matAutocomplete]="auto2" name="consultingDoctor" #consultingDoctor="ngModel"
                       [(ngModel)]="model.consultingDoctorName" (keyup)="doctorRequired = false"
-                      (ngModelChange)="doDoctorFilter(model.consultingDoctorName)" required>
+                      (ngModelChange)="doDoctorFilter(model.consultingDoctorName)" required (blur)="doctorSelected()">
                     <mat-icon matSuffix>search</mat-icon>
                     <mat-error *ngIf="consultingDoctor.invalid && (consultingDoctor.dirty || consultingDoctor.touched)">
                       <span *ngIf="consultingDoctor.errors?.['required']"> Consulting Doctor is required</span>
                     </mat-error>
-                    <mat-hint style="color: crimson;" *ngIf="doctorRequired">
+                    <mat-hint style="color: crimson;" *ngIf="doctorOptions.length == 0">
                       Consulting Doctor is required
                     </mat-hint>
                   </mat-form-field>
                   <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete"
                     (optionSelected)="onDoctorSelectionChanged($event)">
+                    <mat-option disabled style="color: crimson;" *ngIf="doctorOptions.length == 0">No data found </mat-option>
                     <mat-option *ngFor="let eachOption of doctorOptions" [value]="eachOption.name">
                       {{eachOption.name}}
                     </mat-option>
@@ -54,17 +55,18 @@
                     <mat-label>Patient</mat-label>
                     <input matInput [matAutocomplete]="auto" name="patientId" #patientId="ngModel"
                       [disabled]="action == 'edit'" [(ngModel)]="model.patientName" (keyup)="patientRequired = false"
-                      (ngModelChange)="doFilter(model.patientName)" required>
+                      (ngModelChange)="doFilter(model.patientName)" required (blur)="patientSelected()">
                     <mat-icon matSuffix>search</mat-icon>
                     <mat-error *ngIf="patientId.invalid && (patientId.dirty || patientId.touched)">
                       <span *ngIf="patientId.errors?.['required']"> Patient is required</span>
                     </mat-error>
-                    <mat-hint style="color: crimson;" *ngIf="patientRequired">
+                    <mat-hint style="color: crimson;" *ngIf="patientOptions.length == 0">
                       Patient is required
                     </mat-hint>
                   </mat-form-field>
                   <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                     (optionSelected)="onSelectionChanged($event)">
+                    <mat-option disabled style="color: crimson;" *ngIf="patientOptions.length == 0">No data found </mat-option>
                     <mat-option *ngFor="let eachOption of patientOptions" [value]="eachOption.patientName">
                       {{eachOption.patientName}}
                     </mat-option>
@@ -141,7 +143,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Referred By</mat-label>
+                    <input matInput  name="referredBy" #referredBy="ngModel" [(ngModel)]="model.referredBy">
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Complaint</mat-label>
                     <textarea maxlength="500" matInput name="compliant" #compliant="ngModel"

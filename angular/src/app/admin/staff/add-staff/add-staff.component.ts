@@ -40,7 +40,8 @@ export class AddStaffComponent implements OnInit, OnDestroy {
     return option.id === item.id;
   }
   onSubmit() {
-    this.model.specializationId = this.specializationOption.id;
+    this.model.specializationId = this.specializationOption?.id;
+    this.model.specializationId = this.model.specializationId == -1 ? null : this.model.specializationId;
     this.userMasterService.post(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
@@ -55,7 +56,8 @@ export class AddStaffComponent implements OnInit, OnDestroy {
   }
 
   update() {
-    this.model.specializationId = this.specializationOption.id;
+    this.model.specializationId = this.specializationOption?.id;
+    this.model.specializationId = this.model.specializationId == -1 ? null : this.model.specializationId;
     this.userMasterService.put(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {

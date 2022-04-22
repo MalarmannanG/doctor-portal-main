@@ -144,7 +144,7 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
     this.model.procedureModel.description = this.selectedProcedureObj?.description ?? "";
     this.model.procedureModel.diagnosis = this.selectedProcedureObj?.diagnosis ?? "";
     this.model.procedureModel.others = this.selectedProcedureObj?.others ?? "";
-    this.model.procedureModel.procedurename = this.selectedProcedureObj?.procedurename ?? "";
+    this.model.procedureModel.name = this.selectedProcedureObj?.procedurename ?? "";
 
     // this.model.examination = this.selectedTemplateObj?.examination ?? "";
     // this.model.impression = this.selectedTemplateObj?.impression ?? "";

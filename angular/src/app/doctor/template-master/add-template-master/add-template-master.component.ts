@@ -54,7 +54,7 @@ export class AddTemplateMasterComponent implements OnInit, OnDestroy {
       this.editablePrescription.noon = this.activePrescription.noon;
       this.editablePrescription.night = this.activePrescription.night;
       this.editablePrescription.beforeFood = this.activePrescription.beforeFood;
-      this.editablePrescription.description = this.activePrescription.description;
+      //this.editablePrescription.description = this.activePrescription.description;
       this.editablePrescription.noOfDays = this.activePrescription.noOfDays;
     }
     this.activePrescription = new TemplatePrescriptionModel();

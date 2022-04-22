@@ -22,9 +22,10 @@ export class TemplateMasterModel {
 
 export class TemplatePrescriptionModel {
     id: number;
+    patientProfileId : number
     templateMasterId: number;
-    genericName: string;
     medicineName: string;
+    genericName: string;
     categoryName : string;
     strength: string;
     units: string;
@@ -33,8 +34,7 @@ export class TemplatePrescriptionModel {
     morning: boolean;
     noon: boolean;
     night: boolean;
-    description: string;
-    noOfDays: string;
+    noOfDays: number;
     isDeleted: boolean;
     sos: boolean;
     stat: boolean;

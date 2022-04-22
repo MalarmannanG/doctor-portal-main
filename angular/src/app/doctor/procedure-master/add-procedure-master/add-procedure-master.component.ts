@@ -33,7 +33,7 @@ export class AddProcedureMasterComponent implements OnInit, OnDestroy {
         if (resp.id == -1)
           this.showNotification(
             "snackbar-danger",
-            "Test Name already available!!!",
+            "Procedure Name already available!!!",
             "bottom",
             "center"
           );
@@ -49,7 +49,7 @@ export class AddProcedureMasterComponent implements OnInit, OnDestroy {
         if (resp == -1)
           this.showNotification(
             "snackbar-danger",
-            "Diagnosis Name already available!!!",
+            "Procedure Name already available!!!",
             "bottom",
             "center"
           );

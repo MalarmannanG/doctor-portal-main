@@ -85,6 +85,8 @@ export class AddDoctorComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
+        if(this.model.pinCode < 1)
+          this.model.pinCode = null;
       });
   }
 

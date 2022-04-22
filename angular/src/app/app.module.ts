@@ -36,6 +36,7 @@ import { GlobalErrorHandler } from "./shared/globalErrorHandler";
 import { MyLoaderComponent } from "./shared/Loading/custome.loader.component";
 import { LoadingService } from "./shared/Loading/loading-services";
 import { LoaderInterceptor } from "./shared/Loading/loading-interceptor";
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from "@angular/material/form-field";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -88,6 +89,7 @@ export function createTranslateLoader(http: HttpClient): any {
         { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
         fakeBackendProvider,
         LoadingService,
+        { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' }}
     ],
     bootstrap: [AppComponent]
 })

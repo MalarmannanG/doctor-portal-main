@@ -99,10 +99,10 @@ export class AllPatientProfileComponent
   }
 
   addNew() {
-    this.router.navigateByUrl('/doctor/patient-profile');
+    this.router.navigateByUrl('/doctor/view-patient-profile');
   }
   editCall(id) {
-    this.router.navigateByUrl('/doctor/patient-profile/' + id)
+    this.router.navigateByUrl('/doctor/view-patient-profile/' + id)
   }
   deleteItem(id) {
     Swal.fire({

@@ -91,7 +91,7 @@ export class MainComponent implements OnInit, OnDestroy {
   patientList: PatientModel[] = [];
   doctorList: DoctorModel[] = [];
   selected: string;
-
+  selectedClinic : string;
   constructor(private router: Router, 
     private patientsService: PatientMasterService,
     private doctorService: DoctorService,
@@ -117,7 +117,8 @@ export class MainComponent implements OnInit, OnDestroy {
   }
 
   gotoProfile(id) {
-    this.router.navigateByUrl(`/admin/dashboard/vitals/${id}`);
+    //this.router.navigateByUrl(`/admin/dashboard/vitals/${id}`);
+    this.router.navigateByUrl(`doctor/patient-profile/${id}`);
   }
   
   selectedColor(code) {    

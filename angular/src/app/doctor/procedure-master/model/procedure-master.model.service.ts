@@ -3,7 +3,7 @@ export class ProcedureMasterModel {
   id : number;
   diagnosis: string;
   date: string;
-  procedurename: string;
+  name: string;
   anesthesia: string;
   description: string;
   complication: string;

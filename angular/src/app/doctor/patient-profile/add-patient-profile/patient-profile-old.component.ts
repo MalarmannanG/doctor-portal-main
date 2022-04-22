@@ -161,7 +161,7 @@ export class PatientProfileOldComponent implements OnInit, OnDestroy {
     if (this.selectedDiagName) {
       let selectedTemplateObj = this.diagosisList.filter(a => a.name == this.selectedDiagName)[0];
       var _patientDiag = new PatientDiagnosisModel();
-      _patientDiag.diagnosisMasterName = selectedTemplateObj.name;
+      _patientDiag.name = selectedTemplateObj.name;
       _patientDiag.description = selectedTemplateObj.description;
       _patientDiag.diagnosisMasterId = selectedTemplateObj.id;
       if (this.model.patientDiagnosisModel == null) {
@@ -191,7 +191,7 @@ export class PatientProfileOldComponent implements OnInit, OnDestroy {
     this.model.plan = this.selectedTemplateObj?.plan ?? "";
     this.model.advice = this.selectedTemplateObj?.advice ?? "";
     this.model.followUp = this.selectedTemplateObj?.followUp ?? "";
-    this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
+    //this.model.prescriptionModel = this.selectedTemplateObj?.templatePrescriptionModel;
   }
 
   clearTemplate() {
@@ -303,7 +303,8 @@ export class PatientProfileOldComponent implements OnInit, OnDestroy {
         this.model.appointment.isActive = false;
       else
         this.model.appointment.isActive = true;
-      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel.filter(a => a.id || a.diagnosisMasterName)
+        
+      this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel.filter(a => a.id || a.name)
       this.patientProfileService.put(this.model)
         .pipe(takeUntil(this.unsubscribe$))
         .subscribe((resp) => {

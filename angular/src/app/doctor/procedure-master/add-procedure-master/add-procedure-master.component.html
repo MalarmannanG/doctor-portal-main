@@ -54,7 +54,7 @@
                   <mat-form-field class="example-full-width mb-3" appearance="outline">
                     <mat-label>Procedure Name</mat-label>
                     <textarea maxlength="500" matInput name="procedurename" #procedurename="ngModel"
-                      [(ngModel)]="model.procedurename" required>
+                      [(ngModel)]="model.name" required>
                     </textarea>
                     <mat-error *ngIf="procedurename.invalid && (procedurename.dirty || procedurename.touched)">
                       <span *ngIf="procedurename.errors?.['required']"> Procedure Name is required</span>

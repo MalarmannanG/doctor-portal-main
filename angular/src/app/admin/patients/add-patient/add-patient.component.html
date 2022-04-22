@@ -28,7 +28,7 @@
           <div class="body">
             <form class="m-4" #f="ngForm">
               <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3" *ngIf="id">
+                <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3" *ngIf="id">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>HR No </mat-label>
                     <input matInput name="hrno" #hrno="ngModel" [(ngModel)]="model.hrno" required [readonly]="true">
@@ -36,7 +36,7 @@
                       <span *ngIf="hrno.errors?.['required']"> HR No is required</span>
                     </mat-error>
                   </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>UHID </mat-label>
@@ -47,8 +47,6 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-              </div>
-              <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Salutation</mat-label>
@@ -72,6 +70,8 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+              </div>
+              <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Name</mat-label>
@@ -85,12 +85,24 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Date Of Birth</mat-label>
+                    <input matInput [matDatepicker]="picker" (dateChange)="dboChange()" name="dob" [max]="today" #dob="ngModel" [(ngModel)]="model.dob" required>
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="dob.invalid && (dob.dirty || dob.touched)">
+                      <span *ngIf="dob.errors?.['required']"> Date Of Birth is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
               </div>
               <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Age</mat-label>
-                    <input max="160" min="0" matInput type="number" name="age" #age="ngModel" [(ngModel)]="model.age" required>
+                    <input max="160" min="0" matInput type="number" name="age" #age="ngModel" [(ngModel)]="model.age"
+                      required>
                     <i class="fa-input-icon fas fa-user-clock" matSuffix></i>
                     <mat-error *ngIf="age.invalid && (age.dirty || age.touched)">
                       <span *ngIf="age.errors?.['required']"> Age is required</span>
@@ -163,6 +175,7 @@
                   <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
                     color="primary">Update</button>
                   <button routerLink="/admin/patients/all-patients" type="button" mat-button>Cancel</button>
+                
                 </div>
               </div>
             </form>

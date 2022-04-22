@@ -37,7 +37,18 @@
           </mat-option>
         </mat-autocomplete>
       </div>
-      <div class="col-12 col-md-5">
+      <div class="col-12 col-md-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Patient</mat-label>
+          <span matPrefix>
+            <i class="material-icons">search</i>
+          </span>
+          <input matInput [matAutocomplete]="auto" name="clinicId" #clinicId="ngModel" [(ngModel)]="selectedClinic">
+          
+        </mat-form-field>
+   
+      </div>
+      <div class="col-12 col-md-3">
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Patient</mat-label>
           <span matPrefix>
@@ -68,7 +79,7 @@
         </mat-form-field>
       </div>
       <div class="col-md-1">
-        <button class="btn btn-primary btn-sm btn-rounded" ngbTooltip="Clear" (click)="clear()">
+        <button class="btn btn-primary btn-sm btn-rounded mb-2" ngbTooltip="Clear" (click)="clear()">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -190,10 +201,11 @@
             <img [src]="each.patient?.gender == 'Male' ? maleUrl : femaleUrl" class="user-img" alt="">
             <h6 class="name-group col-green">
               <i class="material-icons">account_circle</i>
-              <span class="icon-name">{{each.patient?.patientName}}</span>
-              <mat-icon class="md-18 " matSuffix *ngIf="each.vitalsReportModel">check</mat-icon>
+              <span class="icon-name">{{each.patient?.patientName}} ({{each.patient?.age}})</span>
+              <!-- <mat-icon class="md-18 " matSuffix *ngIf="each.vitalsReportModel">check</mat-icon> -->
+              <mat-icon matSuffix *ngIf="each.vitalsReportModel">assignment_turned_in</mat-icon>
             </h6>
-            <h6 class="name-group2">
+            <h6 class="name-group">
               <i class="material-icons">phone</i>
               <span class="icon-name">{{each.patient?.mobileNumber}}</span>
             </h6>
