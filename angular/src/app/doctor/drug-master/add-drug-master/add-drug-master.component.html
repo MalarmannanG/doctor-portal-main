@@ -1,0 +1,92 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title"> {{id ? 'Update' : 'Add'}} Drug</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/doctor/dashboard">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a routerLink="/doctor/all-drug">Drug</a>
+            </li>
+            <li class="breadcrumb-item active"> {{id ? 'Update' : 'Add'}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2> {{id ? 'Update' : 'Add'}} Drug</h2>
+          </div>
+          <div class="body">
+            <form class="m-4" #f="ngForm">
+              <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Category Name</mat-label>
+                    <input maxlength="100" matInput name="categoryName" #categoryName="ngModel" [(ngModel)]="model.categoryName" required>
+                    <mat-error *ngIf="categoryName.invalid && (categoryName.dirty || categoryName.touched)">
+                      <span *ngIf="categoryName.errors?.['required']"> Category Name is required</span>
+                      <span *ngIf="categoryName.errors?.['maxlength']"> Max Length is 100 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Generic Name</mat-label>
+                    <input maxlength="200" matInput name="genericName" #genericName="ngModel" [(ngModel)]="model.genericName" required>
+                    <mat-error *ngIf="genericName.invalid && (genericName.dirty || genericName.touched)">
+                      <span *ngIf="genericName.errors?.['required']"> Generic Name is required</span>
+                      <span *ngIf="genericName.errors?.['maxlength']"> Max Length is 200 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Medicine Name</mat-label>
+                    <input maxlength="200" matInput name="medicineName" #medicineName="ngModel" [(ngModel)]="model.medicineName" required>
+                    <mat-error *ngIf="medicineName.invalid && (medicineName.dirty || medicineName.touched)">
+                      <span *ngIf="medicineName.errors?.['required']"> Medicine Name is required</span>
+                      <span *ngIf="medicineName.errors?.['maxlength']"> Max Length is 200 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Strength</mat-label>
+                    <input maxlength="25" matInput name="strength" #strength="ngModel"
+                      [(ngModel)]="model.strength">
+                    
+                  </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Remarks</mat-label>
+                    <input maxlength="200" matInput name="remarks" #remarks="ngModel"
+                      [(ngModel)]="model.remarks">
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                  <button *ngIf="!id" (click)="onSubmit()" class="btn-space" [disabled]="!f.form.valid "
+                    mat-raised-button color="primary">Submit</button>
+                  <button *ngIf="id" (click)="update()" class="btn-space" [disabled]="!f.form.valid " mat-raised-button
+                    color="primary">Update</button>
+                  <button routerLink="/doctor/all-drug" type="button" mat-button>Cancel</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

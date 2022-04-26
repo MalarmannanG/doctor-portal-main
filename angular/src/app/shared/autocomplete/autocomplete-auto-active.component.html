@@ -1,0 +1,26 @@
+
+    <mat-form-field class="example-full-width" appearance="outline">
+      <mat-label>{{label}}</mat-label>
+      <mat-chip-list #chipList aria-label="Template selection">
+        <mat-chip *ngFor="let template of selectedTemplateObjsTemp; let index = index"
+          selectable="true" removable="true">
+          {{template.name}}
+          <button matChipRemove (click)="removeChip(index, true)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <input #input type="text" #trigger="matAutocompleteTrigger" [placeholder]="label"   [formControl]="myControl" 
+        [matAutocomplete]="auto"  [matChipInputFor]="chipList" (mousedown)="mouseDown(trigger)"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+      </mat-chip-list>
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onOptionSelected($event); input.value = ''">
+        <mat-option *ngIf="length == 0" disabled style="color: crimson;" >No data found </mat-option>
+        <mat-option *ngFor="let res of result | async" [value]="res.name">
+          {{res.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+ 
+
+    
+ 
