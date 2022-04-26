@@ -56,7 +56,7 @@ import { ViewPatientProfileComponent } from "./patient-profile/view-patient-prof
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from "ng-pick-datetime";
 import {PatientProfileComponent} from './patient-profile/patient-profile.component';
 import { AllPatientProfileComponent } from './patients/patient-profiles/all-patient-profile.component';
-import { PatientProfileController } from 'src/shared/service-proxies/service-proxies';
+import { PatientProfileController } from '../shared/service-proxies/service-proxies';
 import { AutocompleteAutoActiveComponent } from "../shared/autocomplete/autocomplete-auto-active.component";
 import { AllDrugMasterComponent } from './drug-master/all-drug-master/all-drug-master.component';
 import { AddDrugMasterComponent } from './drug-master/add-drug-master/add-drug-master.component';

@@ -38,7 +38,7 @@
           </mat-option>
         </mat-autocomplete>
       </div>
-      <div class="col-12 col-md-5">
+      <div class="col-12 col-md-3">
         <mat-form-field class="example-full-width" appearance="outline">
           <mat-label>Patient</mat-label>
           <span matPrefix>
@@ -54,6 +54,23 @@
           <mat-option disabled style="color: crimson;" *ngIf="patientOptions.length == 0">No data found </mat-option>
           <mat-option *ngFor="let eachOption of patientOptions" [value]="eachOption.patientName">
             {{eachOption.patientName}}
+          </mat-option>
+        </mat-autocomplete>
+      </div>
+      <div class="col-12 col-md-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Cilinic</mat-label>
+          <span matPrefix>
+            <i class="material-icons">search</i>
+          </span>
+          <input matInput [matAutocomplete]="autoFacility" name="cilinicId" #cilinicId="ngModel" [(ngModel)]="selectedClinic"
+            (ngModelChange)="doFacilityFilter(selectedClinic)">
+         
+        </mat-form-field>
+        <mat-autocomplete autoActiveFirstOption #autoFacility="matAutocomplete" (optionSelected)="filterChange()">
+          <mat-option disabled style="color: crimson;" *ngIf="facilityOptions.length == 0">No data found </mat-option>
+          <mat-option *ngFor="let eachOption of facilityOptions" [value]="eachOption.name">
+            {{eachOption.name}}
           </mat-option>
         </mat-autocomplete>
       </div>

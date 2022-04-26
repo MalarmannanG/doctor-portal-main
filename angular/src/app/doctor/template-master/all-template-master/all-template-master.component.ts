@@ -12,8 +12,8 @@ import { UnsubscribeOnDestroyAdapter } from "src/app/shared/UnsubscribeOnDestroy
 import { Router } from "@angular/router";
 import { BaseQueryModel } from "src/app/model/base.query-model";
 import { TemplateMasterService } from "../service/template-master.service";
-
-import { TemplateMasterModel } from "../model/template-master.model.service";
+import { TemplateMasterController, TemplateMasterModel } from "../../../shared/service-proxies/service-proxies";
+//import { TemplateMasterModel } from "../model/template-master.model.service";
 import Swal from "sweetalert2";
 @Component({
   selector: "app-all-template-master",
@@ -29,7 +29,7 @@ export class AllTemplateMasterComponent
     "examination",
     "impression",
     "advice",
-    "plan", 
+    "plan",
     "actions"
   ];
   index: number;
@@ -46,7 +46,8 @@ export class AllTemplateMasterComponent
     public dialog: MatDialog,
     private templateMasterService: TemplateMasterService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private _service: TemplateMasterController
   ) {
     super();
   }
@@ -66,21 +67,27 @@ export class AllTemplateMasterComponent
   }
 
   getAll() {
-    let query = "";
-    if (this.searchTemplate) {
-      query = `?name=${this.searchTemplate}`
-    }
+    debugger;
+    this.sort;
+    this._service.getAll(this.searchTemplate, "", this.queryModel.skip, this.queryModel.take).subscribe(res => {
+      this.model = res.items;
+      this.totalCount = res.totalCount;
+    })
+    // let query = "";
+    // if (this.searchTemplate) {
+    //   query = `?name=${this.searchTemplate}`
+    // }
 
-    query = query ? `${query}&` : "?";
-    query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
-    this.isTblLoading = true;
-    this.templateMasterService.getAll(query)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((resp) => {
-        this.isTblLoading = false;
-        this.model = resp.result;
-        this.totalCount = resp.total;
-      });
+    // query = query ? `${query}&` : "?";
+    // query = `${query}skip=${this.queryModel.skip}&take=${this.queryModel.take}`;
+    // this.isTblLoading = true;
+    // this.templateMasterService.getAll(query)
+    //   .pipe(takeUntil(this.unsubscribe$))
+    //   .subscribe((resp) => {
+    //     this.isTblLoading = false;
+    //     this.model = resp.result;
+    //     this.totalCount = resp.total;
+    //   });
   }
   paginate(event) {
     let pageIndex = event.pageIndex;

@@ -1046,7 +1046,7 @@
                 <strong>Complaints</strong>
               </div>
               <div class="col-md-9 col-sm-9 col-xs-9">
-                : {{model.compliants}}
+                :  <span [innerHtml]="getHtmlString(model.compliants)"></span>   
               </div>
             </div>
             <div *ngIf="model.patientTestModel?.length > 0" class="row clearfix">
@@ -1072,7 +1072,7 @@
                 <strong>Advice</strong>
               </div>
               <div class="col-md-9 col-sm-9 col-xs-9">
-                : {{model.advice}}
+                : <span [innerHtml]="getHtmlString(model.advice)"></span>
               </div>
             </div>
           </div>

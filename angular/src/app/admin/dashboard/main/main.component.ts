@@ -19,12 +19,12 @@ import { AppoinemtModel } from "../../appointment/model/appointmentt.model";
 import { AppoinementsService } from "../../appointment/service/Appointmentt.service";
 import { Subject, takeUntil } from "rxjs";
 import { PatientMasterService } from "../../patients/service/patient.service";
-import { DoctorsService } from "../../doctors/alldoctors/doctors.service";
 import { DoctorService } from "../../doctors/service/doctor.service";
 import { DoctorModel } from "../../doctors/model/doctor.model.service";
 import { PatientModel } from "../../patients/model/patient.model";
 import * as moment from "moment";
-import { I } from "@angular/cdk/keycodes";
+
+
 export type areaChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -90,6 +90,8 @@ export class MainComponent implements OnInit, OnDestroy {
   doctorOptions: DoctorModel[] = [];
   patientList: PatientModel[] = [];
   doctorList: DoctorModel[] = [];
+  facilityOptions: DoctorModel[] = [];
+  facilityList: DoctorModel[] = [];
   selected: string;
   selectedClinic : string;
   constructor(private router: Router, 
@@ -157,6 +159,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.isProcedure = null;
     this.selectedPatient = "";
     this.selectedDoctor = "";
+    this.selectedClinic = "";
       this.getAppointments()
   }
 
@@ -170,7 +173,9 @@ export class MainComponent implements OnInit, OnDestroy {
     if (this.selectedDoctor) {
       query = query ? query + `&doctorName=${this.selectedDoctor}` : `?doctorName=${this.selectedDoctor}`
     }
-
+    if (this.selectedClinic) {
+      query = query ? query + `&clinicName=${this.selectedClinic}` : `?clinicName=${this.selectedClinic}`
+    }
     if (this.todayPatients) {
       query = query ? query + `&todayPatients=${this.todayPatients}` : `?todayPatients=${this.todayPatients}`
     }
@@ -258,8 +263,25 @@ export class MainComponent implements OnInit, OnDestroy {
       this.totalPatientsCount = resp?.total ?? 0;
     });   
   }
-
-
+  getFacilities() {    
+    this.doctorService.getAll()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((resp) => {    
+    
+      this.facilityList = resp.result;
+      this.facilityOptions = this.facilityList;
+       
+    });   
+  }
+  doFacilityFilter(filter) {
+    filter = filter;
+    this.facilityOptions = [];  
+    this.facilityList.forEach(element => {
+      if(element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase()) || element.name?.includes(filter)) {
+        this.facilityOptions.push(element)
+      }
+    });     
+  }  
   ngOnInit() {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     this.fromDate = moment().startOf('day');
@@ -267,6 +289,7 @@ export class MainComponent implements OnInit, OnDestroy {
     this.getAppointments(true);
     this.getPatinets();
     this.getDoctors();
+    this.getFacilities();
   }
 
   ngOnDestroy(): void {

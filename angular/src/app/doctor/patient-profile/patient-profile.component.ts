@@ -484,12 +484,17 @@ export class PatientProfileComponent implements OnInit {
       });
   }
 
+  getHtmlString(html : string)
+  {
+return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
+  }
   get() {
 
     this.patientProfileService.get(this.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
+        
         this.model.prescriptionModel = this.model.prescriptionModel.filter(item => !item.isDeleted)
         this.selectedComplaint = this.model.compliants;
         this.selectedAdvice = this.model.advice;

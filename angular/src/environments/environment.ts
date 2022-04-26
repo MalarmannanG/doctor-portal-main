@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   apiUrl: "http://localhost:5200",
   navUrl: "http://localhost:4200",
+  appConfig: 'appconfig.json'
 };
 
 /*

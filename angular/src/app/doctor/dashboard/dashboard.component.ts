@@ -90,7 +90,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   doctorOptions: DoctorModel[] = [];
   patientList: PatientModel[] = [];
   doctorList: DoctorModel[] = [];
+  facilityOptions: DoctorModel[] = [];
+  facilityList: DoctorModel[] = [];
   selected: string;
+  selectedClinic : string;
 
   constructor(private router: Router,
     private patientsService: PatientMasterService,
@@ -161,6 +164,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isProcedure = null;
     this.selectedPatient = "";
     this.selectedDoctor = "";
+    this.selectedClinic = "";
     this.getAppointments()
   }
   dateRangeChange(dateRangeStart: HTMLInputElement, dateRangeEnd: HTMLInputElement, isProcedure = null) {
@@ -238,7 +242,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  doFacilityFilter(filter) {
+    filter = filter;
+    this.facilityOptions = [];  
+    this.facilityList.forEach(element => {
+      if(element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase()) || element.name?.includes(filter)) {
+        this.facilityOptions.push(element)
+      }
+    });     
+  }  
   doFilter(filter) {
     filter = filter;
     this.patientOptions = [];
@@ -253,7 +265,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isProcedure = isProcedure;
     this.getAppointments();
   }
-
+  getFacilities() {    
+    this.doctorService.getAll()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((resp) => {    
+    
+      this.facilityList = resp.result;
+      this.facilityOptions = this.facilityList;
+       
+    });   
+  }
   getPatinets() {
     this.patientsService.getAll()
       .pipe(takeUntil(this.unsubscribe$))
@@ -272,7 +293,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.getPatinets();
     this.getDoctors();
-
+this.getFacilities();
 
     // if(user.role == "Doctor")
     //   this.selectedDoctor = user.username 

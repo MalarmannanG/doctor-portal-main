@@ -18,7 +18,7 @@ import { PatientMasterService } from "../service/patient.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BaseQueryModel } from "src/app/model/base.query-model";
 import Swal from "sweetalert2";
-import { PatientProfileController, PatientProfileModel } from "../../../../shared/service-proxies/service-proxies";
+import { PatientProfileController, PatientProfileModel } from "../../../shared/service-proxies/service-proxies";
 import { PatientProfileService } from "../../patient-profile/service/patient-profile.service";
 
 @Component({

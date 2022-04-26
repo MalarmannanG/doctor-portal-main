@@ -1,1 +1,4 @@
 /node_modules
+/dist
+/.angular
+/e2e

@@ -18,7 +18,7 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VitalsReportService } from "src/app/admin/dashboard/service/vitals.service";
 import { saveAs } from 'file-saver';
 import { PatientProcedureModel } from "src/app/admin/patients/model/procedureModel";
-import { ProcedureMasterModel } from "src/shared/service-proxies/service-proxies";
+import { ProcedureMasterModel } from "../../../shared/service-proxies/service-proxies";
 import { ProcedureMasterService } from "../../procedure-master/service/procedure-master.service";
 import { DoctorService } from "src/app/admin/doctors/service/doctor.service";
 import { AccountService } from "src/app/authentication/service/auth.service";
@@ -144,7 +144,7 @@ export class ViewPatientProfileComponent implements OnInit, OnDestroy {
     this.model.procedureModel.description = this.selectedProcedureObj?.description ?? "";
     this.model.procedureModel.diagnosis = this.selectedProcedureObj?.diagnosis ?? "";
     this.model.procedureModel.others = this.selectedProcedureObj?.others ?? "";
-    this.model.procedureModel.name = this.selectedProcedureObj?.procedurename ?? "";
+    this.model.procedureModel.name = this.selectedProcedureObj?.name?? "";
 
     // this.model.examination = this.selectedTemplateObj?.examination ?? "";
     // this.model.impression = this.selectedTemplateObj?.impression ?? "";

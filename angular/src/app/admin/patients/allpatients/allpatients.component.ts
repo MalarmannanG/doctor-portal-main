@@ -18,6 +18,7 @@ import { PatientMasterService } from "../service/patient.service";
 import { Router } from "@angular/router";
 import { BaseQueryModel } from "src/app/model/base.query-model";
 import Swal from "sweetalert2";
+import { PatientMasterController } from '../../../shared/service-proxies/service-proxies';
 
 @Component({
   selector: "app-allpatients",
@@ -55,9 +56,11 @@ export class AllpatientsComponent
     public patientService: PatientService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private patientsService: PatientMasterService
+    private patientsService: PatientMasterService,
+    private service : PatientMasterController
   ) {
     super();
+ 
   }
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -68,6 +71,11 @@ export class AllpatientsComponent
   ngOnInit() {
     //this.loadData();
     this.getAll();
+    
+    this.service.getAll("",null,null,false,0,10,null).subscribe((res)=>{
+      debugger;
+       console.log(res);
+    })
   }
   refresh() {
     //this.loadData();
