@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   apiUrl: "",
-  navUrl: "https://health.pi-systems.in/",
+  navUrl: "https://test-health.pi-systems.in/",
   appConfig: 'appconfig.production.json'
 };

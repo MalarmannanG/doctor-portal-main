@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  //apiUrl: "https://test-health.pi-systems.in/",
   apiUrl: "http://localhost:5200",
   navUrl: "http://localhost:4200",
   appConfig: 'appconfig.json'

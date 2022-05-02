@@ -19,6 +19,7 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.TestMasterController,        
         ApiServiceProxies.UserController,        
         ApiServiceProxies.VitalsReportController,     
+        ApiServiceProxies.DoctorServicsController,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
     ]
 })

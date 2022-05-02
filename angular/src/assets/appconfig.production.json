@@ -1,4 +1,4 @@
 {
-  "remoteServiceBaseUrl": "http://recipeapi",
-  "appBaseUrl": "http://recipesnew"
+  "remoteServiceBaseUrl": "https://test-health.pi-systems.in",
+  "appBaseUrl": "https://test-health.pi-systems.in/"
 }

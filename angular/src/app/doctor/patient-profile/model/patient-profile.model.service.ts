@@ -14,6 +14,7 @@ export class PatientProfileModel {
     appointmentId: number;
     templateMasterId?: number;
     procedureMasterId? : number;
+    doctorServiceId?:number;
     compliants: string;
     examination: string;
     pastHistory : string;

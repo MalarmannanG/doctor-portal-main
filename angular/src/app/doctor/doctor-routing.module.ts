@@ -1,3 +1,5 @@
+import { AddServiceMasterComponent } from './service-master/add-service-master/add-service-master.component';
+import { AllServiceMasterComponent } from './service-master/all-service-master/all-service-master.component';
 import { AllDrugMasterComponent } from './drug-master/all-drug-master/all-drug-master.component';
 import { AddDrugMasterComponent } from './drug-master/add-drug-master/add-drug-master.component';
 import { AddProcedureMasterComponent } from './procedure-master/add-procedure-master/add-procedure-master.component';
@@ -118,6 +120,18 @@ const routes: Routes = [
   {
     path: "edit-drug/:id",
     component: AddDrugMasterComponent,
+  },
+  {
+    path: "all-service",
+    component: AllServiceMasterComponent,
+  },
+  {
+    path: "add-service",
+    component: AddServiceMasterComponent,
+  },
+  {
+    path: "edit-service/:id",
+    component: AddServiceMasterComponent,
   },
   { path: "**", component: Page404Component },
 ];

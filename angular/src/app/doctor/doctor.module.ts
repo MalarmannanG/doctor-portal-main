@@ -1,3 +1,5 @@
+import { AllServiceMasterComponent } from './service-master/all-service-master/all-service-master.component';
+import { AddServiceMasterComponent } from './service-master/add-service-master/add-service-master.component';
 import { AllProcedureMasterComponent } from './procedure-master/all-procedure-master/all-procedure-master.component';
 import { AddProcedureMasterComponent } from './procedure-master/add-procedure-master/add-procedure-master.component';
 import { NgModule } from "@angular/core";
@@ -85,7 +87,9 @@ import { AddDrugMasterComponent } from './drug-master/add-drug-master/add-drug-m
     AllPatientProfileComponent,
     AutocompleteAutoActiveComponent,
     AddDrugMasterComponent,
-    AllDrugMasterComponent
+    AllDrugMasterComponent,
+    AddServiceMasterComponent,
+    AllServiceMasterComponent
   ],
   imports: [
     CommonModule,

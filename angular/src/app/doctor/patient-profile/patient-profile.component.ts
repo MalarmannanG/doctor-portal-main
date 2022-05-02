@@ -26,6 +26,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import * as moment from "moment";
 import { VitalsReportModel } from "src/app/admin/dashboard/model/vitals.model";
 import { AppoinemtModel } from "src/app/admin/appointment/model/appointmentt.model";
+import { DoctorServiceModel, DoctorServicsController } from "src/app/shared/service-proxies/service-proxies";
 
 @Component({
   selector: 'app-patient-profile',
@@ -89,9 +90,18 @@ export class PatientProfileComponent implements OnInit {
   doctorOptions: any[] = [];
   patientDiagnosisModel: PatientDiagnosisModel[] = [];
   doctorOption: any;
+  doctorServices: any[];
+  selectedDoctorService: any;
+
   user: any = {};
   vitalsModel = new VitalsReportModel();
   appointmentModel = new AppoinemtModel();
+
+  selectedDoctor = '';
+  doctorsList: any[] = [];
+  doctors: any[] = [];
+  doctor: any;
+
   // constructor() {}
   constructor(config: NgbModalConfig, private router: Router,
     private patientProfileService: PatientProfileService,
@@ -104,7 +114,8 @@ export class PatientProfileComponent implements OnInit {
     public procedureMasterService: ProcedureMasterService,
     public accountService: AccountService,
     private snackBar: MatSnackBar,
-    private doctorService: DoctorService) {
+    private doctorService: DoctorService,
+    private _service: DoctorServicsController) {
     // customize default values of modals used by this component tree
     config.backdrop = 'static';
     config.keyboard = false;
@@ -398,6 +409,7 @@ export class PatientProfileComponent implements OnInit {
   }
   update() {
     this.model.procedureModel.referedBy = this.doctorOption.value;
+
     this.model.appointment.isActive = true;
     this.savePatientProfile(false);
   }
@@ -421,6 +433,7 @@ export class PatientProfileComponent implements OnInit {
     });
   }
   savePatientProfile(result: boolean) {
+    this.model.doctorServiceId = this.selectedDoctorService.value;
     var message = result ? "Patient's Appoinment Completed!!" : "Patient's Profile Saved Successfully!!";
     this.model.patientDiagnosisModel = this.model?.patientDiagnosisModel?.filter(a => a.id || a.name);
     if (this.model.isfollowUpNeed) {
@@ -447,6 +460,7 @@ export class PatientProfileComponent implements OnInit {
   public objectComparisonFunction = function (option, item): boolean {
     return option.value === item.value;
   }
+
   getDoctors() {
     this.doctorService.getAll()
       .pipe(takeUntil(this.unsubscribe$))
@@ -457,7 +471,7 @@ export class PatientProfileComponent implements OnInit {
         this.doctorOptions.splice(0, 0, { name: 'Select Facility', value: -1 });
         if (this.id && this.model.procedureModel?.referedBy) {
           this.doctorOption = this.doctorOptions.filter(a => a.value == this.model.procedureModel.referedBy)[0];
-          console.log(this.doctorOption);
+
         }
         else {
           this.doctorOption = this.doctorOptions[0];
@@ -477,6 +491,7 @@ export class PatientProfileComponent implements OnInit {
   }
 
   onSubmit() {
+    this.model.doctorServiceId = this.selectedDoctorService.id
     this.patientProfileService.post(this.model)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
@@ -484,9 +499,8 @@ export class PatientProfileComponent implements OnInit {
       });
   }
 
-  getHtmlString(html : string)
-  {
-return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
+  getHtmlString(html: string) {
+    return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
   }
   get() {
 
@@ -494,7 +508,7 @@ return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((resp) => {
         this.model = resp;
-        
+
         this.model.prescriptionModel = this.model.prescriptionModel.filter(item => !item.isDeleted)
         this.selectedComplaint = this.model.compliants;
         this.selectedAdvice = this.model.advice;
@@ -513,6 +527,7 @@ return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
         this.getPastHistories();
         this.populatePrescriptionMaster();
         this.getDoctors();
+        this.getAppUser();
       });
 
   }
@@ -674,6 +689,7 @@ return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
     this.adviceOptions = this.adviceList.filter(a => a.toLowerCase().includes(filter.toLowerCase()));
   }
   doMedFilter(filter) {
+
     if (Number.parseInt(filter)) {
       this.prescriptionOptions = [];
       this.prescriptionList.forEach(element => {
@@ -690,7 +706,8 @@ return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
       var _filter = filter?.toLocaleLowerCase();
       this.prescriptionOptions = [];
       this.prescriptionList.forEach(element => {
-        if (element.medicineName?.toLocaleLowerCase().includes(_filter)) {
+        var name = element.categoryName.toLocaleLowerCase() + element.medicineName.toLocaleLowerCase() + element.genericName.toLocaleLowerCase();
+        if (element.medicineName?.toLocaleLowerCase().includes(_filter) || element.categoryName?.toLocaleLowerCase().includes(_filter) || element.genericName?.toLocaleLowerCase().includes(_filter) || name.includes(_filter.trim().replace('-', '').replace(' ', ''))) {
           this.prescriptionOptions.push(element)
         }
       });
@@ -735,10 +752,43 @@ return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
       this.populateProcedureList();
       this.getDoctors();
     }
-
     this.getAllComplaints();
   }
+  getDoctorService(id) {
+    
+    this._service.getAll(id, "", "", 0, 0)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.doctorServices = resp?.items?.map(a => {
+          return { name: a.serviceName, value: a.id, fees:a.fees };
+        });
+        this.doctorOptions.splice(0, 0, { name: 'Select Service', value: -1, fees : 0});
+        if (this.id && this.model?.doctorServiceId) {
+          this.selectedDoctorService = this.doctorServices.filter(a => a.value == this.model?.doctorServiceId)[0];
+        }
+        else {
+          this.doctorOption = this.doctorOptions[0];
+        }
+      });
 
+
+    this.doctorService.getAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.doctorOptions = resp?.result?.map(a => {
+          return { name: a.name, value: a.id };
+        })
+        this.doctorOptions.splice(0, 0, { name: 'Select Facility', value: -1 });
+        if (this.id && this.model.procedureModel?.referedBy) {
+          this.doctorOption = this.doctorOptions.filter(a => a.value == this.model.procedureModel.referedBy)[0];
+
+        }
+        else {
+          this.doctorOption = this.doctorOptions[0];
+        }
+      });
+
+  }
   printPrescrption() {
 
     let Pagelink = "about:blank";
@@ -807,7 +857,33 @@ return html.replace(/(?:\r\n|\r|\n)/g, '<br/> ');
         });
     }
   }
-
+  getAppUser() {
+   
+    this.doctorService.getAllUsers()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((resp) => {
+        this.doctors = resp.result?.filter(a => a.userType == "Doctor");
+        console.log(this.doctors)
+        this.doctorsList = this.doctors;
+        if (this.user.role.toLocaleLowerCase() == "doctor") {
+          this.selectedDoctor = this.user.username;
+          this.getDoctorService(this.user.id);
+        }
+      });
+  }
+  doDoctorFilter(filter) {
+    filter = filter;
+    this.doctors = [];
+    this.doctorsList.forEach(element => {
+      if (element.name.toLocaleLowerCase().includes(filter?.toLocaleLowerCase())) {
+        this.doctors.push(element)
+      }
+    });
+  }
+  filterChange() {
+    var selected = this.doctorsList.filter(a => a.name == this.selectedDoctor)[0]
+    this.getDoctorService(selected.id);
+  }
   ngOnDestroy(): void {
 
     this.unsubscribe$.complete();

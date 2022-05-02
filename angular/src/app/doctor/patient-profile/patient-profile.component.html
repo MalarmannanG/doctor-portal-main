@@ -296,7 +296,7 @@
                             </div>
 
 
-                            <div class="col-md-12 m_b0">
+                            <div class="col-md-6 m_b0">
                               <mat-form-field appearance="outline">
                                 <mat-label>Impression</mat-label>
                                 <span matPrefix>
@@ -311,7 +311,7 @@
                               </mat-form-field>
                             </div>
 
-                            <div class="col-md-12 m_b0">
+                            <div class="col-md-6 m_b0">
                               <mat-form-field appearance="outline">
                                 <mat-label>Advice </mat-label>
                                 <span matPrefix>
@@ -364,15 +364,41 @@
                                 </mat-error>
                               </mat-form-field>
                             </div>
-                            <div class="col-md-6 m_b0">
-                              <mat-form-field appearance="outline">
-                                <mat-label>Fees</mat-label>
+                            <div class="col-md-4 m_b0">
+                              <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Consulting Doctor</mat-label>
                                 <span matPrefix>
-                                  <img matSuffix src="assets/images/icons/fees.png" width="24px" height="24px"
-                                    class="icon_frm" /></span>
-                                <input    matInput name="fees"
-                                  #fees="ngModel" [(ngModel)]="model.fees">
-                                 
+                                  <i class="material-icons">search</i>
+                                </span>
+                                <input [readonly]="user.role.toLocaleLowerCase() == 'doctor'" matInput [matAutocomplete]="auto2" name="consultingDoctor" #consultingDoctor="ngModel"
+                                  [(ngModel)]="selectedDoctor" (ngModelChange)="doDoctorFilter(selectedDoctor)">
+                                <mat-error *ngIf="consultingDoctor.invalid && (consultingDoctor.dirty || consultingDoctor.touched)">
+                                  <span *ngIf="consultingDoctor.errors?.['required']"> Consulting Doctor is required</span>
+                                </mat-error>
+                              </mat-form-field>
+                              <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete" (optionSelected)="filterChange()">
+                                <mat-option disabled style="color: crimson;" *ngIf="doctors.length == 0">No data found </mat-option>
+                                <mat-option *ngFor="let eachOption of doctors" [value]="eachOption.name">
+                                  {{eachOption.name}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </div>
+                            <div class="col-md-4 m_b0">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <mat-label>Service</mat-label>
+                                <mat-select [compareWith]="objectComparisonFunction" name="doctorService"
+                                #doctorService="ngModel" [(ngModel)]="selectedDoctorService">
+                                <mat-option *ngFor="let each of doctorServices" [value]="each">
+                                  {{each.name}}
+                                </mat-option>
+                              </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-md-4 m_b0">
+                              <mat-form-field class="example-full-width mb-3" appearance="outline">
+                                <mat-label>Fees</mat-label>
+                                <input matInput readonly
+                                  name="serviceFee" [value]="selectedDoctorService?.fees">
                               </mat-form-field>
                             </div>
                             <div class="col-md-6 m_b0">
@@ -423,7 +449,7 @@
                               <mat-autocomplete autoActiveFirstOption #autoMed="matAutocomplete"
                                 (optionSelected)="onMedSelectionChanged($event)">
                                 <mat-option *ngFor="let eachOption of prescriptionOptions" [value]="eachOption.id">
-                                  {{eachOption.medicineName}}-{{eachOption.categoryName}}-{{eachOption.strength}}{{eachOption.units}}
+                                  {{eachOption.categoryName}}-{{eachOption.medicineName}}-{{eachOption.strength}}{{eachOption.units}}
                                 </mat-option>
                               </mat-autocomplete>
                             </div>
@@ -752,8 +778,8 @@
                               border: solid 1px gray;
                               border-radius: 10px;
                             ">
-                            <!-- <img src="https://cdn-icons-png.flaticon.com/512/2764/2764540.png" width="45px" /> -->
-                            <i class="fas fa-solid fa-download"></i>&nbsp;&nbsp;
+                            <img src="https://cdn-icons-png.flaticon.com/512/2764/2764540.png" width="45px" />
+                            <!-- <i class="fas fa-solid fa-download"></i> -->&nbsp;&nbsp;
                             <p style="font-size: 14px;margin-top: 1rem;
                             margin-bottom: 0rem;"><strong> Past
                                 Records</strong></p>
@@ -860,6 +886,7 @@
                 <div class="row">
                   <div class="header">
                     <h2>Prescription / Reports</h2>
+                    <p><span class="pastVisits-compliants">Compliants: </span>{{model.compliants}}</p>
                   </div>
                   <div class="body">
                     <ul class="list-unstyled list-unstyled-border list-unstyled-noborder">
@@ -979,7 +1006,8 @@
 <!--///////////////// Model Reports///////////////// -->
 <ng-template #content4 let-c="close" let-d="dismiss">
   <div class="modal-header" style="text-align: center;padding: 10px;">
-    <h4 class="modal-title" id="modal-basic-title"><img width="25px" src="assets/images/icons/pro.png">&nbsp;&nbsp;
+    <h4 class="modal-title" id="modal-basic-title"><img width="25px"
+        src="https://cdn-icons-png.flaticon.com/512/2764/2764540.png">&nbsp;&nbsp;
       Reports</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
   </div>
@@ -1019,7 +1047,7 @@
       </div> -->
       <div class="col-md-8 col-sm-8 col-xs-8" style=" padding: 15px;">
         <div>
-          <strong> Name: </strong> {{model?.patientModel?.initial}}.{{model?.patientModel?.patientName}}
+          <strong> Name: </strong> {{model?.patientModel?.initial}}{{model?.patientModel?.patientName}}
         </div>
         <div>
           <strong>Age / Gender: </strong>{{model.patientModel?.age}} / {{model.patientModel?.gender}}
@@ -1103,8 +1131,8 @@
                     {{index + 1}}
                   </td>
                   <td class="col-md-7 col-sm-7 col-xs-7">
-                    {{each.medicineName}} - {{each.strength}} ({{each.genericName ? each.genericName :
-                    each.medicineName}}) {{each.categoryName ? each.categoryName : ''}}{{each.units ? each.units : ''}}
+                    <strong>{{each.medicineName}}-{{each.strength}}{{each.units ? each.units : ''}} </strong> ({{each.genericName ? each.genericName :
+                    each.medicineName}})-{{each.categoryName ? each.categoryName : ''}}  
                   </td>
                   <td class="col-md-1 col-sm-1 col-xs-1">
                     {{each.morning ? 1 : 0}}-{{each.noon? 1:0}}-{{each.night? 1: 0}}

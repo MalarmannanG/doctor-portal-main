@@ -184,7 +184,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.selectedDoctor) {
       query = query ? query + `&doctorName=${this.selectedDoctor}` : `?doctorName=${this.selectedDoctor}`
     }
-
+    if (this.selectedClinic) {
+      query = query ? query + `&clinicName=${this.selectedClinic}` : `?clinicName=${this.selectedClinic}`
+    }
     if (this.todayPatients) {
       query = query ? query + `&todayPatients=${this.todayPatients}` : `?todayPatients=${this.todayPatients}`
     }
@@ -203,7 +205,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       query = query ? query + `&toDate=${this.toDate}` : `?toDate=${this.toDate}`
     }
 
-    if (this.fromDate && this.toDate) {
+    if(!this.fromDate && !this.toDate) {
       let today = moment().format('YYYY-MM-DD')
       this.todaysAppointments = today == this.fromDate && today == this.toDate;
     }
